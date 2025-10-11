@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/*Header*/
+
+#logo {
+    width: 110px;
+    margin-right: 200px;
+}
+
+.nav-item {
+    padding-right: 180px;
+    font-size: 23px;
+}
+
+#inc-user {
+    width: 40px;
+    height: 40px;
+    margin: 0 20px;
+}
+
+.h4-saldo {
+    font-size: 23px;
+    margin: 0;
+    margin-right: 100px;
+}
+
+.bi-eye-slash {
+    padding-left: .5rem;
+}
+
+.navbar {
+    border-bottom: 3px solid #003A14;
+}
+
+h1 {
+    margin: 2% 0 1% 3%;
+    color: #003A17;
+}
+
+.input-estilo {
+    width: 650px;
+    padding: 10px 15px;
+    border: 1px solid #2c3e2c;
+    border-radius: 8px;
+    background-color: #fdfdf2;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 16px;
+    color: #1c3b1c;
+    outline: none;
+    margin-left: 60px;
+}
+
+.input-estilo::placeholder {
+    color: #1c3b1c;
+    opacity: 0.8;
+}
+
+.select-simples {
+    width: 400px;
+    padding: 10px;
+    border: 1px solid #2c3e2c;
+    border-radius: 8px;
+    background-color: #fdfdf2;
+    color: #1c3b1c;
+    font-size: 16px;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-left: 60px;
+    margin-top: 15px;
+}
+
+.checkbox-receitadespesa label {
+    font-size: 1.1rem;
+}
+
+#radio-despesa {
+    padding: 1rem 10px 15px;
+    color: #1c3b1c;
+    outline: none;
+    margin-left: 60px;
+}
+
+#radio-receita {
+    padding: 1rem 10px 15px;
+    color: #1c3b1c;
+    outline: none;
+    margin-left: 60px;
+}
+
+.input-estilo-money {
+    width: 217px;
+    padding: 10px 15px;
+    border: 1px solid #2c3e2c;
+    border-radius: 8px;
+    background-color: #fdfdf2;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 16px;
+    color: #1c3b1c;
+    outline: none;
+    margin-left: 30px;
+}
+
+#checkbox-1 {
+    transform: scale(1.5);
+    margin-left: 68px;
+    margin-top: 10px;
+    border: 1px solid #2c3e2c;
+    color: #1c3b1c;
+}
+
+hr {
+    width: 96%;
+    margin: 2%;
+}
+
+#img-porquinho {
+    margin-left: 40px;
+    width: 90px;
+    height: 85px;
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+}
+
+.porquinho {
+    display: flex;               
+}
+
+.porquinho h1{
+    margin: 1.3% 0 1% 0.8%;
+}
+
+.table{
+    width: 95%;
+    margin-left: 3%;
+}
+.table thead th {
+    background-color: #2e7d32;
+    color: white !important;
+}
+.table.table-striped tbody tr:nth-of-type(odd) td {
+    background-color: #3DCE3D !important;
+}
+.table.table-striped tbody tr:nth-of-type(even) td {
+    background-color: #FFFEF2 !important;
+}
+.table, .table th, .table td {
+    border: 2px solid #2e7d32;
+}
+
+table {
+    width: 90%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin: 0 auto;
+    }
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #f8f9fa;
+}
+
+tbody tr:hover {
+    background-color: #e2e6ea;
+}
+
+td i{
+    width: 4px;
+}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PoupeMais - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="src/css/home.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg" style="background-color: #FFFEF2;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><img src="src/img/PoupeMais-logo.png" alt="Logo PoupeMais" id="logo"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="home.html"><b>Home</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="simulacao.html"><b>Simular</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#"><b>Gráficos</b></a>
+                    </li>
+                </ul>
+                <h4 class="h4-saldo"><b>Saldo:</b> R$<span id="saldo">0,00</span>
+                    <i class="bi bi-eye-slash" id="icone-olho"></i>
+                </h4>
+                <img src="src/img/inc-user.png" alt="" id="inc-user">
+            </div>
+        </div>
+    </nav>
+    <!--CRUD cadastro de despesas e receitas-->
+    <h1><b>CADASTRAR NOVA TRANSAÇÃO</b></h1>
+
+    <input type="text" placeholder="Inserir nome" class="input-estilo">
+
+    <div><select class="select-simples">
+            <option>Despesa</option>
+            <option>Receita</option>
+        </select>
+
+        <input type="text" placeholder="Inserir valor (R$)" class="input-estilo-money">
+    </div>
+    <select class="select-simples">
+        <option selected disabled>Inserir categoria</option>
+        <option>Salário</option>
+        <option>Investimentos</option>
+        <option>Vendas</option>
+        <option>Outros</option>
+    </select>
+
+    <input type="text" placeholder="Inserir parcelas" class="input-estilo-money">
+
+</body>
+<script src="src/js/script.js"></script>
+
+</html>
