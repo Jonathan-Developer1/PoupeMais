@@ -45,19 +45,19 @@
     <!--CRUD cadastro de despesas e receitas-->
     <h1><b>CADASTRAR NOVA TRANSAÇÃO</b></h1>
 
-    <input type="text" placeholder="Inserir nome" class="input-estilo">
+    <input type="text" placeholder="Inserir nome" class="input-estilo" id="nome-transacao">
 
     <div>
-        <select class="select-simples" title="categoria">
+        <select class="select-simples" title="categoria" id="tipo">
             <option>Despesa</option>
             <option>Receita</option>
         </select>
 
-        <input type="text" placeholder="Inserir valor (R$)" class="input-estilo-money">
+        <input type="text" placeholder="Inserir valor (R$)" class="input-estilo-money" id="valor">
     </div>
 
-    <select class="select-simples" title="despesas e receitas">
-        <option selected disabled>Inserir categoria</option>
+    <select class="select-simples" title="despesas e receitas" id="categoria">
+        <option  value="" selected disabled>Inserir categoria</option>
         <option>Salário</option>
         <option>Investimentos</option>
         <option>Vendas</option>
@@ -68,7 +68,7 @@
     </select>
 
     <input type="number" placeholder="Inserir parcelas (meses)" class="input-estilo-money">
-
+    <button type="submit" id="botao-cadastro" onclick = "cadastrarTransacao()">Cadastrar</button>
     <hr>
     <div class="porquinho">
         <img src="src/img/Porquinho_PM.png" alt="" id="img-porquinho">
@@ -85,27 +85,8 @@
                 <th scope="col">Deletar</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="tabela-cadastro">
             <tr>
-                <td>Bar do Zeze</td>
-                <td>Alimentação</td>
-                <td>R$</td>
-                <td><i class="bi bi-check-square-fill"></i> <i class="bi bi-x-square-fill"></i></td>
-                <td><i class="bi bi-trash3"></i></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td>R$</td>
-                <td><i class="bi bi-check-square-fill"></i> <i class="bi bi-x-square-fill"></i></td>
-                <td><i class="bi bi-trash3"></i></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td>R$</td>
-                <td><i class="bi bi-check-square-fill"></i> <i class="bi bi-x-square-fill"></i></td>
-                <td><i class="bi bi-trash3"></i></td>
             </tr>
 
         </tbody>
@@ -117,30 +98,13 @@
     <div id="ultimas-transacoes">
 
         <table>
-            <tbody>
-                <tr>
-                    <td class="primeiro"><i class="bi bi-fork-knife"></i></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+            <tbody id="tabela-ultimas">
             </tbody>
         </table>
     </div>
 
 </body>
 <script src="src/js/script.js"></script>
+<script src="src/js/cadastro.js"></script>
 
 </html>
