@@ -45,24 +45,54 @@
     </nav>
 
     <!--Dados baseados em saldo, despesas, economia e receita-->
+    <div class="texto-inicial">
+        <h3 id="titulo"><b>GRÁFICOS FINANCEIROS</b></h3>
+        <b><p id="subtitulo">Acompanhe a evolução das suas receitas, despesas e saldo geral de forma visual e interativa.</p></b>
+    </div>
     <div class="resumo-financeiro">
-  <div class="item">
-    <h4>Saldo Atual</h4>
-    <p>R$ <span id="saldo-atual"></span></p>
-  </div>
-  <div class="item">
-    <h4>Receitas Totais</h4>
-    <p>R$ <span id="receitas-totais"></span></p>
-  </div>
-  <div class="item">
-    <h4>Despesas Totais</h4>
-    <p>R$ <span id="despesas-totais"></span></p>
-  </div>
-  <div class="item">
-    <h4>Economia</h4>
-    <p>R$ <span id="economia"></span></p>
-  </div>
-</div>
+        <div class="item">
+            <h4>Saldo Atual</h4>
+            <p>R$ <span id="saldo-atual"></span></p>
+        </div>
+        <div class="item">
+            <h4>Receitas Totais</h4>
+            <p>R$ <span id="receitas-totais"></span></p>
+        </div>
+        <div class="item">
+            <h4>Despesas Totais</h4>
+            <p>R$ <span id="despesas-totais"></span></p>
+        </div>
+        <div class="item">
+            <h4>Economia</h4>
+            <p>R$ <span id="economia"></span></p>
+        </div>
+    </div>
 
-<!--Evolução financeira-->
-<!-- Card de Evolução Financeira -->
+    <!--Evolução financeira-->
+    <div class="card shadow-sm my-4">
+        <div class="card-body">
+            <h5 class="card-title text-dark fw-bold fs-4 mb-3">Evolução Financeira</h5>
+            <canvas id="graficoEvolucao" height="120"></canvas>
+        </div>
+    </div>
+    <!--Distribuição de Despesas-->
+    <div class="container py-5">
+    <div class="d-flex justify-content-center gap-4 flex-wrap">
+      <div class="card shadow-sm grafico-card">
+        <div class="card-body">
+          <h5 class="mb-3">DISTRIBUIÇÃO DAS DESPESAS</h5>
+          <canvas id="graficoDespesas" height="250"></canvas>
+        </div>
+      </div>
+      <!--Distribuição das Receitas-->
+      <div class="card shadow-sm grafico-card">
+        <div class="card-body">
+          <h5 class="mb-3">DISTRIBUIÇÃO DAS RECEITAS</h5>
+          <canvas id="graficoReceitas" height="250"></canvas>
+        </div>
+      </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="src/js/graficos.js"></script>
+
+    

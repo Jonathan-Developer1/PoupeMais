@@ -1,0 +1,67 @@
+/*Dados sobre saldo, receita, etc*/
+
+
+
+
+
+
+
+
+
+
+/*Gráfico*/ 
+const ctx = document.getElementById('graficoEvolucao');
+
+new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+        datasets: [
+          {
+            label: 'Receitas',
+            data: [1000, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600],
+            borderColor: '#0f5132',
+            backgroundColor: '#0f5132',
+            tension: 0.3,
+            fill: false
+          },
+          {
+            label: 'Despesas',
+            data: [800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350],
+            borderColor: '#dc3545',
+            backgroundColor: '#dc3545',
+            tension: 0.3,
+            fill: false
+          },
+          {
+            label: 'Saldo Geral',
+            data: [200, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250],
+            borderColor: '#d9d700',
+            backgroundColor: '#d9d700',
+            tension: 0.3,
+            fill: false
+          }
+        ]
+      },
+      options: {
+        plugins: {
+         legend: {
+        display: true,
+        position: 'bottom',
+        labels: {
+          font: {
+            size: 16,       // aumenta a fonte
+            weight: 'bold'  // deixa em negrito
+          },
+          padding: 50,      // aumenta a separação entre legendas
+          color: '#000'     // cor da fonte (preta)
+        }
+      }
+    },
+        scales: {
+          y: {
+            beginAtZero: false
+          }
+        }
+      }
+    });
