@@ -1,4 +1,4 @@
-/*Dados sobre saldo, receita, etc*/
+// ======== SALDOS/DESPESAS/RECEITA/ECONOMIA =========
 
 
 
@@ -9,9 +9,9 @@
 
 
 
-/*Gráfico*/ 
+// ======== GRÁFICOS =========
+// ======== GRÁFICO DE Evolução Financeira =========
 const ctx = document.getElementById('graficoEvolucao');
-
 new Chart(ctx, {
       type: 'line',
       data: {
@@ -50,11 +50,11 @@ new Chart(ctx, {
         position: 'bottom',
         labels: {
           font: {
-            size: 16,       // aumenta a fonte
-            weight: 'bold'  // deixa em negrito
+            size: 16,       
+            weight: 'bold'  
           },
-          padding: 50,      // aumenta a separação entre legendas
-          color: '#000'     // cor da fonte (preta)
+          padding: 50,      
+          color: '#000'     
         }
       }
     },
@@ -65,3 +65,59 @@ new Chart(ctx, {
         }
       }
     });
+
+   // ======== GRÁFICO DE DESPESAS =========
+const ctxDespesas = document.getElementById('graficoDespesas');
+new Chart(ctxDespesas, {
+  type: 'pie',
+  data: {
+    labels: ['Aluguel', 'Alimentação', 'Transporte', 'Lazer'],
+    datasets: [{
+      data: [35, 25, 20, 20],
+      backgroundColor: ['#000dffff', '#228B22', '#f5dc00ff', '#00ffffff']
+    }]
+  },
+  options: {
+    plugins: {
+      legend: {
+        display: true,
+        position: 'bottom',
+        labels: {
+          font: {
+            size: 16,
+            weight: 'bold'
+          },
+          color: '#000'
+        }
+      }
+    }
+  }
+});
+
+// ======== GRÁFICO DE RECEITAS =========
+const ctxReceitas = document.getElementById('graficoReceitas');
+new Chart(ctxReceitas, {
+  type: 'pie',
+  data: {
+    labels: ['Salário', 'Freelas', 'Investimentos', 'Outros'],
+    datasets: [{
+      data: [50, 25, 15, 10],
+      backgroundColor: ['#000dffff', '#228B22', '#f5dc00ff', '#00ffffff']
+    }]
+  },
+  options: {
+    plugins: {
+      legend: {
+        display: true,
+        position: 'bottom',
+        labels: {
+          font: {
+            size: 16,
+            weight: 'bold'
+          },
+          color: '#000'
+        }
+      }
+    }
+  }
+});
