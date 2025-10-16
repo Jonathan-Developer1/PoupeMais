@@ -21,7 +21,7 @@ new Chart(ctx, {
             label: 'Receitas',
             data: [1000, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600],
             borderColor: '#0f5132',
-            backgroundColor: '#0f5132',
+            backgroundColor: '#c',
             tension: 0.3,
             fill: false
           },

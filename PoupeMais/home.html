@@ -15,33 +15,36 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg" style="background-color: #FFFEF2;">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#"><img src="src/img/PoupeMais-logo.png" alt="Logo PoupeMais" id="logo"></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="home.html"><b>Home</b></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="simulacao.html"><b>Simular</b></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="graficos.html"><b>Gráficos</b></a>
-                    </li>
-                </ul>
-                <h4 class="h4-saldo"><b>Saldo:</b> R$<span id="saldo">0,00</span>
-                    <i class="bi bi-eye-slash" id="icone-olho"></i>
-                </h4>
-                <img src="src/img/inc-user.png" alt="" id="inc-user">
+    <header>
+        <nav class="navbar navbar-expand-lg" style="background-color: #FFFEF2;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#"><img src="src/img/PoupeMais-logo.png" alt="Logo PoupeMais"
+                        id="logo"></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="home.html"><b>Home</b></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="simulacao.html"><b>Simular</b></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="graficos.html"><b>Gráficos</b></a>
+                        </li>
+                    </ul>
+                    <h4 class="h4-saldo"><b>Saldo:</b> R$<span id="saldo">0,00</span>
+                        <i class="bi bi-eye-slash" id="icone-olho"></i>
+                    </h4>
+                    <img src="src/img/inc-user.png" alt="" id="inc-user">
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </header>
     <!--CRUD cadastro de despesas e receitas-->
     <h1><b>CADASTRAR NOVA TRANSAÇÃO</b></h1>
 
@@ -62,7 +65,7 @@
     </select>
 
     <input type="number" placeholder="Inserir parcelas (meses)" class="input-estilo-money">
-    <button type="submit" id="botao-cadastro" onclick = "cadastrarTransacao()">Cadastrar</button>
+    <button type="submit" id="botao-cadastro" onclick="cadastrarTransacao()">Cadastrar</button>
     <hr>
     <div class="porquinho">
         <img src="src/img/Porquinho_PM.png" alt="" id="img-porquinho">
