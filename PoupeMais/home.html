@@ -49,22 +49,16 @@
 
     <div>
         <select class="select-simples" title="categoria" id="tipo">
-            <option>Despesa</option>
-            <option>Receita</option>
+            <option value="" selected disabled>Selecione o tipo</option>
+            <option value="despesa">Despesa</option>
+            <option value="receita">Receita</option>
         </select>
 
         <input type="text" placeholder="Inserir valor (R$)" class="input-estilo-money" id="valor">
     </div>
 
     <select class="select-simples" title="despesas e receitas" id="categoria">
-        <option  value="" selected disabled>Inserir categoria</option>
-        <option>Salário</option>
-        <option>Investimentos</option>
-        <option>Vendas</option>
-        <option>Alimentação</option>
-        <option>Lazer</option>
-        <option>Transporte</option>
-        <option>Outros</option>
+        <option value="" selected disabled>Inserir categoria</option>
     </select>
 
     <input type="number" placeholder="Inserir parcelas (meses)" class="input-estilo-money">
@@ -104,7 +98,7 @@
     </div>
 
 </body>
-<script src="src/js/script.js"></script>
+<script src="src/js/home.js"></script>
 <script src="src/js/cadastro.js"></script>
 
 </html>

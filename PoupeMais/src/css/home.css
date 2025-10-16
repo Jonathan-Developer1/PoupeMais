@@ -73,24 +73,6 @@ h1 {
     margin-top: 15px;
 }
 
-.checkbox-receitadespesa label {
-    font-size: 1.1rem;
-}
-
-#radio-despesa {
-    padding: 1rem 10px 15px;
-    color: #1c3b1c;
-    outline: none;
-    margin-left: 60px;
-}
-
-#radio-receita {
-    padding: 1rem 10px 15px;
-    color: #1c3b1c;
-    outline: none;
-    margin-left: 60px;
-}
-
 .input-estilo-money {
     width: 217px;
     padding: 10px 15px;
@@ -104,12 +86,18 @@ h1 {
     margin-left: 30px;
 }
 
-#checkbox-1 {
-    transform: scale(1.5);
-    margin-left: 68px;
-    margin-top: 10px;
+#botao-cadastro { 
+    width: 217px;
+    padding: 10px 15px;
     border: 1px solid #2c3e2c;
-    color: #1c3b1c;
+    border-radius: 8px;
+    background-color: #2e7d32;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 16px;
+    color: white;
+    font-weight: bold;
+    outline: none;
+    margin-left: 30px;
 }
 
 hr {
