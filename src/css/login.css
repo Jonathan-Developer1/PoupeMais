@@ -1,0 +1,165 @@
+body {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.left {
+  background-color: #3a8d67;
+  height: 100vh;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding-right: 120px;
+}
+
+.left h1 {
+  margin-top: 100px;
+}
+
+.left img {
+  width: 200px;
+  align-self: center;
+  margin-top: 40px;
+}
+
+.left h2 {
+  font-size: 45px;
+  font-weight: bold;
+}
+
+.left p {
+font-size: 18px;
+  width: 80%;
+  margin: 50px auto;
+}
+
+.left span {
+  font-size: 25px;
+  margin-top: 170px;
+  word-spacing: 20px;
+}
+
+.left::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 700px;
+  width: 400px;
+  height: 100%;
+  background-color: #ffffff;
+  clip-path: ellipse(50% 60% at 100% 50%);
+  z-index: 1;
+}
+
+main {
+  background-color: #88888854;
+  width: 25%;
+  padding: 50px;
+  margin: 0 auto;
+  border: 4px outset #a5a5a5;
+  border-radius: 10px;
+}
+
+.sair {
+  width: 30px;
+  padding: 5px;
+  margin-left: auto; 
+}
+
+main h1 {
+  color: #1d8831;
+  text-align: center;
+  font-weight: bold;
+  font-size: 45px;
+}
+
+main hr {
+  margin: 0 auto 30px;
+  width: 85%;
+}
+
+.holders {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  margin: 50px 0;
+}
+
+.holders label {
+  color: #000000;
+}
+
+.holders input {
+  border-radius: 100px;
+  border: 1px solid #000000;
+  padding: 12px;
+  font-size: 14px;
+}
+
+.holders input::placeholder {
+  color: #666;
+  font-size: 14px;
+}
+
+/* Botão acessar (login) */
+.btn-login {
+  width: 100%;
+  background-color: #09be6d;
+  border: 2px solid #51a07d;
+  padding: 12px 30px;
+  font-size: 14px;
+  font-weight: bold;
+  min-width: 120px;
+  color: #fff;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.btn-login:hover {
+  background-color: #068348;
+}
+@media (max-width: 1690px) {
+    .left::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 620px;
+  width: 400px;
+  height: 100%;
+  background-color: #ffffff;
+  clip-path: ellipse(50% 60% at 100% 50%);
+  z-index: 1;
+    }
+}
+
+@media (max-width: 1500px) {
+
+    .left::after {
+        display: none;
+}
+
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+  main {
+    width: 90%;
+    margin: 1rem;
+  }
+
+  .left {
+    display: none;
+  }
+
+  .holders input,
+  .btn-acesso {
+    max-width: 100%;
+  }
+}
