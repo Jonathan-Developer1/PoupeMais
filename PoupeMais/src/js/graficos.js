@@ -121,3 +121,51 @@ new Chart(ctxReceitas, {
     }
   }
 });
+
+// ======== RECEITAS VS DESPESAS =========
+const ctxReceitasDespesas = document.getElementById('graficoReceitasDespesas');
+
+new Chart(ctxReceitasDespesas, { // 🔹 aqui usa a mesma variável
+  type: 'bar',
+  data: {
+    labels: ['Receitas', 'Despesas'],
+    datasets: [{
+      data: [4500, 3200],
+      backgroundColor: ['#2e8b57', '#dc3545'],
+      barThickness: 15
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { beginAtZero: true, grid: { display: false } },
+      y: {
+        ticks: { color: '#013220', font: { size: 14, weight: 'bold' } },
+        grid: { display: false }
+      }
+    }
+  }
+});
+
+
+// ======== HISTÓRICO DE PERÍODO =========
+const historico = [
+  { mes: 'Jan/2025', receita: 1200, despesa: 800 },
+  { mes: 'Fev/2025', receita: 950, despesa: 1100 },
+  { mes: 'Mar/2025', receita: 1500, despesa: 1000 },
+  { mes: 'Ago/2025', receita: 1900, despesa: 1600 },
+];
+
+const tbody = document.getElementById('tabelaHistorico');
+
+historico.forEach(item => {
+  const row = `
+    <tr class="text-center">
+      <td>${item.mes}</td>
+      <td class="text-success fw-bold">R$ ${item.receita}</td>
+      <td class="text-danger fw-bold">R$ ${item.despesa}</td>
+    </tr>
+  `;
+  tbody.innerHTML += row;
+});

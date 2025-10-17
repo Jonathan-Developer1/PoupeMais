@@ -69,6 +69,7 @@
     </div>
 
     <!--Evolução financeira-->
+    <div>
     <div class="card shadow-sm my-4">
         <div class="card-body">
             <h5 class="card-title text-dark fw-bold fs-4 mb-3">Evolução Financeira</h5>
@@ -91,8 +92,46 @@
           <canvas id="graficoReceitas" height="250"></canvas>
         </div>
       </div>
+      </div>
+
+      <!-- Receitas vs Despesas e Histórico de Período -->
+<div class="d-flex justify-content-center gap-4 flex-wrap mt-4">
+  
+  <!-- Receitas vs Despesas -->
+  <div class="card shadow-sm grafico-card" id="ReceitasvsDespesas">
+    <div class="card-body">
+      <h5 class="mb-3">RECEITAS VS DESPESAS</h5>
+      <canvas id="graficoReceitasDespesas" height="150"></canvas>
+    </div>
+  </div>
+
+  <!-- Histórico de Período -->
+  <div class="card shadow-sm grafico-card" id="HistoricoPeriodo">
+    <div class="card-body">
+      <h5 class="mb-3">HISTÓRICO DE PERÍODO</h5>
+      <div class="table-responsive" style="max-height: 220px;">
+        <table class="table table-sm align-middle">
+          <thead class="table-success text-center">
+            <tr>
+              <th>Mês/Ano</th>
+              <th>Receita</th>
+              <th>Despesa</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaHistorico">
+            <!-- JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+      
+      
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="src/js/graficos.js"></script>
+    </body>
 
     

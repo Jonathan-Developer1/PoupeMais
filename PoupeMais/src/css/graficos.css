@@ -55,3 +55,17 @@
       font-weight: bold;
       color: #013220; 
     }
+/*Receitas vs Despesas e Historico de pedido*/
+.grafico-card {
+  width: 380px; 
+  min-height: 320px; 
+  border-radius: 10px;
+}
+
+#ReceitasvsDespesas {
+    margin-top: 35px;
+}
+
+#HistoricoPeriodo {
+    margin-top: 35px;
+}
