@@ -122,6 +122,11 @@ main hr {
   transition: 0.5s;
 }
 
+.btn-login a{
+  color: white;
+  text-decoration: none;
+}
+
 .btn-login:hover {
   background-color: #068348;
 }
