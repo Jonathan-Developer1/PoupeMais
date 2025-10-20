@@ -1,4 +1,11 @@
-//  SALDOS/DESPESAS/RECEITA/ECONOMIA
+//  SALDOS/DESPESAS/RECEITA/ECONOMIA  
+
+// Saldo atual
+const saldoDoHeader = parseFloat(document.getElementById('saldo').textContent.replace(',', '.')) || 0;
+document.getElementById('saldo-atual').textContent = saldoDoHeader.toFixed(2);
+
+//(aguardando atualizações sobre conexão com o bd para dar continuidade)
+
 
 
 
@@ -15,7 +22,7 @@ const ctx = document.getElementById('graficoEvolucao');
 new Chart(ctx, {
       type: 'line',
       data: {
-        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+        labels: ['Nov', 'Dez', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'],
         datasets: [
           {
             label: 'Receitas',
@@ -69,6 +76,38 @@ new Chart(ctx, {
 }
 
     });
+
+    //  HISTÓRICO DE PERÍODO 
+const historico = [
+  { mes: 'Nov/2024', receita: 1280, despesa: 600 },
+  { mes: 'Dez/2024', receita: 1200, despesa: 800 },
+  { mes: 'Jan/2025', receita: 6000, despesa: 3647 },
+  { mes: 'Fev/2025', receita: 2500, despesa: 1100 },
+  { mes: 'Mar/2025', receita: 1500, despesa: 1000 },
+  { mes: 'Abr/2025', receita: 1900, despesa: 1600 },
+  { mes: 'Mai/2025', receita: 7000, despesa: 4800 },
+  { mes: 'Jun/2025', receita: 3500, despesa: 3200 },
+  { mes: 'Jul/2025', receita: 1900, despesa: 2000 },
+  { mes: 'Ago/2025', receita: 8000, despesa: 1350 },
+  { mes: 'Set/2025', receita: 1500, despesa: 1100 },
+  { mes: 'Out/2025', receita: 945, despesa: 840 },
+  
+];
+
+const tbody = document.getElementById('tabelaHistorico');
+
+historico.forEach(item => {
+  const row = `
+    <tr class="text-center">
+      <td>${item.mes}</td>
+      <td class="text-success fw-bold">R$ ${item.receita}</td>
+      <td class="text-danger fw-bold">R$ ${item.despesa}</td>
+    </tr>
+  `;
+  tbody.innerHTML += row;
+});
+
+//----Tudo abaixo será mensal? olhar com os meninos---
 
    // GRÁFICO DE DESPESAS
 const ctxDespesas = document.getElementById('graficoDespesas');
@@ -153,23 +192,4 @@ new Chart(ctxReceitasDespesas, { // 🔹 aqui usa a mesma variável
 });
 
 
-//  HISTÓRICO DE PERÍODO 
-const historico = [
-  { mes: 'Jan/2025', receita: 1200, despesa: 800 },
-  { mes: 'Fev/2025', receita: 950, despesa: 1100 },
-  { mes: 'Mar/2025', receita: 1500, despesa: 1000 },
-  { mes: 'Ago/2025', receita: 1900, despesa: 1600 },
-];
 
-const tbody = document.getElementById('tabelaHistorico');
-
-historico.forEach(item => {
-  const row = `
-    <tr class="text-center">
-      <td>${item.mes}</td>
-      <td class="text-success fw-bold">R$ ${item.receita}</td>
-      <td class="text-danger fw-bold">R$ ${item.despesa}</td>
-    </tr>
-  `;
-  tbody.innerHTML += row;
-});
