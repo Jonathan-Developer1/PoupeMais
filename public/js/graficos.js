@@ -1,4 +1,4 @@
-// ======== SALDOS/DESPESAS/RECEITA/ECONOMIA =========
+//  SALDOS/DESPESAS/RECEITA/ECONOMIA
 
 
 
@@ -9,8 +9,8 @@
 
 
 
-// ======== GRÁFICOS =========
-// ======== GRÁFICO DE Evolução Financeira =========
+// GRÁFICOS
+// GRÁFICO DE Evolução Financeira 
 const ctx = document.getElementById('graficoEvolucao');
 new Chart(ctx, {
       type: 'line',
@@ -43,30 +43,34 @@ new Chart(ctx, {
           }
         ]
       },
-      options: {
-        plugins: {
-         legend: {
-        display: true,
-        position: 'bottom',
-        labels: {
-          font: {
-            size: 16,       
-            weight: 'bold'  
-          },
-          padding: 50,      
-          color: '#000'     
-        }
+     options: {
+  plugins: {
+    legend: {
+      display: true,
+      position: 'bottom',
+      labels: {
+        font: {
+          size: 12, 
+          weight: 'bold'
+        },
+        padding: 20, 
+        color: '#000'
       }
-    },
-        scales: {
-          y: {
-            beginAtZero: false
-          }
-        }
-      }
+    }
+  },
+  layout: {
+    padding: 10 
+  },
+  scales: {
+    y: {
+      beginAtZero: false
+    }
+  }
+}
+
     });
 
-   // ======== GRÁFICO DE DESPESAS =========
+   // GRÁFICO DE DESPESAS
 const ctxDespesas = document.getElementById('graficoDespesas');
 new Chart(ctxDespesas, {
   type: 'pie',
@@ -94,7 +98,7 @@ new Chart(ctxDespesas, {
   }
 });
 
-// ======== GRÁFICO DE RECEITAS =========
+// GRÁFICO DE RECEITAS 
 const ctxReceitas = document.getElementById('graficoReceitas');
 new Chart(ctxReceitas, {
   type: 'pie',
@@ -122,7 +126,7 @@ new Chart(ctxReceitas, {
   }
 });
 
-// ======== RECEITAS VS DESPESAS =========
+// RECEITAS VS DESPESAS 
 const ctxReceitasDespesas = document.getElementById('graficoReceitasDespesas');
 
 new Chart(ctxReceitasDespesas, { // 🔹 aqui usa a mesma variável
@@ -149,7 +153,7 @@ new Chart(ctxReceitasDespesas, { // 🔹 aqui usa a mesma variável
 });
 
 
-// ======== HISTÓRICO DE PERÍODO =========
+//  HISTÓRICO DE PERÍODO 
 const historico = [
   { mes: 'Jan/2025', receita: 1200, despesa: 800 },
   { mes: 'Fev/2025', receita: 950, despesa: 1100 },

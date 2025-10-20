@@ -2,49 +2,48 @@
 <html lang="pt-br">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PoupeMais - Home</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="src/css/home.css">
-    <link rel="stylesheet" href="src/css/graficos.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PoupeMais - Gráficos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+
+  <link rel="stylesheet" href="/public/css/home.css">
+  <link rel="stylesheet" href="/public/css/graficos.css">
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg" style="background-color: #FFFEF2;">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#"><img src="src/img/PoupeMais-logo.png" alt="Logo PoupeMais" id="logo"></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="home.html"><b>Home</b></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="simulacao.html"><b>Simular</b></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="graficos.html"><b>Gráficos</b></a>
-                    </li>
-                </ul>
-                <h4 class="h4-saldo"><b>Saldo:</b> R$<span id="saldo">0,00</span>
-                    <i class="bi bi-eye-slash" id="icone-olho"></i>
-                </h4>
-                <img src="src/img/inc-user.png" alt="" id="inc-user">
-            </div>
-        </div>
-    </nav>
 
-    <!--Dados baseados em saldo, despesas, economia e receita-->
+  <nav class="navbar navbar-expand-lg" style="background-color: #FFFEF2;">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="/public/img/PoupeMais-logo.png" alt="Logo PoupeMais" id="logo">
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link active" href="home.html"><b>Home</b></a></li>
+          <li class="nav-item"><a class="nav-link active" href="simulacao.html"><b>Simular</b></a></li>
+          <li class="nav-item"><a class="nav-link active" href="graficos.html"><b>Gráficos</b></a></li>
+        </ul>
+        <h4 class="h4-saldo"><b>Saldo:</b> R$<span id="saldo">0,00</span>
+          <i class="bi bi-eye-slash" id="icone-olho"></i>
+        </h4>
+        <img src="/public/img/inc-user.png" alt="" id="inc-user">
+      </div>
+    </div>
+  </nav>
+
+
+   <!--Dados baseados em saldo, despesas, economia e receita-->
     <div class="texto-inicial">
         <h3 id="titulo"><b>GRÁFICOS FINANCEIROS</b></h3>
         <b><p id="subtitulo">Acompanhe a evolução das suas receitas, despesas e saldo geral de forma visual e interativa.</p></b>
@@ -68,70 +67,80 @@
         </div>
     </div>
 
-    <!--Evolução financeira-->
-    <div>
-    <div class="card shadow-sm my-4">
-        <div class="card-body">
+  <div class="container my-5">
+    <div class="row g-4 justify-content-center">
+      <!-- Evolução Financeira -->
+      <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
             <h5 class="card-title text-dark fw-bold fs-4 mb-3">Evolução Financeira</h5>
             <canvas id="graficoEvolucao" height="120"></canvas>
-        </div>
-    </div>
-    <!--Distribuição de Despesas-->
-    <div class="container py-5">
-    <div class="d-flex justify-content-center gap-4 flex-wrap">
-      <div class="card shadow-sm grafico-card">
-        <div class="card-body">
-          <h5 class="mb-3">DISTRIBUIÇÃO DAS DESPESAS</h5>
-          <canvas id="graficoDespesas" height="250"></canvas>
+          </div>
         </div>
       </div>
-      <!--Distribuição das Receitas-->
-      <div class="card shadow-sm grafico-card">
-        <div class="card-body">
-          <h5 class="mb-3">DISTRIBUIÇÃO DAS RECEITAS</h5>
-          <canvas id="graficoReceitas" height="250"></canvas>
+
+      <!-- Histórico de Período -->
+      <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="mb-3 fw-bold">Histórico de Período</h5>
+            <div class="table-responsive" style="max-height: 220px;">
+              <table class="table table-sm align-middle">
+                <thead class="table-success text-center">
+                  <tr>
+                    <th>Mês/Ano</th>
+                    <th>Receita</th>
+                    <th>Despesa</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelaHistorico">
+                  <!-- JS insere os dados -->
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
-      </div>
-
-      <!-- Receitas vs Despesas e Histórico de Período -->
-<div class="d-flex justify-content-center gap-4 flex-wrap mt-4">
-  
-  <!-- Receitas vs Despesas -->
-  <div class="card shadow-sm grafico-card" id="ReceitasvsDespesas">
-    <div class="card-body">
-      <h5 class="mb-3">RECEITAS VS DESPESAS</h5>
-      <canvas id="graficoReceitasDespesas" height="150"></canvas>
     </div>
-  </div>
-
-  <!-- Histórico de Período -->
-  <div class="card shadow-sm grafico-card" id="HistoricoPeriodo">
-    <div class="card-body">
-      <h5 class="mb-3">HISTÓRICO DE PERÍODO</h5>
-      <div class="table-responsive" style="max-height: 220px;">
-        <table class="table table-sm align-middle">
-          <thead class="table-success text-center">
-            <tr>
-              <th>Mês/Ano</th>
-              <th>Receita</th>
-              <th>Despesa</th>
-            </tr>
-          </thead>
-          <tbody id="tabelaHistorico">
-            <!-- JS -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-
-      
-      
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="src/js/graficos.js"></script>
-    </body>
 
     
+    <div class="row g-4 justify-content-center mt-5">
+      <!-- Despesas -->
+      <div class="col-md-4">
+        <div class="card shadow-sm grafico-card h-100">
+          <div class="card-body">
+            <h5 class="mb-3">Distribuição das Despesas</h5>
+            <canvas id="graficoDespesas" height="250"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Receitas -->
+      <div class="col-md-4">
+        <div class="card shadow-sm grafico-card h-100">
+          <div class="card-body">
+            <h5 class="mb-3">Distribuição das Receitas</h5>
+            <canvas id="graficoReceitas" height="250"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Receitas vs Despesas -->
+      <div class="col-md-4">
+        <div class="card shadow-sm grafico-card h-100">
+          <div class="card-body">
+            <h5 class="mb-3">Receitas vs Despesas</h5>
+            <canvas id="graficoReceitasDespesas" height="250"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/public/js/graficos.js"></script>
+  <script src="/public/js/home.js"></script>
+</body>
+
+</html>
