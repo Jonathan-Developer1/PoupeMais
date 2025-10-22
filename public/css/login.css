@@ -48,7 +48,7 @@ font-size: 18px;
   content: '';
   position: absolute;
   top: 0;
-  right: 700px;
+  right: 800px;
   width: 400px;
   height: 100%;
   background-color: #ffffff;
@@ -130,12 +130,12 @@ main hr {
 .btn-login:hover {
   background-color: #068348;
 }
-@media (max-width: 1690px) {
+@media (max-width: 1840px) {
     .left::after {
   content: '';
   position: absolute;
   top: 0;
-  right: 620px;
+  right: 700px;
   width: 400px;
   height: 100%;
   background-color: #ffffff;
@@ -144,7 +144,7 @@ main hr {
     }
 }
 
-@media (max-width: 1500px) {
+@media (max-width: 1640px) {
 
     .left::after {
         display: none;

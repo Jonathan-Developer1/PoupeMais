@@ -79,7 +79,7 @@ a {
 
 /* -----------------Fim do menu -----------------*/
 
-/* ----------------- Inicio da introdução (agora é o container do banner) ----------------- */
+/* ----------------- Inicio da introdução ----------------- */
 #introducao {
     display: flex;
     justify-content: center;
@@ -87,42 +87,35 @@ a {
     margin-top: 98px;
     width: 100%;
     height: 700px;
-
-
+    background-color: #238662;
+    padding: 0 0 0 100px ;
 }
 
-/* -- Banner Poupe Mais -- */
 .poupe-mais-container {
     display: flex;
     align-items: center;
-    background-color: #3a8d67;
     color: #ffffff;   
     width: 100%;
     height: 100%;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .text-content {
-    padding: 40px 50px;
+    width: 100%;
+    padding-left: 180px;
     z-index: 2;
-    font-family: 'Poppins', sans-serif; /* Fonte específica para o banner */
-    font-size: large;
 }
 
 .text-content h1 {
     font-size: 2.2rem;
-    font-weight: 700;
-    margin-top: 0;
-    margin-bottom: 15px;
-    line-height: 1.3;
+    word-spacing: 5px;
+    width: 80%;
 }
 
 .text-content p {
+    width: 80%;
     font-size: 2rem;
-    line-height: 1.6;
-    margin-bottom: 0;
-    max-width: 400px;
+    margin-top: 20px;    
 }
 
 .image-container {
@@ -138,18 +131,16 @@ a {
 .image-container::before {
     content: '';
     position: absolute;
-    background-color: #85c78d;
-    width: 150%;
-    height: 150%;
-    border-radius: 100px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-15deg);
-    z-index: 0;
+    border: solid 235px #e5ff7088;
+    background-color: #3a8d67;
+    margin: 580px 100px 0 350px;
+    width: 750px;
+    height: 750px;
+    border-radius: 50%;
 }
 
 .image-container img {
-    max-width: 100%;
+    width: 650px;
     border-radius: 20px;
     position: relative;
     z-index: 1;
@@ -161,63 +152,69 @@ a {
 #vantagens{
     width: 100%;
     height: 500px;
-    border: solid 3px #013918;
+    padding: 40px 0;
     background-color: #013918;
     color: white;
 }   
 
 #container {
-    width: 80%;
-    margin: 20px auto;
+    width: 100%;
+    margin: 0px auto;
 }
 
-.cards {
-  display: flex;          /* coloca os cards lado a lado */
-  justify-content: center; /* centraliza os cards horizontalmente */
+#container h1{
+    width: 71.5%;
+    margin: 0 auto 40px auto;
+    font-weight: 300
+}
 
-
+.cards{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 50px;
 }
 
 .card {
-  background-color: #488536;
+    background-color: #488536;
     margin: 15px;
-    border-radius: 10px;
-}   
-
-#titulo img{
-    width: 90px;
+    border-radius: 5px;
+    width: 280px;
+    height: 280px;  
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    transition: 0.8s;
 }
-#titulo{
+
+.card:hover {
+    scale: 105%;
+    transition: 0.8s;
+}
+.titulo{
     display: flex;
-    justify-content: center;
     align-items: center;
-    width: 250px;
-    height: 250px;
+    padding: 20px;
+    width: 100%;
+    height: 110px;
 }
-#titulo {
-  display: flex;
-  align-items: center;   /* alinha verticalmente */
-  gap: 10px;             /* espaçamento entre imagem e texto */
-  flex-wrap: wrap;       /* permite quebrar linha */
-  width: 350px;
-  height: 350px;
-  justify-content: center;
-
+.titulo img{
+    width: 50px;
+    margin: 10px;
+    justify-content: space-between;
 }
 
-#titulo img {
-  width: 50px;
-}
-
-#titulo h2 {
-  margin: 0;
-}
-
-.descricao p{
+.descricao{
     font-size: 20px;
-    padding:20px;
+    padding: 20px 35px;
+    width: 100%;
+    height: 65%;
+    display: flex;
 }
-/* Faz o parágrafo ficar abai*
+.descricao p{
+    height: 50px;
+    width: 100%;
+    font-weight: 300;
+}
 
 /* Responsividade para telas menores */
 @media (max-width: 768px) {
