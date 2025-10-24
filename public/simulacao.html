@@ -19,8 +19,7 @@
     <header>
         <nav class="navbar navbar-expand-lg" style="background-color: #FFFEF2;">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#"><img src="img/PoupeMais-logo.png" alt="Logo PoupeMais"
-                        id="logo"></a>
+                <a class="navbar-brand" href="home.html"><img src="img/PoupeMais-logo.png" alt="Logo PoupeMais" id="logo"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +34,7 @@
                             <a class="nav-link active" aria-current="page" href="simulacao.html"><b>Simular</b></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#"><b>Gráficos</b></a>
+                            <a class="nav-link active" aria-current="page" href="graficos.html"><b>Gráficos</b></a>
                         </li>
                     </ul>
                     <h4 class="h4-saldo"><b>Saldo:</b> R$<span id="saldo">0,00</span>
@@ -50,26 +49,28 @@
     <h1><b>SIMULAÇÃO FINANCEIRA</b></h1>
     <h3>Planeje seus gastos e descubra como alcançar seus objetivos.</h3>
 
-    <div class="parametros">
-        <h3 class="sub-titulos">PARÂMETROS DA SIMULAÇÃO</h3>
-        <input type="text" placeholder="Ex: Economizar para a viagem" class="input-estilo">
+    <div class="container-fluid">
+        <div class="parametros">
+            <h3 class="sub-titulos">PARÂMETROS DA SIMULAÇÃO</h3>
+            <input type="text" placeholder="Ex: Economizar para a viagem" class="input-estilo">
 
-        <div><select class="select-simples">
-                <option>Despesa</option>
-                <option>Receita</option>
+            <div><select class="select-simples">
+                    <option>Despesa</option>
+                    <option>Receita</option>
+                </select>
+
+                <input type="text" placeholder="Inserir valor (R$)" class="input-estilo-money">
+            </div>
+            <select class="select-simples">
+                <option selected disabled>Inserir categoria</option>
+                <option>Salário</option>
+                <option>Investimentos</option>
+                <option>Vendas</option>
+                <option>Outros</option>
             </select>
 
-            <input type="text" placeholder="Inserir valor (R$)" class="input-estilo-money">
+            <input type="text" placeholder="Inserir parcelas" class="input-estilo-money">
         </div>
-        <select class="select-simples">
-            <option selected disabled>Inserir categoria</option>
-            <option>Salário</option>
-            <option>Investimentos</option>
-            <option>Vendas</option>
-            <option>Outros</option>
-        </select>
-
-        <input type="text" placeholder="Inserir parcelas" class="input-estilo-money">
     </div>
 
 </body>

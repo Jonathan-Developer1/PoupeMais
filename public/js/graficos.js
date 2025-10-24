@@ -107,7 +107,7 @@ historico.forEach(item => {
   tbody.innerHTML += row;
 });
 
-//----Tudo abaixo será mensal? olhar com os meninos---
+
 
    // GRÁFICO DE DESPESAS
 const ctxDespesas = document.getElementById('graficoDespesas');
