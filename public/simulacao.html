@@ -19,7 +19,8 @@
     <header>
         <nav class="navbar navbar-expand-lg" style="background-color: #FFFEF2;">
             <div class="container-fluid">
-                <a class="navbar-brand" href="home.html"><img src="img/PoupeMais-logo.png" alt="Logo PoupeMais" id="logo"></a>
+                <a class="navbar-brand" href="home.html"><img src="img/PoupeMais-logo.png" alt="Logo PoupeMais"
+                        id="logo"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -50,28 +51,84 @@
     <h3>Planeje seus gastos e descubra como alcançar seus objetivos.</h3>
 
     <div class="container-fluid">
-        <div class="parametros">
+        <div id="parametros">
             <h3 class="sub-titulos">PARÂMETROS DA SIMULAÇÃO</h3>
-            <input type="text" placeholder="Ex: Economizar para a viagem" class="input-estilo">
-
-            <div><select class="select-simples">
-                    <option>Despesa</option>
-                    <option>Receita</option>
-                </select>
-
-                <input type="text" placeholder="Inserir valor (R$)" class="input-estilo-money">
+            <div class="linha">
+                <div>
+                    <label>Nome da simulação <span id="obrigatorio">*</span></label>
+                    <input type="text" placeholder="Ex: Economizar para a viagem" class="input-estilo">
+                </div>
+                <div id="saldo">
+                    <label>Saldo inicial <span id="obrigatorio">*</span></label>
+                    <input type="text" placeholder="R$" class="input-estilo-money">
+                </div>
             </div>
-            <select class="select-simples">
-                <option selected disabled>Inserir categoria</option>
-                <option>Salário</option>
-                <option>Investimentos</option>
-                <option>Vendas</option>
-                <option>Outros</option>
-            </select>
 
-            <input type="text" placeholder="Inserir parcelas" class="input-estilo-money">
+            <div class="linha">
+                <div>
+                    <label>Periodo da simulação <span id="obrigatorio">*</span></label>
+                    <input type="number" placeholder="(Meses)" class="input-estilo-money">
+                </div>
+                <div id="porcentagem">
+                    <label>Porcentagem da simulação <span id="obrigatorio">*</span></label>
+                    <input type="text" placeholder="%" class="input-estilo-money">
+                </div>
+            </div>
+
+            <div>
+                <label id="tipo">Tipo da simulação <span id="obrigatorio">*</span></label>
+                <div class="check">
+                    <div id="RedDesp">
+                        <input type="radio" name="simulação" value="1">
+                        <label>Redução de despesas</label>
+                    </div>
+                    <div id="AumReceita">
+                        <input type="radio" name="simulação" value="2">
+                        <label>Aumento de receitas</label>
+                    </div>
+                </div>
+
+                <div class="check">
+                    <div id="InvRendim">
+                        <input type="radio" name="simulação" value="3">
+                        <label>Investimento com rendimento</label>
+                    </div>
+                    <div id="MetEco">
+                        <input type="radio" name="simulação" value="4">
+                        <label>Meta de economia</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" id="botao-simulacao">Criar simulação</button>
+
         </div>
     </div>
+
+    <div class="container-fluid">
+        <div id="resultado">
+            <h3 class="sub-titulos">RESULTADO DA SIMULAÇÃO</h3>
+            <h5>Se você reduzir <span>10%</span> das despesas mensais, em <span>6 meses</span> poderá economizar:</h5>
+            <h2>R$ <span>1.200,00</span></h2>
+            <h5>Saldo Projetado: <span>R$ 5.800,00</span></h5>
+        </div>
+    </div>
+
+    <div class="comparativos-wrapper">
+        <div id="comparativo">
+            <h3 class="sub-titulos">COMPARATIVO VISUAL</h3>
+            <div class="centro-h5">
+                <h5> <span>5.800,00</span></h5>
+            </div>
+        </div>
+
+        <div id="historico">
+            <h3 class="sub-titulos">HISTÓRICO DE SIMULAÇÕES</h3>
+            
+            <button type="submit" id="botao-nova-simulacao">Nova simulação</button>
+        </div>
+    </div>
+
 
 </body>
 <script src="js/simulacao.js"></script>

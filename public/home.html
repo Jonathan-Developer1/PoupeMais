@@ -49,23 +49,23 @@
     <!--CRUD cadastro de despesas e receitas-->
     <h1><b>CADASTRAR NOVA TRANSAÇÃO</b></h1>
 
-    <input type="text" placeholder="Inserir nome" class="input-estilo" id="nome-transacao">
+    <input type="text" placeholder="Inserir nome" class="input-estilo" id="nome-transacao" required>
 
     <div>
-        <select class="select-simples" title="categoria" id="tipo">
+        <select class="select-simples" title="categoria" id="tipo" required>
             <option value="" selected disabled>Selecione o tipo</option>
             <option value="despesa">Despesa</option>
             <option value="receita">Receita</option>
         </select>
 
-        <input type="text" placeholder="Inserir valor (R$)" class="input-estilo-money" id="valor">
+        <input type="text" placeholder="Inserir valor (R$)" class="input-estilo-money" id="valor" required>
     </div>
 
-    <select class="select-simples" title="despesas e receitas" id="categoria">
+    <select class="select-simples" title="despesas e receitas" id="categoria" required>
         <option value="" selected disabled>Inserir categoria</option>
     </select>
 
-    <input type="number" placeholder="Inserir parcelas (meses)" class="input-estilo-money">
+    <input type="number" placeholder="Inserir parcelas (meses)" class="input-estilo-money" required>
     <button type="submit" id="botao-cadastro" onclick="cadastrarTransacao()">Cadastrar</button>
     <hr>
     <div class="porquinho">
