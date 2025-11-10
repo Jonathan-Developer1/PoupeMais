@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="css/simulacao.css">
     <link rel="shortcut icon" href="img/Porquinho_PM.png" type="image/x-icon">
@@ -110,9 +111,38 @@
     <div class="container-fluid">
         <div id="resultado">
             <h3 class="sub-titulos">RESULTADO DA SIMULAÇÃO</h3>
-            <h5>Se você reduzir <span>10%</span> das despesas mensais, em <span>6 meses</span> poderá economizar:</h5>
-            <h2>R$ <span>1.200,00</span></h2>
-            <h5>Saldo Projetado: <span>R$ 5.800,00</span></h5>
+            <div class="conteudo-resultado">
+                <div class="dados-simulacao">
+                    <h5>Se você reduzir <span>10%</span> das despesas mensais, em <span>6 meses</span> poderá
+                        economizar:
+                    </h5>
+                    <h2>R$ <span>1.200,00</span></h2>
+                    <h5>Saldo Projetado: <span>R$ 5.800,00</span></h5>
+                </div>
+                <div class="grafico-simulacao">
+                    <canvas id="grafico-linha1"></canvas>
+                    <script>
+                        const cty = document.getElementById('grafico-linha1');
+
+                        new Chart(cty, {
+                            type: 'line',
+                            data: {
+                                datasets: [{
+                                    label: 'Simulação 1',
+                                    data: [65, 59, 80, 81, 56, 55, 40],
+                                    fill: false,
+                                    borderColor: 'rgb(75, 192, 192)',
+                                    tension: 0.1
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -125,8 +155,6 @@
                 <canvas id="grafico1"></canvas>
                 <canvas id="grafico2"></canvas>
             </div>
-
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
             <script>
                 const ctx = document.getElementById('grafico1');
@@ -165,25 +193,26 @@
             </script>
 
             <div class="centro-h5">
-                <h5> <span>5.800,00</span></h5>
+                <h5><span class="valor">+5.800,00</span></h5>
             </div>
+
         </div>
 
         <!--HISTÓRICO DE SIMULAÇÕES-->
         <div id="historico">
             <h3 class="sub-titulos">HISTÓRICO DE SIMULAÇÕES</h3>
-            <div>
-
+            <div class="div-com-scroll" id="historicoSimulacao">
+                <!-- JS insere os cards aqui -->
             </div>
-            <a href="#nova-simulacao" id="botao-n-simulacao"><button type="submit" id="botao-nova-simulacao">Nova
-                    simulação</button></a>
+            <hr id="hr-historico">
+            <a href="#nova-simulacao" id="botao-n-simulacao">
+                <button type="submit" id="botao-nova-simulacao">Nova simulação</button>
+            </a>
         </div>
     </div>
     <hr>
 
-
 </body>
 <script src="js/simulacao.js"></script>
-<script></script>
 
 </html>

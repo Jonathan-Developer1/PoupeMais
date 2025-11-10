@@ -20,3 +20,53 @@ iconeOlho.addEventListener("click", () => {
 });
 
 
+
+
+
+
+
+
+
+
+// Exemplo: salvar e carregar simulações (temporariamente)
+
+const container = document.getElementById("historicoSimulacao");
+
+// Carregar simulações salvas (string separada por ;)
+let simulacoes = localStorage.getItem("simulacoes");
+let lista = simulacoes ? simulacoes.split(";") : [];
+
+// Exibir simulações na tela
+function renderizarHistorico() {
+  container.innerHTML = "";
+  lista.forEach(item => {
+    if (item.trim() !== "") {
+      const div = document.createElement("div");
+      div.classList.add("card-item");
+      div.innerHTML = `
+        <div class="card-text">
+          <h4>${item}</h4>
+        </div>
+        <span>›</span>
+      `;
+      container.appendChild(div);
+    }
+  });
+}
+
+// Adicionar nova simulação
+function adicionarSimulacao(nome) {
+  lista.push(nome);
+  localStorage.setItem("simulacoes", lista.join(";"));
+  renderizarHistorico();
+}
+
+// Inicializa
+renderizarHistorico();
+
+// Exemplo de uso (botão fictício)
+document.getElementById("btnAdd").addEventListener("click", () => {
+  const nome = prompt("Nome da simulação:");
+  if (nome) adicionarSimulacao(nome);
+});
+
