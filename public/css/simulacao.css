@@ -3,42 +3,60 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
-/*Header*/
-
+/* Header */
 #logo {
     width: 110px;
-    margin-right: 200px;
+}
+
+a.navbar-brand {
+    margin-right: 6rem;
+}
+
+.navbar {
+    border-bottom: 3px solid #003A14;
+    padding: 0.5rem 1rem;
 }
 
 .nav-item {
-    padding-right: 180px;
-    font-size: 23px;
+    font-size: 1.3rem;
+    margin-right: 4.5rem;
+    font-size: 22px;
+}
+
+.h4-saldo {
+    width: 160px;
+    font-size: 1.3rem;
+    margin: 0 4rem 0 0;
 }
 
 #inc-user {
     width: 40px;
     height: 40px;
-    margin: 0 20px;
 }
 
-.h4-saldo {
-    font-size: 23px;
-    margin: 0;
-    margin-right: 100px;
+
+/* Ajuste para responsividade do navbar */
+@media (max-width: 768px) {
+    .navbar-nav {
+        width: 100%;
+        text-align: center;
+    }
+
+    .h4-saldo {
+        display: block;
+        margin: 0.5rem auto;
+    }
+
+    #inc-user {
+        display: block;
+        margin: 0.5rem auto;
+    }
 }
 
-.bi-eye-slash {
-    padding-left: .5rem;
-}
-
-.navbar {
-    border-bottom: 3px solid #003A14;
-}
-
-/*Body*/
-/*PARAMETROS*/
+/* Body - Parâmetros */
 h1 {
     margin: 2% 0 0 3%;
     color: #003A17;
@@ -48,9 +66,13 @@ h1+h3 {
     margin: 0 0 1% 3%;
 }
 
+h3 {
+    font-size: 1.6rem;
+}
+
 #parametros {
     margin: 3rem;
-    padding: .5rem 1.5rem 1.5rem 1.5rem;
+    padding: 1rem 1.5rem;
     background-color: #E5F6E0;
     border-radius: 8px;
 }
@@ -59,80 +81,63 @@ h1+h3 {
     color: red;
 }
 
+#tipo {
+    font-size: 1.2rem;
+    font-weight: bolder;
+}
+
 .linha {
     display: flex;
-    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
     margin-bottom: 1%;
+}
+
+.linha>div {
+    flex: 1 1 250px;
 }
 
 .linha label {
     display: block;
-    margin: 0 0 0 .9rem;
-    font-size: 20px;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
     font-weight: bolder;
 }
 
-#tipo {
-    display: block;
-    margin: 0 0 0 .9rem;
-    font-size: 20px;
-    font-weight: bolder;
-}
-
-.sub-titulos {
-    margin: 0 1% 1% 1%;
-    color: #003A17;
-    font-weight: bold;
-}
-
-#saldo {
-    margin-left: 6.1rem;
-}
-
-#porcentagem {
-    margin-left: 18rem;
-}
-
-.input-estilo {
-    width: 450px;
+.input-estilo,
+.input-estilo-money {
+    width: 100%;
+    max-width: 450px;
     padding: 10px 15px;
     border: 1px solid #2c3e2c;
     border-radius: 8px;
     background-color: #fdfdf2;
     box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
-    font-size: 16px;
+    font-size: 1rem;
     color: #1c3b1c;
     outline: none;
-    margin-left: 1rem;
 }
 
-.input-estilo::placeholder {
+.input-estilo-money {
+    max-width: 260px;
+}
+
+.input-estilo::placeholder,
+.input-estilo-money::placeholder {
     color: #1c3b1c;
     opacity: 0.8;
 }
 
-.input-estilo-money {
-    width: 260px;
-    padding: 10px 15px;
-    border: 1px solid #2c3e2c;
-    border-radius: 8px;
-    background-color: #fdfdf2;
-    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
-    font-size: 16px;
-    color: #1c3b1c;
-    outline: none;
-    margin-left: 1rem;
-}
-
 .check {
     display: flex;
-    margin: .5rem 0 .5rem .9rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 0.5rem 0;
 }
 
 .check label {
-    font-size: 20px;
-    font-weight: 450;
-    color: rgba(0, 0, 0, 0.650);
+    font-size: 1.1rem;
+    color: rgba(0, 0, 0, 0.65);
 }
 
 input[type="radio"] {
@@ -151,122 +156,239 @@ input[type="radio"]:checked {
     border-color: black;
 }
 
-#RedDesp{
-    width: 25rem;
-}
-#AumReceita {
-    width: 25rem;
-}
-#MetEco {
-    width: 25rem;
-}
-#InvRendim{
-    width: 25rem;
-}
-
 #botao-simulacao {
     display: block;
     margin-left: auto;
     margin-right: 0;
     width: 12rem;
-    padding: .6rem .6rem;
+    padding: 0.6rem;
     border: 1px solid #2c3e2c;
-    border-radius: .3rem;
+    border-radius: 0.3rem;
     background-color: #2e7d32;
     box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
-    font-size: 16px;
+    font-size: 1rem;
     color: white;
     font-weight: bold;
 }
 
-
-/*RESULTADO*/
+/* Resultado */
 #resultado {
     margin: 3rem;
-    padding: .5rem 1.5rem 1.5rem 1.5rem;
+    padding: 1rem 1.5rem;
     border-radius: 8px;
     border: 1px solid black;
 }
 
 #resultado h2 {
-    margin: 2% 0 2% 1.5rem;
+    margin: 1rem 0;
     color: #008B37;
     font-weight: bold;
 }
 
 #resultado h5 {
-    margin-left: 1.5rem;
+    margin-bottom: 0.5rem;
 }
 
 #resultado span {
     color: #008B37;
 }
 
-/*COMPARATIVO E HISTORICO*/
 
+
+/* Comparativo e Histórico */
 .comparativos-wrapper {
     display: flex;
-    gap: 2rem;
     flex-wrap: wrap;
+    gap: 2rem;
+    margin: 0 3.5rem;
 }
 
-#comparativo {
-    flex: 1;
-    min-width: 250px;
-    margin: 0;
-    margin: 3rem;
-    padding: .5rem 1.5rem 1.5rem 1.5rem;
+#comparativo,
+#historico {
+    flex: 1 1 300px;
+    padding: 1rem 1.5rem;
     border-radius: 8px;
     border: 1px solid black;
+}
+
+.linha-graficos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+    justify-content: center;
+}
+
+.linha-graficos canvas {
+    flex: 1 1 250px;
+    max-width: 45%;
+    aspect-ratio: 1 / 1;
+}
+
+.valor {
+    display: inline-block;
+    margin: 1.5rem 1rem;
+    padding: .6rem .5rem;
+    color: #008B37;
+    font-size: 1.6rem;
+    font-weight: bolder;
+    border: 1px solid black;
+    border-radius: .2rem;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .centro-h5 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100px;
-    max-width: 100%;
-    margin-top: 1rem;
-}
-
-.centro-h5 h5 {
-    margin: 0;
-    padding: .5rem 1rem;
-    border: 1px solid black;
-    border-radius: 8px;
-    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.4);
     text-align: center;
-    font-size: 1.2rem;
 }
 
-
-#comparativo span {
-    color: #008B37;
-    font-weight: bold;
+.conteudo-resultado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
 }
 
-#historico {
+.dados-simulacao {
     flex: 1;
     min-width: 250px;
-    margin: 0;
-    margin: 3rem;
-    padding: .5rem 1.5rem 1.5rem 1.5rem;
-    border-radius: 8px;
-    border: 1px solid black;
 }
 
+.grafico-simulacao {
+    flex: 1;
+    min-width: 300px;
+    height: 300px;
+    position: relative;
+}
+
+
+/* Botões */
 #botao-nova-simulacao {
     display: block;
     margin: 1rem auto;
     width: 12rem;
-    padding: .6rem .6rem;
+    padding: 0.6rem;
     border: 1px solid #2c3e2c;
-    border-radius: .3rem;
+    border-radius: 0.3rem;
     background-color: #2e7d32;
     box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
-    font-size: 16px;
+    font-size: 1rem;
     color: white;
     font-weight: bold;
 }
 
+#hr-historico{
+    margin-bottom: 0;
+}
 
+#botao-n-simulacao {
+    text-decoration: none;
+}
+
+#grafico1 {
+    width: 40%;
+    max-width: 300px;
+    aspect-ratio: 1 / 1;
+}
+
+#grafico2 {
+    width: 40%;
+    max-width: 300px;
+    aspect-ratio: 1 / 1;
+}
+
+/* Ajustes finais para telas menores */
+@media (max-width: 768px) {
+
+    #parametros,
+    #resultado,
+    #comparativo,
+    #historico {
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    .linha-graficos canvas {
+        max-width: 100%;
+        height: 250px;
+    }
+
+    .linha>div {
+        flex: 1 1 100%;
+    }
+}
+
+#historico {
+    margin: 0 auto;
+    background: #fff;   
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.div-com-scroll {
+  height: 340px;          
+  max-height: 60vh;       
+  overflow-y: scroll;     
+  overflow-x: hidden;    
+  padding-right: 5px;
+  margin-bottom: 10px;
+  scroll-behavior: smooth;
+}
+
+/* Barra de rolagem estilizada */
+.div-com-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.div-com-scroll::-webkit-scrollbar-thumb {
+  background-color: #004b23;
+  border-radius: 4px;
+}
+
+.div-com-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+
+/* Cada item do histórico */
+.card-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.card-item:hover {
+    background: #f3f7f5;
+}
+
+/* Texto dentro do card */
+.card-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-text h4 {
+    margin: 0;
+    font-size: 1em;
+    color: #003d1f;
+    font-weight: 700;
+}
+
+.card-text p {
+    margin: 2px 0 0;
+    font-size: 0.9em;
+    color: #107b3e;
+}
+
+/* Ícone seta */
+.card-item span {
+    font-size: 1.2em;
+    color: #003d1f;
+}

@@ -5,37 +5,37 @@
     padding: 0;
 }
 
-/*Header*/
-
+/* Header */
 #logo {
     width: 110px;
-    margin-right: 200px;
+}
+
+a.navbar-brand{
+    margin-right: 6rem;
+}
+
+.navbar {
+    border-bottom: 3px solid #003A14;
+    padding: 0.5rem 1rem;
 }
 
 .nav-item {
-    padding-right: 180px;
-    font-size: 23px;
+    font-size: 1.3rem;
+    margin-right: 4.5rem;
+    font-size: 22px;
+}
+
+.h4-saldo {
+    width: 160px;
+    font-size: 1.3rem;
+    margin: 0 4rem 0 0;
 }
 
 #inc-user {
     width: 40px;
     height: 40px;
-    margin: 0 20px;
 }
 
-.h4-saldo {
-    font-size: 23px;
-    margin: 0;
-    margin-right: 100px;
-}
-
-.bi-eye-slash {
-    padding-left: .5rem;
-}
-
-.navbar {
-    border-bottom: 3px solid #003A14;
-}
 
 h1 {
     margin: 2% 0 1% 3%;
