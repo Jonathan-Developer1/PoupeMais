@@ -19,7 +19,10 @@
   },
   "homepage": "https://github.com/Jonathan-Developer1/PoupeMais#readme",
   "dependencies": {
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "msnodesqlv8": "^5.1.1",
+    "mssql": "^12.1.0",
     "webpack": "^5.102.1"
   }
 }
