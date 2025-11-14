@@ -219,10 +219,12 @@ input[type="radio"]:checked {
 }
 
 .linha-graficos canvas {
+    width: 100%;
+    max-width: 300px;
+    min-height: 300px;
     flex: 1 1 250px;
-    max-width: 45%;
-    aspect-ratio: 1 / 1;
 }
+
 
 .valor {
     display: inline-block;
@@ -276,7 +278,7 @@ input[type="radio"]:checked {
     font-weight: bold;
 }
 
-#hr-historico{
+#hr-historico {
     margin-bottom: 0;
 }
 
@@ -287,13 +289,11 @@ input[type="radio"]:checked {
 #grafico1 {
     width: 40%;
     max-width: 300px;
-    aspect-ratio: 1 / 1;
 }
 
 #grafico2 {
     width: 40%;
     max-width: 300px;
-    aspect-ratio: 1 / 1;
 }
 
 /* Ajustes finais para telas menores */
@@ -315,11 +315,15 @@ input[type="radio"]:checked {
     .linha>div {
         flex: 1 1 100%;
     }
+
+    .linha-graficos {
+        gap: 1rem;
+    }
 }
 
 #historico {
     margin: 0 auto;
-    background: #fff;   
+    background: #fff;
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     padding: 15px;
@@ -329,27 +333,27 @@ input[type="radio"]:checked {
 }
 
 .div-com-scroll {
-  height: 340px;          
-  max-height: 60vh;       
-  overflow-y: scroll;     
-  overflow-x: hidden;    
-  padding-right: 5px;
-  margin-bottom: 10px;
-  scroll-behavior: smooth;
+    height: 340px;
+    max-height: 60vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding-right: 5px;
+    margin-bottom: 10px;
+    scroll-behavior: smooth;
 }
 
 /* Barra de rolagem estilizada */
 .div-com-scroll::-webkit-scrollbar {
-  width: 6px;
+    width: 6px;
 }
 
 .div-com-scroll::-webkit-scrollbar-thumb {
-  background-color: #004b23;
-  border-radius: 4px;
+    background-color: #004b23;
+    border-radius: 4px;
 }
 
 .div-com-scroll::-webkit-scrollbar-track {
-  background: #f1f1f1;
+    background: #f1f1f1;
 }
 
 

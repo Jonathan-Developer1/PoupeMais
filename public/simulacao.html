@@ -159,37 +159,41 @@
             <script>
                 const ctx = document.getElementById('grafico1');
 
-                new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        datasets: [{
-                            label: '# of Votes',
-                            data: [12, 19, 3, 5, 2, 3],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false
-                    }
-                });
+                setTimeout(() => {
+                    new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            datasets: [{
+                                label: '# of Votes',
+                                data: [12, 19, 3, 5, 2, 3],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: false,
+                            maintainAspectRatio: false
+                        }
+                    });
+                }, 50);
 
                 const ctz = document.getElementById('grafico2');
 
-                new Chart(ctz, {
-                    type: 'pie',
-                    data: {
-                        datasets: [{
-                            label: '# of Votes',
-                            data: [12, 19, 3, 5, 2, 3],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false
-                    }
-                });
+                setTimeout(() => {
+                    new Chart(ctz, {
+                        type: 'pie',
+                        data: {
+                            datasets: [{
+                                label: '# of Votes',
+                                data: [12, 19, 3, 5, 2, 3],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: false,
+                            maintainAspectRatio: false
+                        }
+                    });
+                }, 50);
             </script>
 
             <div class="centro-h5">
