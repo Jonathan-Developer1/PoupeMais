@@ -1,13 +1,11 @@
 /*Titulo e subtitulo*/
-.texto-inicial {
-    margin: 10px;
-    margin-left: 70px;
-}
 
-#subtitulo {
-    font-size: large;
+.texto-inicial{
+    margin: 2% 0 0% 3%;
 }
-
+h1{
+    margin: 0;
+}
 /*Quadro verde com dados*/
 .resumo-financeiro {
     display: grid;
