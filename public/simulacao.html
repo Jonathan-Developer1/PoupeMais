@@ -58,22 +58,23 @@
             <div class="linha">
                 <div>
                     <label>Nome da simulação <span id="obrigatorio">*</span></label>
-                    <input type="text" placeholder="Ex: Economizar para a viagem" class="input-estilo">
+                    <input type="text" placeholder="Ex: Economizar para a viagem" class="input-estilo"
+                        id="nomeSimulacao">
                 </div>
                 <div id="saldon">
                     <label>Saldo inicial <span id="obrigatorio">*</span></label>
-                    <input type="text" placeholder="R$" class="input-estilo-money">
+                    <input type="text" placeholder="R$" class="input-estilo-money" id="saldoInicial">
                 </div>
             </div>
 
             <div class="linha">
                 <div>
                     <label>Periodo da simulação <span id="obrigatorio">*</span></label>
-                    <input type="number" placeholder="(Meses)" class="input-estilo-money">
+                    <input type="number" placeholder="(Meses)" class="input-estilo-money" id="periodoSimulacao">
                 </div>
                 <div id="porcentagem">
                     <label>Porcentagem da simulação <span id="obrigatorio">*</span></label>
-                    <input type="text" placeholder="%" class="input-estilo-money">
+                    <input type="text" placeholder="%" class="input-estilo-money" id="porcentagemSimulacao">
                 </div>
             </div>
 
@@ -81,28 +82,29 @@
                 <label id="tipo">Tipo da simulação <span id="obrigatorio">*</span></label>
                 <div class="check">
                     <div id="RedDesp">
-                        <input type="radio" name="simulação" value="1">
+                        <input type="radio" name="simulacaoTipo" value="1">
                         <label>Redução de despesas</label>
                     </div>
                     <div id="AumReceita">
-                        <input type="radio" name="simulação" value="2">
+                        <input type="radio" name="simulacaoTipo" value="2">
                         <label>Aumento de receitas</label>
                     </div>
                 </div>
 
                 <div class="check">
                     <div id="InvRendim">
-                        <input type="radio" name="simulação" value="3">
+                        <input type="radio" name="simulacaoTipo" value="3">
                         <label>Investimento com rendimento</label>
                     </div>
                     <div id="MetEco">
-                        <input type="radio" name="simulação" value="4">
+                        <input type="radio" name="simulacaoTipo" value="4">
                         <label>Meta de economia</label>
                     </div>
                 </div>
             </div>
 
-            <button type="submit" id="botao-simulacao">Criar simulação</button>
+            <button type="button" id="botao-simulacao">Criar simulação</button>
+
 
         </div>
     </div>
@@ -113,34 +115,14 @@
             <h3 class="sub-titulos">RESULTADO DA SIMULAÇÃO</h3>
             <div class="conteudo-resultado">
                 <div class="dados-simulacao">
-                    <h5>Se você reduzir <span>10%</span> das despesas mensais, em <span>6 meses</span> poderá
-                        economizar:
-                    </h5>
-                    <h2>R$ <span>1.200,00</span></h2>
-                    <h5>Saldo Projetado: <span>R$ 5.800,00</span></h5>
+                    <h5 id="resMensagem">AQUI APARECERÁ O RESULTADO DA SIMULÇÃO</h5>
+                    <!-- Valores detalhados -->
+                    <h5><span id="nomeSimul"></span></h5>
+                    <h2>R$ <span id="resValor">0,00</span></h2>
+                    <h5>Saldo Final: <span id="resTotal">0,00</span></h5>
                 </div>
                 <div class="grafico-simulacao">
                     <canvas id="grafico-linha1"></canvas>
-                    <script>
-                        const cty = document.getElementById('grafico-linha1');
-
-                        new Chart(cty, {
-                            type: 'line',
-                            data: {
-                                datasets: [{
-                                    label: 'Simulação 1',
-                                    data: [65, 59, 80, 81, 56, 55, 40],
-                                    fill: false,
-                                    borderColor: 'rgb(75, 192, 192)',
-                                    tension: 0.1
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: false
-                            }
-                        });
-                    </script>
                 </div>
             </div>
         </div>
@@ -156,50 +138,9 @@
                 <canvas id="grafico2"></canvas>
             </div>
 
-            <script>
-                const ctx = document.getElementById('grafico1');
-
-                setTimeout(() => {
-                    new Chart(ctx, {
-                        type: 'pie',
-                        data: {
-                            datasets: [{
-                                label: '# of Votes',
-                                data: [12, 19, 3, 5, 2, 3],
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            responsive: false,
-                            maintainAspectRatio: false
-                        }
-                    });
-                }, 50);
-
-                const ctz = document.getElementById('grafico2');
-
-                setTimeout(() => {
-                    new Chart(ctz, {
-                        type: 'pie',
-                        data: {
-                            datasets: [{
-                                label: '# of Votes',
-                                data: [12, 19, 3, 5, 2, 3],
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            responsive: false,
-                            maintainAspectRatio: false
-                        }
-                    });
-                }, 50);
-            </script>
-
             <div class="centro-h5">
-                <h5><span class="valor">+5.800,00</span></h5>
+                <h5><span class="valor" id="valorTotal">+0,00</span></h5>
             </div>
-
         </div>
 
         <!--HISTÓRICO DE SIMULAÇÕES-->
