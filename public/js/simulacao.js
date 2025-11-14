@@ -146,9 +146,9 @@ function atualizarGraficoPizza(sim) {
     graficoPizza = new Chart(ctx1, {
         type: "pie",
         data: {
-            labels: ["Saldo Inicial", "Ganho da Simulação"],
+            labels: ["Saldo Inicial"],
             datasets: [{
-                data: [saldoInicial, saldoExtra],
+                data: [saldoInicial],
                 backgroundColor: ["#4CAF50", "#FFA500"],
                 borderColor: ["#003A14", "#FF8C00"],
                 borderWidth: 1

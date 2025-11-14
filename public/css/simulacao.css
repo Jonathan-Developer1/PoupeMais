@@ -225,6 +225,14 @@ input[type="radio"]:checked {
     flex: 1 1 250px;
 }
 
+.grafico-pizza{
+    max-height: 400px;
+}
+
+.grafico-pizza h5{
+    text-align: center;
+}
+
 .valor {
     display: inline-block;
     margin: 1.5rem 1rem;
