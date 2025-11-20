@@ -238,6 +238,33 @@ app.post("/api/excluir", async (req, res) => {
   }
 })
 
+//HistoricoMensal:
+
+app.get("/api/historico/ultimo/:id_usuario", async (req, res) => {
+  const id_usuario = req.params.id_usuario;
+
+  try {
+    const result = await execSQLQuery(`
+      SELECT TOP 1 
+        mes,
+        ano,
+        total_receitas,
+        total_despesas,
+        economia
+      FROM HistoricoMensal
+      WHERE id_usuario = ${id_usuario}
+      ORDER BY ano DESC, mes DESC;
+    `);
+
+    res.json(result[0] || {});
+
+  } catch (error) {
+    console.error("Erro ao consultar último histórico:", error);
+    res.status(500).json({ erro: error.message });
+  }
+});
+
+
 app.listen(3000, () => {
   console.log("Servidor funcionando em http://localhost:3000");
 });

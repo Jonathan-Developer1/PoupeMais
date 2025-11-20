@@ -1,83 +1,94 @@
 //  SALDOS/DESPESAS/RECEITA/ECONOMIA  
+async function carregarResumo() {
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
 
-// Saldo atual
-/*const saldoDoHeader = parseFloat(document.getElementById('saldo').textContent.replace(',', '.')) || 0;
-document.getElementById('saldo-atual').textContent = saldoDoHeader.toFixed(2);
+  const resposta = await fetch(`/api/historico/ultimo/${usuario.id}`);
+  const dados = await resposta.json();
 
-//(aguardando atualizações sobre conexão com o bd para dar continuidade)
+  return dados;
+}
+
+async function preencherResumo() {
+  const dados = await carregarResumo();
+
+  document.getElementById("saldo-atual").innerText =
+     Number(dados.economia);
+
+  document.getElementById("receitas-totais").innerText =
+    Number(dados.total_receitas).toFixed(2);
+
+  document.getElementById("despesas-totais").innerText =
+    Number(dados.total_despesas).toFixed(2);
+
+  document.getElementById("economia").innerText =
+    Number(dados.economia).toFixed(2);
+}
+
+preencherResumo();
 
 
-
-
-
-
-
-
-
-
-
-// GRÁFICOS
+                                                // GRÁFICOS
 // GRÁFICO DE Evolução Financeira 
 const ctx = document.getElementById('graficoEvolucao');
 new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Nov', 'Dez', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'],
-        datasets: [
-          {
-            label: 'Receitas',
-            data: [1000, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600],
-            borderColor: '#0f5132',
-            backgroundColor: '#c',
-            tension: 0.3,
-            fill: false
-          },
-          {
-            label: 'Despesas',
-            data: [800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350],
-            borderColor: '#dc3545',
-            backgroundColor: '#dc3545',
-            tension: 0.3,
-            fill: false
-          },
-          {
-            label: 'Saldo Geral',
-            data: [200, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250],
-            borderColor: '#d9d700',
-            backgroundColor: '#d9d700',
-            tension: 0.3,
-            fill: false
-          }
-        ]
+  type: 'line',
+  data: {
+    labels: ['Nov', 'Dez', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'],
+    datasets: [
+      {
+        label: 'Receitas',
+        data: [1000, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600],
+        borderColor: '#0f5132',
+        backgroundColor: '#c',
+        tension: 0.3,
+        fill: false
       },
-     options: {
-  plugins: {
-    legend: {
-      display: true,
-      position: 'bottom',
-      labels: {
-        font: {
-          size: 12, 
-          weight: 'bold'
-        },
-        padding: 20, 
-        color: '#000'
+      {
+        label: 'Despesas',
+        data: [800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350],
+        borderColor: '#dc3545',
+        backgroundColor: '#dc3545',
+        tension: 0.3,
+        fill: false
+      },
+      {
+        label: 'Saldo Geral',
+        data: [200, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250],
+        borderColor: '#d9d700',
+        backgroundColor: '#d9d700',
+        tension: 0.3,
+        fill: false
+      }
+    ]
+  },
+  options: {
+    plugins: {
+      legend: {
+        display: true,
+        position: 'bottom',
+        labels: {
+          font: {
+            size: 12,
+            weight: 'bold'
+          },
+          padding: 20,
+          color: '#000'
+        }
+      }
+    },
+    layout: {
+      padding: 10
+    },
+    scales: {
+      y: {
+        beginAtZero: false
       }
     }
-  },
-  layout: {
-    padding: 10 
-  },
-  scales: {
-    y: {
-      beginAtZero: false
-    }
   }
-}
 
-    });
+});
 
-    //  HISTÓRICO DE PERÍODO 
+//  HISTÓRICO DE PERÍODO 
 const historico = [
   { mes: 'Nov/2024', receita: 1280, despesa: 600 },
   { mes: 'Dez/2024', receita: 1200, despesa: 800 },
@@ -91,7 +102,7 @@ const historico = [
   { mes: 'Ago/2025', receita: 8000, despesa: 1350 },
   { mes: 'Set/2025', receita: 1500, despesa: 1100 },
   { mes: 'Out/2025', receita: 945, despesa: 840 },
-  
+
 ];
 
 const tbody = document.getElementById('tabelaHistorico');
@@ -109,7 +120,7 @@ historico.forEach(item => {
 
 
 
-   // GRÁFICO DE DESPESAS
+// GRÁFICO DE DESPESAS
 const ctxDespesas = document.getElementById('graficoDespesas');
 new Chart(ctxDespesas, {
   type: 'pie',
@@ -192,4 +203,4 @@ new Chart(ctxReceitasDespesas, { // 🔹 aqui usa a mesma variável
 });
 
 
-*/
+
