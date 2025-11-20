@@ -19,8 +19,8 @@ function cadastrarTransacao()
     }
     
 
-    
-    
+
+
     array.push(objeto);
     const index = array.length-1;
  
