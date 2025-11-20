@@ -8,32 +8,13 @@ let arrayUltima = [];
 
 
 
-export async function cadastrarTransacao(objeto)
-{
-   
-    /*let objeto = {
-    valor: document.getElementById("valor-transacao").value,
-    nome: document.getElementById("nome-transacao").value,
-    categoria: document.getElementById("categoria").value,
-    tipo: document.getElementById("tipo").value
-    }
-    
+export async function cadastrarTransacao(objeto) {
 
-    
-    
-    array.push(objeto);
-    const index = array.length-1;
-    */
- 
+  const tabela = document.getElementById("tabela-cadastro");
 
+  tabela.innerHTML = ""; // limpa antes
 
-    const tabela = document.getElementById("tabela-cadastro");
-
-    
-    
-    
-    objeto.forEach(e => {
-        
+  objeto.forEach(e => {
     const novoCadastro = document.createElement('tr');
     const data = new Date(e.data);
     novoCadastro.innerHTML += `<td>${e.nome}</td>
@@ -44,7 +25,7 @@ export async function cadastrarTransacao(objeto)
                 <td><i class="bi bi-trash3"></i></td>`;
 
     tabela.appendChild(novoCadastro);
-    });
+  });
 }
 
     
