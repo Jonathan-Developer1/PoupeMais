@@ -146,31 +146,31 @@ app.get("/api/transacoes/:id_usuario", async (req, res) => {
 
   try {
     const result = await execSQLQuery(`
-      SELECT 
-        t.id_transacao,
-        t.id_usuario,
-        t.nome,
-        t.tipo,
-        t.valor,
-        t.parcelas,
-        t.confirmada,
-        t.data,
-        t.id_categoria,
-        c.nome_categoria 
-      FROM 
-        Transacoes t
-      JOIN 
-        Categorias c ON t.id_categoria = c.id_categoria
-      WHERE 
-        t.id_usuario = ${id_usuario}
-    `);
-    
-    res.json(result); 
+SELECT 
+  t.id_transacao,
+  t.id_usuario,
+  t.nome,
+  t.tipo,
+  t.valor,
+  t.parcelas,
+  t.confirmada,
+  t.data,
+  t.id_categoria,
+  c.nome_categoria 
+  FROM 
+  Transacoes t
+  JOIN 
+  Categorias c ON t.id_categoria = c.id_categoria
+  WHERE 
+  t.id_usuario = ${id_usuario}
+  `);
 
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ erro: "Erro ao consultar o banco" });
-  }
+  res.json(result); 
+
+  } catch (error) {
+  console.error(error);
+  res.status(500).json({ erro: "Erro ao consultar o banco" });
+  }
 });
 
 //pegar valor
@@ -200,7 +200,7 @@ app.post("/api/valor", async (req, res) => {
 //atualizar saldo 
 
 app.post("/api/valor/:id_usuario", async (req, res) => {
-  const dados = req.body;
+  const dados = req.params.id_usuario;
 
   try {
   

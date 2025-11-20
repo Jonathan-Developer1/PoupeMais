@@ -18,7 +18,7 @@ export async function cadastrarTransacao(objeto) {
     const novoCadastro = document.createElement('tr');
     const data = new Date(e.data);
     novoCadastro.innerHTML += `<td>${e.nome}</td>
-                <td>${data.toLocaleString('pt-BR', { timezone: 'UTC' })}</td>
+                <td>${data.toLocaleString('pt-BR', { timezone: 'UTC', dateStyle: 'short' })}</td>
                 <td>${e.categoria}</td>
                 <td>R$ ${e.valor}</td>
                 <td style="cursor: pointer"><i class="bi bi-check-square-fill" onclick="atualizaValor(${e.id_transacao})"></i></i></td>

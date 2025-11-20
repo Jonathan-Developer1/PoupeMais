@@ -222,6 +222,7 @@ if (formCadastro) {
             // 3. Verifica o status da resposta
             if (json.sucesso) {
                 listarTransacoes();
+                data.valueAsDate = new Date();
                 alert("Transação cadastrada com sucesso!");
                 formCadastro.reset(); // Limpa o formulário
                 // Garante que o select de categoria volte ao estado inicial (disabled)
