@@ -9,9 +9,34 @@ let array = [];
 let arrayUltima = [];
 
 const categorias = {
-    receita: ["Salário", "Comissão", "Freelance", "Aluguel", "Venda", "Investimentos", "Juros", "Dividendos", "Herança", "Outros"],
-    despesa: ["Aluguel", "Condomínio", "Água", "Luz", "Gás", "Cartão", "Alimentação", "Transporte", "Plano de Saúde", "Financiamento", "Lazer", "Outros"]
+    receita: [
+        { id: 1, nome: "Salário" },
+        { id: 2, nome: "Comissão" },
+        { id: 3, nome: "Aluguel" },
+        { id: 4, nome: "Venda" },
+        { id: 5, nome: "Investimentos" },
+        { id: 6, nome: "Juros" },
+        { id: 7, nome: "Dividendos" },
+        { id: 8, nome: "Herança" },
+        { id: 9, nome: "Outros" },
+        { id: 10, nome: "Freelance" }
+    ],
+    despesa: [
+        { id: 11, nome: "Aluguel" },
+        { id: 13, nome: "Condomínio" },
+        { id: 14, nome: "Água" },
+        { id: 12, nome: "Luz" },
+        { id: 15, nome: "Alimentação" },
+        { id: 16, nome: "Lazer" },
+        { id: 17, nome: "Gás" },
+        { id: 18, nome: "Cartão" },
+        { id: 19, nome: "Transporte" },
+        { id: 20, nome: "Plano de Saude" },
+        { id: 22, nome: "Outros" },
+        { id: 21, nome: "Financiamento" }
+    ]
 };
+
 const saldo = document.getElementById('saldo');
 
 let usuario = JSON.parse(localStorage.getItem('usuario'));
@@ -46,48 +71,40 @@ iconeOlho.addEventListener("click", () => {
 const tipoSelect = document.getElementById("tipo");
 const categoriaSelect = document.getElementById("categoria");
 
-async function listarTransacoes()
-{
-try {
-            // 2. Envio dos dados para a API (Backend)
-            const resposta = await fetch("/api/transacoes", {
-                method: 'POST', 
-                headers: {
-                    'Content-Type': 'application/json' 
-                },
-                body: JSON.stringify({ id_usuario: usuario.id }) 
-            });
+async function listarTransacoes() {
+    try {
+        const resposta = await fetch(`/api/transacoes/${usuario.id}`);
+        const json = await resposta.json();
 
-            const json = await resposta.json();
-            // 3. Verifica o status da resposta
-            if (json) {
-               cadastrarTransacao(json);
-            } else {
-                // Tenta ler o erro do corpo da resposta JSON
-                alert(`ERRO ao cadastrar (Status ${resposta.status}): ${json.message || resposta.statusText}`);
-            }
-
-        } catch (erro) {
-            console.error('Erro de rede ou na requisição:', erro);
+        if (json) {
+            cadastrarTransacao(json);
+        } else {
+            alert("Erro ao carregar transações");
         }
+
+    } catch (erro) {
+        console.error("Erro ao buscar transações:", erro);
     }
+}
+
 
 
 if (tipoSelect && categoriaSelect) {
     tipoSelect.addEventListener("change", () => {
         const tipoSelecionado = tipoSelect.value;
 
-        
+
         categoriaSelect.innerHTML = '<option value="" selected disabled>Inserir categoria</option>';
 
         // Adiciona as novas opções conforme o tipo
         if (tipoSelecionado && categorias[tipoSelecionado]) {
             categorias[tipoSelecionado].forEach(cat => {
                 const option = document.createElement("option");
-                option.textContent = cat;
-                option.value = cat.toLowerCase();
+                option.textContent = cat.nome;
+                option.value = cat.id; // AGORA ENVIA O ID CORRETO
                 categoriaSelect.appendChild(option);
             });
+
         }
     });
 }
@@ -107,23 +124,23 @@ if (formCadastro) {
         const transacao = {
             id_usuario: usuario.id,
             // IDs do HTML modificado:
-            descricao: document.getElementById("descricao-transacao").value,
+            nome: document.getElementById("descricao-transacao").value,
             tipo: document.getElementById("tipo").value,
             categoria: document.getElementById("categoria").value,
             // Certifique-se de que o input seja do tipo 'number' no HTML para garantir o valor
-            valor: parseFloat(document.getElementById("valor-transacao").value), 
-            parcelas: parseFloat(document.getElementById("parcelas").value), 
+            valor: parseFloat(document.getElementById("valor-transacao").value),
+            parcelas: parseFloat(document.getElementById("parcelas").value),
             data: document.getElementById("data-transacao").value // yyyy-mm-dd
         };
 
         try {
             // 2. Envio dos dados para a API (Backend)
             const resposta = await fetch("/api/transacao", {
-                method: 'POST', 
+                method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json' 
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(transacao) 
+                body: JSON.stringify(transacao)
             });
 
             const json = await resposta.json();
@@ -133,8 +150,8 @@ if (formCadastro) {
                 alert("Transação cadastrada com sucesso!");
                 formCadastro.reset(); // Limpa o formulário
                 // Garante que o select de categoria volte ao estado inicial (disabled)
-                categoriaSelect.innerHTML = '<option value="" selected disabled>Inserir categoria</option>'; 
-                
+                categoriaSelect.innerHTML = '<option value="" selected disabled>Inserir categoria</option>';
+
 
             } else {
                 // Tenta ler o erro do corpo da resposta JSON
