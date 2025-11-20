@@ -41,6 +41,7 @@ let usuario = JSON.parse(localStorage.getItem('usuario'));
 let saldoUsuario = await pegarSaldo();
 const data = document.getElementById("data-transacao")
 
+if(data)
 data.valueAsDate = new Date();
 
 window.atualizaValor = async function atualizaValor(transacao_id) {
