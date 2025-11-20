@@ -86,7 +86,26 @@ app.post("/login.html", async (req, res) => {
   }
 });
 
-// cadastro
+//saldo
+app.post("/api/saldo", async (req, res) => {
+  const {id_usuario} = req.body;
+
+  try {
+    const result = await execSQLQuery(
+      `SELECT saldo FROM Usuarios WHERE id = ${id_usuario}`
+    );
+    if (result.length > 0) {
+      res.json(result)
+    } else {
+      res.json({ sucesso: false });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ erro: "Erro ao consultar o banco" });
+  }
+})
+
+//cadastro
 app.post("/api/transacao", async (req, res) => {
   const transacao = req.body;
 
@@ -99,7 +118,7 @@ app.post("/api/transacao", async (req, res) => {
     request.input("nome", sql.VarChar(200), transacao.nome);
     request.input("tipo", sql.VarChar(50), transacao.tipo);
     request.input("valor", sql.Decimal(18, 2), transacao.valor);
-    request.input("parcelas", sql.Int, transacao.parcelas);
+    request.input("parcelas", sql.Int, transacao.parcelas || 1);
     request.input("data", sql.Date, transacao.data);
 
     request.input("id_categoria", sql.Int, transacao.categoria);
@@ -121,9 +140,9 @@ app.post("/api/transacao", async (req, res) => {
   }
 });
 
-// Listagem de Transações
-app.get("/api/transacoes/:id_usuario", async (req, res) => {
-  const id_usuario = req.params.id_usuario;
+//carregar transações
+app.post("/api/transacoes", async (req, res) => {
+  const {id_usuario} = req.body;
 
   try {
     const result = await execSQLQuery(`
@@ -154,6 +173,54 @@ app.get("/api/transacoes/:id_usuario", async (req, res) => {
   }
 });
 
+//pegar valor
+
+app.post("/api/valor", async (req, res) => {
+  const id_transacao = req.body;
+
+  try {
+    const result = await execSQLQuery(`SELECT * FROM Transacoes WHERE id = ${id_transacao}`);
+    
+    await execSQLQuery(`
+  UPDATE Transacoes
+  SET confirmado = 1
+  WHERE id = ${id_transacao};
+`);
+   
+    
+    res.json({ sucesso: true, dados: result});
+    
+
+  } catch (error) {
+    console.error("Erro ao selecionar transação:");
+    res.status(500).json({ erro: error.message });
+  }
+});
+
+//atualizar saldo 
+
+app.post("/api/valor/:id_usuario", async (req, res) => {
+  const dados = req.body;
+
+  try {
+  
+   if(dados[0].tipo == "Despesa")
+   {
+    await execSQLQuery(`UPDATE Usuarios SET saldo = saldo - ${dados[0].valor} WHERE id = ${id_usuario}`)
+   }
+   else if(dados[0].tipo == "Despesa")
+   {
+    await execSQLQuery(`UPDATE Usuarios SET saldo = saldo + ${dados[0].valor} WHERE id = ${id_usuario}`)
+   }
+  
+    res.json({ sucesso: true, dados: result});
+    
+
+  } catch (error) {
+    console.error("Erro ao selecionar transação:");
+    res.status(500).json({ erro: error.message });
+  }
+});
 
 app.listen(3000, () => {
   console.log("Servidor funcionando em http://localhost:3000");

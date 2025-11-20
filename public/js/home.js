@@ -1,5 +1,5 @@
 //const API_URL_CADASTRO = 'http://localhost:5000/api/transacoes'; //MUDAR PARA A ROTA CORRETA DO BANCO DE DASDOS
-import { cadastrarTransacao, addValor, addUltimas } from "./cadastro.js";
+import { cadastrarTransacao } from "./cadastro.js";
 
 
 const button = document.getElementById("botao-cadastro");
@@ -36,11 +36,76 @@ const categorias = {
     ]
 };
 
-const saldo = document.getElementById('saldo');
 
 let usuario = JSON.parse(localStorage.getItem('usuario'));
+let saldoUsuario = await pegarSaldo();
+const data = document.getElementById("data-transacao")
+
+data.valueAsDate = new Date();
+
+async function atualizaValor(transacao_id)
+{
+   try{
+      const resposta = await fetch("/api/valor",
+        {
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify({ id_transacao: transacao_id })
+        })
+        const json = await resposta.json();
+        if(json)
+      {
+        await fetch(`/api/saldo/${json[0].id_usuario}`,
+            {
+            
+            method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify({ dados: json})
+      })
+      }
+   }
+   catch(erro)
+   {
+    console.error('Erro de rede ou na requisição:', erro);
+   }
+}
+
+async function pegarSaldo(){
+    try
+    {
+        const resposta = await fetch("/api/saldo", 
+            {
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify({ id_usuario: usuario.id })
+            })
+            const json = await resposta.json()
+
+            if(json)
+            {
+                return json[0].saldo;
+            }
+             else {
+                // Tenta ler o erro do corpo da resposta JSON
+                alert(`ERRO ao cadastrar (Status ${resposta.status}): ${json.message || resposta.statusText}`);
+            }
+
+        } catch (erro) {
+            console.error('Erro de rede ou na requisição:', erro);
+        }
+    
+}
+
 
 listarTransacoes();
+pegarSaldo();
+
 
 
 // Função para pegar o nome da categoria pelo id
@@ -52,16 +117,16 @@ function getNomeCategoria(tipo, id) {
 
 //Animação do olho para o saldo
 const iconeOlho = document.getElementById("icone-olho");
-
+const saldo = document.getElementById('saldo');
 
 let saldoVisivel = true;
-saldo.textContent = usuario.saldo;
+saldo.textContent = saldoUsuario;
 
 iconeOlho.addEventListener("click", () => {
     saldoVisivel = !saldoVisivel;
 
     if (saldoVisivel) {
-        saldo.textContent = usuario.saldo;
+        saldo.textContent = saldoUsuario;
         iconeOlho.classList.remove("bi-eye");
         iconeOlho.classList.add("bi-eye-slash");
     } else {

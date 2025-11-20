@@ -16,43 +16,20 @@ export async function cadastrarTransacao(objeto) {
 
   objeto.forEach(e => {
     const novoCadastro = document.createElement('tr');
-
-    novoCadastro.innerHTML = `
-      <td>${e.nome}</td>
-      <td>${e.data ?? "-"}</td>
-      <td>${e.categoria}</td>
-      <td>R$ ${e.valor}</td>
-      <td><i class="bi bi-check-square-fill"></i></td>
-      <td><i class="bi bi-trash3"></i></td>
-    `;
+    const data = new Date(e.data);
+    novoCadastro.innerHTML += `<td>${e.nome}</td>
+                <td>${data.toLocaleString('pt-BR', { timezone: 'UTC' })}</td>
+                <td>${e.categoria}</td>
+                <td>R$ ${e.valor}</td>
+                <td style="cursor: pointer"><i class="bi bi-check-square-fill" onclick="atualizaValor(${e.id_transacao})"></i></i></td>
+                <td><i class="bi bi-trash3"></i></td>`;
 
     tabela.appendChild(novoCadastro);
   });
 }
 
-
-
-export async function addValor(index)
-{
     
-      let objeto = {
-        valor: array[index].valor,
-    nome: array[index].nome,
-    categoria: array[index].categoria,
-    tipo: array[index].tipo
-    }
-    if(arrayUltima.length == 4)
-    {
-        arrayUltima.pop();
-        arrayUltima.unshift(objeto);
-    }
-    else
-    {
-    arrayUltima.unshift(objeto);
-    }
-
-    
-  addUltimas();  
+  /*addUltimas();  
 
      let saldoNovo;
      
@@ -104,4 +81,4 @@ export async function addUltimas()
         });
 
     
-}
+}*/
