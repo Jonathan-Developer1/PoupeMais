@@ -1,25 +1,37 @@
-const API_URL_CADASTRO = 'http://localhost:5000/api/transacoes'; //MUDAR PARA A ROTA CORRETA DO BANCO DE DASDOS
+
+//const API_URL_CADASTRO = 'http://localhost:5000/api/transacoes'; //MUDAR PARA A ROTA CORRETA DO BANCO DE DASDOS
+import { cadastrarTransacao, addValor, addUltimas } from "./cadastro.js";
+
+
+const button = document.getElementById("botao-cadastro");
+const tabelaUltimas = document.getElementById("tabela-ultimas");
+let array = [];
+let arrayUltima = [];
 
 const categorias = {
     receita: ["Salário", "Comissão", "Freelance", "Aluguel", "Venda", "Investimentos", "Juros", "Dividendos", "Herança", "Outros"],
     despesa: ["Aluguel", "Condomínio", "Água", "Luz", "Gás", "Cartão", "Alimentação", "Transporte", "Plano de Saúde", "Financiamento", "Lazer", "Outros"]
 };
+const saldo = document.getElementById('saldo');
 
+let usuario = JSON.parse(localStorage.getItem('usuario'));
+
+listarTransacoes();
 
 
 
 //Animação do olho para o saldo
-const saldo = document.getElementById("saldo");
 const iconeOlho = document.getElementById("icone-olho");
-const saldoAtual = saldo.textContent;
+
 
 let saldoVisivel = true;
+saldo.textContent = usuario.saldo;
 
 iconeOlho.addEventListener("click", () => {
     saldoVisivel = !saldoVisivel;
 
     if (saldoVisivel) {
-        saldo.textContent = saldoAtual;
+        saldo.textContent = usuario.saldo;
         iconeOlho.classList.remove("bi-eye");
         iconeOlho.classList.add("bi-eye-slash");
     } else {
@@ -33,6 +45,33 @@ iconeOlho.addEventListener("click", () => {
 
 const tipoSelect = document.getElementById("tipo");
 const categoriaSelect = document.getElementById("categoria");
+
+async function listarTransacoes()
+{
+try {
+            // 2. Envio dos dados para a API (Backend)
+            const resposta = await fetch("/api/transacoes", {
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify({ id_usuario: usuario.id }) 
+            });
+
+            const json = await resposta.json();
+            // 3. Verifica o status da resposta
+            if (json) {
+               cadastrarTransacao(json);
+            } else {
+                // Tenta ler o erro do corpo da resposta JSON
+                alert(`ERRO ao cadastrar (Status ${resposta.status}): ${json.message || resposta.statusText}`);
+            }
+
+        } catch (erro) {
+            console.error('Erro de rede ou na requisição:', erro);
+        }
+    }
+
 
 if (tipoSelect && categoriaSelect) {
     tipoSelect.addEventListener("change", () => {
@@ -66,18 +105,20 @@ if (formCadastro) {
 
         // 1. Coleta e mapeamento dos dados do formulário
         const transacao = {
+            id_usuario: usuario.id,
             // IDs do HTML modificado:
             descricao: document.getElementById("descricao-transacao").value,
             tipo: document.getElementById("tipo").value,
             categoria: document.getElementById("categoria").value,
             // Certifique-se de que o input seja do tipo 'number' no HTML para garantir o valor
             valor: parseFloat(document.getElementById("valor-transacao").value), 
+            parcelas: parseFloat(document.getElementById("parcelas").value), 
             data: document.getElementById("data-transacao").value // yyyy-mm-dd
         };
 
         try {
             // 2. Envio dos dados para a API (Backend)
-            const resposta = await fetch(API_URL_CADASTRO, {
+            const resposta = await fetch("/api/transacao", {
                 method: 'POST', 
                 headers: {
                     'Content-Type': 'application/json' 
@@ -85,8 +126,10 @@ if (formCadastro) {
                 body: JSON.stringify(transacao) 
             });
 
+            const json = await resposta.json();
             // 3. Verifica o status da resposta
-            if (resposta.ok) {
+            if (json.sucesso) {
+                listarTransacoes();
                 alert("Transação cadastrada com sucesso!");
                 formCadastro.reset(); // Limpa o formulário
                 // Garante que o select de categoria volte ao estado inicial (disabled)
@@ -95,13 +138,11 @@ if (formCadastro) {
 
             } else {
                 // Tenta ler o erro do corpo da resposta JSON
-                const erro = await resposta.json();
-                alert(`ERRO ao cadastrar (Status ${resposta.status}): ${erro.message || resposta.statusText}`);
+                alert(`ERRO ao cadastrar (Status ${resposta.status}): ${json.message || resposta.statusText}`);
             }
 
         } catch (erro) {
             console.error('Erro de rede ou na requisição:', erro);
-            alert("Não foi possível conectar ao servidor. Verifique se a API está rodando em " + API_URL_CADASTRO);
         }
     });
 }

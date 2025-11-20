@@ -8,11 +8,11 @@ let arrayUltima = [];
 
 
 
-function cadastrarTransacao()
+export async function cadastrarTransacao(objeto)
 {
    
-    let objeto = {
-        valor: document.getElementById("valor").value,
+    /*let objeto = {
+    valor: document.getElementById("valor-transacao").value,
     nome: document.getElementById("nome-transacao").value,
     categoria: document.getElementById("categoria").value,
     tipo: document.getElementById("tipo").value
@@ -23,28 +23,30 @@ function cadastrarTransacao()
     
     array.push(objeto);
     const index = array.length-1;
+    */
  
 
 
     const tabela = document.getElementById("tabela-cadastro");
 
+    
+    
+    
+    objeto.forEach(e => {
+        
     const novoCadastro = document.createElement('tr');
-
-    novoCadastro.innerHTML += `<td>${objeto.nome}</td>
-                <td>${objeto.categoria}</td>
-                <td>R$ ${objeto.valor}</td>
-                <td><i class="bi bi-check-square-fill" onclick="addValor(${index})"></i></i></td>
+    novoCadastro.innerHTML += `<td>${e.nome}</td>
+                <td>${e.data}</td>
+                <td>${e.categoria}</td>
+                <td>R$ ${e.valor}</td>
+                <td><i class="bi bi-check-square-fill" onclick=""></i></i></td>
                 <td><i class="bi bi-trash3"></i></td>`;
                 
     tabela.appendChild(novoCadastro);
-
-    document.getElementById("nome-transacao").value = null;
-    document.getElementById("categoria").value = "";
-    document.getElementById("valor").value = null;
-
+    });
 }
 
-function addValor(index)
+export async function addValor(index)
 {
     
       let objeto = {
@@ -92,7 +94,7 @@ function addValor(index)
     saldoEditavel.textContent = saldoNovo;
 }
 
-function addUltimas()
+export async function addUltimas()
 {
 
  tabelaUltimas.innerHTML =

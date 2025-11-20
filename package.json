@@ -2,10 +2,10 @@
   "name": "poupemais",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/server.js"
+    "start": "nodemon src/server.js"
   },
   "repository": {
     "type": "git",
@@ -24,5 +24,10 @@
     "msnodesqlv8": "^5.1.1",
     "mssql": "^12.1.0",
     "webpack": "^5.102.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.2"
   }
 }

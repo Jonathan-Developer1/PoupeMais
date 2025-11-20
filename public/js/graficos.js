@@ -1,7 +1,7 @@
 //  SALDOS/DESPESAS/RECEITA/ECONOMIA  
 
 // Saldo atual
-const saldoDoHeader = parseFloat(document.getElementById('saldo').textContent.replace(',', '.')) || 0;
+/*const saldoDoHeader = parseFloat(document.getElementById('saldo').textContent.replace(',', '.')) || 0;
 document.getElementById('saldo-atual').textContent = saldoDoHeader.toFixed(2);
 
 //(aguardando atualizações sobre conexão com o bd para dar continuidade)
@@ -192,4 +192,4 @@ new Chart(ctxReceitasDespesas, { // 🔹 aqui usa a mesma variável
 });
 
 
-
+*/
