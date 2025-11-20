@@ -114,14 +114,13 @@ app.post("/api/transacao", async (req, res) => {
     const request = new sql.Request(conn);
 
     request.input("id_usuario", sql.Int, transacao.id_usuario);
-    // CORRIGIDO: Usando 'transacao.nome' conforme enviado pelo frontend.
+    //
     request.input("nome", sql.VarChar(200), transacao.nome);
     request.input("tipo", sql.VarChar(50), transacao.tipo);
     request.input("valor", sql.Decimal(18, 2), transacao.valor);
     request.input("parcelas", sql.Int, transacao.parcelas || 1);
     request.input("data", sql.Date, transacao.data);
-    // O campo 'categoria' no frontend envia o ID da categoria, não um nome.
-    // Ajuste para receber o ID e usar na coluna id_categoria
+
     request.input("id_categoria", sql.Int, transacao.categoria);
 
     await request.query(`
@@ -148,7 +147,7 @@ app.get("/api/transacoes/:id_usuario", async (req, res) => {
   try {
     const result = await execSQLQuery(`
       SELECT 
-       t.id_transacao,
+        t.id_transacao,
         t.id_usuario,
         t.nome,
         t.tipo,
@@ -165,13 +164,13 @@ app.get("/api/transacoes/:id_usuario", async (req, res) => {
       WHERE 
         t.id_usuario = ${id_usuario}
     `);
+    
+    res.json(result); 
 
-    res.json(result);
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ erro: "Erro ao consultar o banco" });
-  }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ erro: "Erro ao consultar o banco" });
+  }
 });
 
 //pegar valor
