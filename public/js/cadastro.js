@@ -21,9 +21,9 @@ export async function cadastrarTransacao(objeto) {
                 <td>${data.toLocaleString('pt-BR', { timezone: 'UTC', dateStyle: 'short' })}</td>
                 <td>${e.categoria}</td>
                 <td>R$ ${e.valor}</td>
-                <td style="cursor: pointer"><i class="bi bi-check-square-fill" onclick="atualizaValor(${e.id_transacao})"></i></i></td>
-                <td><i class="bi bi-trash3"></i></td>`;
-
+                <td style="cursor: pointer"><i class="bi bi-check-square-fill" onclick="atualizaValor(${e.id_transacao})"></i></td>
+                <td style="cursor: pointer"><i class="bi bi-trash3" onclick="excluirTransacao(${e.id_transacao})"></i></td>`;
+    
     tabela.appendChild(novoCadastro);
   });
 }

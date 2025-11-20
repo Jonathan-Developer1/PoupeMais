@@ -176,16 +176,15 @@ SELECT
 //pegar valor
 
 app.post("/api/valor", async (req, res) => {
-  const id_transacao = req.body;
-
+  const {id_transacao} = req.body;
   try {
-    const result = await execSQLQuery(`SELECT * FROM Transacoes WHERE id = ${id_transacao}`);
+    const result = await execSQLQuery(`SELECT * FROM Transacoes WHERE id_transacao = ${id_transacao}`);
     
     await execSQLQuery(`
-  UPDATE Transacoes
-  SET confirmado = 1
-  WHERE id = ${id_transacao};
-`);
+    UPDATE Transacoes
+    SET confirmada = 1
+    WHERE id_transacao = ${id_transacao};
+  `);
    
     
     res.json({ sucesso: true, dados: result});
@@ -199,21 +198,22 @@ app.post("/api/valor", async (req, res) => {
 
 //atualizar saldo 
 
-app.post("/api/valor/:id_usuario", async (req, res) => {
-  const dados = req.params.id_usuario;
-
+app.post("/api/saldo/atualizar", async (req, res) => {
+  const result = req.body;
+  
+  
   try {
-  
-   if(dados[0].tipo == "Despesa")
+
+   if(result.dados.tipo == "despesa")
    {
-    await execSQLQuery(`UPDATE Usuarios SET saldo = saldo - ${dados[0].valor} WHERE id = ${id_usuario}`)
+    await execSQLQuery(`UPDATE Usuarios SET saldo = saldo - ${result.dados.valor} WHERE id = ${result.id_usuario}`)
    }
-   else if(dados[0].tipo == "Despesa")
+   else if(result.dados.tipo == "receita")
    {
-    await execSQLQuery(`UPDATE Usuarios SET saldo = saldo + ${dados[0].valor} WHERE id = ${id_usuario}`)
+    await execSQLQuery(`UPDATE Usuarios SET saldo = saldo + ${result.dados.valor} WHERE id = ${result.id_usuario}`)
    }
   
-    res.json({ sucesso: true, dados: result});
+    res.json({sucesso: true, dados: result});
     
 
   } catch (error) {
@@ -221,6 +221,22 @@ app.post("/api/valor/:id_usuario", async (req, res) => {
     res.status(500).json({ erro: error.message });
   }
 });
+
+app.post("/api/excluir", async (req, res) => {
+  const { transacao_id } = req.body;
+
+
+  try
+  {
+    await execSQLQuery(`DELETE FROM Transacoes WHERE id_transacao = ${transacao_id}`);
+    
+    res.json({sucesso: true});
+  }
+  catch(error)
+  {
+    console.log(error);
+  }
+})
 
 app.listen(3000, () => {
   console.log("Servidor funcionando em http://localhost:3000");

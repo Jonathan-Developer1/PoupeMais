@@ -43,36 +43,45 @@ const data = document.getElementById("data-transacao")
 
 data.valueAsDate = new Date();
 
-async function atualizaValor(transacao_id)
-{
-   try{
-      const resposta = await fetch("/api/valor",
-        {
-                method: 'POST', 
-                headers: {
-                    'Content-Type': 'application/json' 
-                },
-                body: JSON.stringify({ id_transacao: transacao_id })
-        })
+window.atualizaValor = async function atualizaValor(transacao_id) {
+    try {
+        const resposta = await fetch("/api/valor", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id_transacao: transacao_id })
+        });
+
         const json = await resposta.json();
-        if(json)
-      {
-        await fetch(`/api/saldo/${json[0].id_usuario}`,
-            {
-            
-            method: 'POST', 
+        
+        console.log(json.dados[0])
+        if (json) {
+            const respostaSaldo = await fetch("/api/saldo/atualizar", {
+                method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json' 
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ dados: json})
-      })
-      }
-   }
-   catch(erro)
-   {
-    console.error('Erro de rede ou na requisição:', erro);
-   }
+                body: JSON.stringify({ dados: json.dados[0], id_usuario: usuario.id })
+            });
+
+            const jsonSaldo = await respostaSaldo.json();
+            
+
+            if (jsonSaldo.sucesso) {
+                saldoUsuario = await pegarSaldo();
+                animacaoOlho();
+               
+            } else {
+                console.log("erro");
+            }
+        }
+
+    } catch (erro) {
+        console.error('Erro de rede ou na requisição:', erro);
+    }
 }
+
 
 async function pegarSaldo(){
     try
@@ -90,6 +99,7 @@ async function pegarSaldo(){
             if(json)
             {
                 return json[0].saldo;
+                
             }
              else {
                 // Tenta ler o erro do corpo da resposta JSON
@@ -104,6 +114,7 @@ async function pegarSaldo(){
 
 
 listarTransacoes();
+animacaoOlho();
 pegarSaldo();
 
 
@@ -116,6 +127,8 @@ function getNomeCategoria(tipo, id) {
 }
 
 //Animação do olho para o saldo
+function animacaoOlho()
+{
 const iconeOlho = document.getElementById("icone-olho");
 const saldo = document.getElementById('saldo');
 
@@ -135,7 +148,7 @@ iconeOlho.addEventListener("click", () => {
         iconeOlho.classList.add("bi-eye");
     }
 });
-
+}
 
 
 const tipoSelect = document.getElementById("tipo");
@@ -145,7 +158,7 @@ async function listarTransacoes() {
     try {
         const resposta = await fetch(`/api/transacoes/${usuario.id}`);
         const json = await resposta.json();
-        console.log(json);
+
         if (json) {
             // Ajusta os objetos para incluir o nome da categoria antes de enviar para cadastrarTransacao
             const jsonAjustado = json.map(e => ({
@@ -238,4 +251,31 @@ if (formCadastro) {
             console.error('Erro de rede ou na requisição:', erro);
         }
     });
+}
+
+window.excluirTransacao = async function excluirTransacao(id_transacao) {
+    
+    try
+    {
+        const resposta = await fetch("/api/excluir",{
+            method: 'POST',
+            headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ transacao_id: id_transacao })
+            });
+
+        const json = await resposta.json();
+        console.log(json);
+
+        if(json.sucesso)
+        {
+            listarTransacoes();
+        }
+        
+    }
+    catch(error)
+{
+    console.log(error);
+}
 }
