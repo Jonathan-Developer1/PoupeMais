@@ -145,7 +145,7 @@ async function listarTransacoes() {
     try {
         const resposta = await fetch(`/api/transacoes/${usuario.id}`);
         const json = await resposta.json();
-
+        console.log(json);
         if (json) {
             // Ajusta os objetos para incluir o nome da categoria antes de enviar para cadastrarTransacao
             const jsonAjustado = json.map(e => ({

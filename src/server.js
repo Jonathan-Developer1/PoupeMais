@@ -142,8 +142,8 @@ app.post("/api/transacao", async (req, res) => {
 });
 
 //carregar transações
-app.post("/api/transacoes", async (req, res) => {
-  const {id_usuario} = req.body;
+app.get("/api/transacoes/:id_usuario", async (req, res) => {
+  const id_usuario = req.params.id_usuario;
 
   try {
     const result = await execSQLQuery(`
