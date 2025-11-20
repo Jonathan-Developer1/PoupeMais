@@ -1,4 +1,3 @@
-
 //const API_URL_CADASTRO = 'http://localhost:5000/api/transacoes'; //MUDAR PARA A ROTA CORRETA DO BANCO DE DASDOS
 import { cadastrarTransacao, addValor, addUltimas } from "./cadastro.js";
 
@@ -44,6 +43,12 @@ let usuario = JSON.parse(localStorage.getItem('usuario'));
 listarTransacoes();
 
 
+// Função para pegar o nome da categoria pelo id
+function getNomeCategoria(tipo, id) {
+    const lista = categorias[tipo];
+    const categoriaEncontrada = lista.find(c => c.id == id);
+    return categoriaEncontrada ? categoriaEncontrada.nome : "Desconhecido";
+}
 
 //Animação do olho para o saldo
 const iconeOlho = document.getElementById("icone-olho");
@@ -77,7 +82,12 @@ async function listarTransacoes() {
         const json = await resposta.json();
 
         if (json) {
-            cadastrarTransacao(json);
+            // Ajusta os objetos para incluir o nome da categoria antes de enviar para cadastrarTransacao
+            const jsonAjustado = json.map(e => ({
+                ...e,
+                categoria: getNomeCategoria(e.tipo, e.id_categoria)
+            }));
+            cadastrarTransacao(jsonAjustado);
         } else {
             alert("Erro ao carregar transações");
         }

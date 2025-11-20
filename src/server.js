@@ -64,17 +64,19 @@ app.get("/", (req, res) => {
 
 // login
 app.post("/login.html", async (req, res) => {
-  const { email, senha} = req.body;
+  const { email, senha } = req.body;
 
   try {
     const result = await execSQLQuery(
       `SELECT * FROM Usuarios WHERE Email='${email}' AND Senha='${senha}'`
     );
-    
+
     if (result.length > 0) {
-      res.json({ sucesso: true,
+      res.json({
+        sucesso: true,
         saldo: result[0].saldo,
-      id: result[0].id});
+        id: result[0].id
+      });
     } else {
       res.json({ sucesso: false });
     }
@@ -84,7 +86,7 @@ app.post("/login.html", async (req, res) => {
   }
 });
 
-//cadastro
+// cadastro
 app.post("/api/transacao", async (req, res) => {
   const transacao = req.body;
 
@@ -93,53 +95,65 @@ app.post("/api/transacao", async (req, res) => {
     const request = new sql.Request(conn);
 
     request.input("id_usuario", sql.Int, transacao.id_usuario);
-    request.input("nome", sql.VarChar(200), transacao.descricao);
+    // CORRIGIDO: Usando 'transacao.nome' conforme enviado pelo frontend.
+    request.input("nome", sql.VarChar(200), transacao.nome);
     request.input("tipo", sql.VarChar(50), transacao.tipo);
     request.input("valor", sql.Decimal(18, 2), transacao.valor);
     request.input("parcelas", sql.Int, transacao.parcelas);
     request.input("data", sql.Date, transacao.data);
-    request.input("categoria", sql.VarChar(100), null);
+    // O campo 'categoria' no frontend envia o ID da categoria, não um nome.
+    // Ajuste para receber o ID e usar na coluna id_categoria
+    request.input("id_categoria", sql.Int, transacao.categoria);
 
     await request.query(`
-      INSERT INTO transacoes
-        (id_usuario, nome, tipo, valor, parcelas, confirmada, data, id_categoria)
-      VALUES 
-        (@id_usuario, @nome, @tipo, @valor, @parcelas, 0, @data, @categoria)
-    `);
+      INSERT INTO transacoes
+        (id_usuario, nome, tipo, valor, parcelas, confirmada, data, id_categoria)
+      VALUES 
+        (@id_usuario, @nome, @tipo, @valor, @parcelas, 0, @data, @id_categoria)
+    `);
 
     res.json({ sucesso: true });
 
   } catch (error) {
     console.error("❌ Erro ao inserir transação:");
-    console.error("Mensagem:", error.message);
-    console.error("Linha do SQL:", error.lineNumber);
-    console.error("SQLSTATE:", error.sqlstate);
-    console.error("Código:", error.code);
     console.error("Detalhes completos:", error);
 
     res.status(500).json({ erro: error.message });
   }
 });
 
-app.post("/api/transacoes", async (req, res) => {
-  const {id_usuario} = req.body;
+// Listagem de Transações
+app.get("/api/transacoes/:id_usuario", async (req, res) => {
+  const id_usuario = req.params.id_usuario;
 
   try {
-    const result = await execSQLQuery(
-      `SELECT * FROM Transacoes WHERE id_usuario = ${id_usuario}`
-    );
-    
-    if (result.length > 0) {
-      res.json(result)
-    } else {
-      res.json({ sucesso: false });
-    }
+    const result = await execSQLQuery(`
+      SELECT 
+       t.id_transacao,
+        t.id_usuario,
+        t.nome,
+        t.tipo,
+        t.valor,
+        t.parcelas,
+        t.confirmada,
+        t.data,
+        t.id_categoria,
+        c.nome_categoria 
+      FROM 
+        Transacoes t
+      JOIN 
+        Categorias c ON t.id_categoria = c.id_categoria
+      WHERE 
+        t.id_usuario = ${id_usuario}
+    `);
+
+    res.json(result);
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ erro: "Erro ao consultar o banco" });
   }
 });
-
 
 
 app.listen(3000, () => {
