@@ -44,6 +44,7 @@ const data = document.getElementById("data-transacao")
 if(data)
 data.valueAsDate = new Date();
 
+//Atualiza o saldo
 window.atualizaValor = async function atualizaValor(transacao_id) {
     try {
         const resposta = await fetch("/api/valor", {
@@ -71,6 +72,7 @@ window.atualizaValor = async function atualizaValor(transacao_id) {
 
             if (jsonSaldo.sucesso) {
                 saldoUsuario = await pegarSaldo();
+                listarTransacoes();
                 animacaoOlho();
                
             } else {
@@ -83,7 +85,7 @@ window.atualizaValor = async function atualizaValor(transacao_id) {
     }
 }
 
-
+// Pega o saldo atual do usuário
 async function pegarSaldo(){
     try
     {
@@ -155,6 +157,7 @@ iconeOlho.addEventListener("click", () => {
 const tipoSelect = document.getElementById("tipo");
 const categoriaSelect = document.getElementById("categoria");
 
+//Busca as transações no banco
 async function listarTransacoes() {
     try {
         const resposta = await fetch(`/api/transacoes/${usuario.id}`);
@@ -202,7 +205,7 @@ if (tipoSelect && categoriaSelect) {
 
 // ENVIO DO CADASTRO PARA O BACKEND (API)
 
-
+//Cadastrar nova transação
 const formCadastro = document.getElementById("formCadastroTransacao");
 
 if (formCadastro) {

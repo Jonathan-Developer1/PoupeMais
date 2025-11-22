@@ -7,7 +7,7 @@ let arrayUltima = [];
 
 
 
-
+//imprimir a nova transação
 export async function cadastrarTransacao(objeto) {
 
   const tabela = document.getElementById("tabela-cadastro");
@@ -18,12 +18,26 @@ export async function cadastrarTransacao(objeto) {
   objeto.forEach(e => {
     const novoCadastro = document.createElement('tr');
     const data = new Date(e.data);
+    if(e.confirmada)
+    {
+      novoCadastro.innerHTML += `<td>${e.nome}</td>
+                <td>${data.toLocaleString('pt-BR', { timezone: 'UTC', dateStyle: 'short' })}</td>
+                <td>${e.categoria}</td>
+                <td>R$ ${e.valor}</td>
+                <td>${e.parcelas}</td>
+                <td style="cursor: pointer"><i class="bi bi-x-square-fill"></i></td>
+                <td style="cursor: pointer"><i class="bi bi-trash3" onclick="excluirTransacao(${e.id_transacao})"></i></td>`;
+    }
+    else
+    {
     novoCadastro.innerHTML += `<td>${e.nome}</td>
                 <td>${data.toLocaleString('pt-BR', { timezone: 'UTC', dateStyle: 'short' })}</td>
                 <td>${e.categoria}</td>
                 <td>R$ ${e.valor}</td>
+                <td>${e.parcelas}</td>
                 <td style="cursor: pointer"><i class="bi bi-check-square-fill" onclick="atualizaValor(${e.id_transacao})"></i></td>
                 <td style="cursor: pointer"><i class="bi bi-trash3" onclick="excluirTransacao(${e.id_transacao})"></i></td>`;
+    }
     
     tabela.appendChild(novoCadastro);
   });
