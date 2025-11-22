@@ -107,8 +107,8 @@ main hr {
   font-size: 14px;
 }
 
-/* Botão acessar (login) */
-.btn-login {
+/* Botão cadastrar (cadastro) */
+.btn-cadastro {
   width: 100%;
   background-color: #09be6d;
   border: 2px solid #51a07d;
@@ -123,34 +123,13 @@ main hr {
   transition: 0.5s;
 }
 
-.btn-login a{
+.btn-cadastro a{
   color: white;
   text-decoration: none;
 }
 
-.btn-login:hover {
-  background-color: #068348;
-}
-
-/* Botão cadastrar (cadastro) */
-
-.btn-cadastro {
-  width: 100%;
-  color: #000000;
-  text-decoration: none;
-  background-color: #ffffff;
-  border: 2px solid #51a07d;
-  padding: 12px 30px;
-  font-size: 14px;
-  font-weight: bold;
-  min-width: 120px;
-  border-radius: 100px;
-  cursor: pointer;
-  transition: 0.5s;
-}
-
 .btn-cadastro:hover {
-  background-color: #93c4ae;
+  background-color: #068348;
 }
 
 /*Media Queries*/
