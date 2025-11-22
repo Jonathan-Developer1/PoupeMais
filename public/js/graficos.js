@@ -1,4 +1,20 @@
 //  SALDOS/DESPESAS/RECEITA/ECONOMIA  
+
+async function pegarSaldo() {
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+
+  const resposta = await fetch("/api/saldo", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ id_usuario: usuario.id })
+  });
+
+  const json = await resposta.json();
+  return json[0].saldo;
+}
+
 async function carregarResumo() {
   const usuario = JSON.parse(localStorage.getItem("usuario"));
 
@@ -11,8 +27,10 @@ async function carregarResumo() {
 async function preencherResumo() {
   const dados = await carregarResumo();
 
+  const saldo = await pegarSaldo();
+
   document.getElementById("saldo-atual").innerText =
-     Number(dados.economia);
+    Number(saldo).toFixed(2);
 
   document.getElementById("receitas-totais").innerText =
     Number(dados.total_receitas).toFixed(2);
