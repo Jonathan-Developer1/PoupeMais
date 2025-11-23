@@ -1,9 +1,6 @@
 
+import { filtromes, filtroano } from "./home.js";
 
-const button = document.getElementById("botao-cadastro");
-const tabelaUltimas = document.getElementById("tabela-ultimas");
-let array = [];
-let arrayUltima = [];
 
 
 
@@ -15,9 +12,14 @@ export async function cadastrarTransacao(objeto) {
   if(tabela)
   tabela.innerHTML = ""; // limpa antes
 
+  
   objeto.forEach(e => {
     const novoCadastro = document.createElement('tr');
     const data = new Date(e.data);
+    if(filtromes && filtroano)
+    {
+    if(filtromes.value == data.getMonth() && filtroano.value == data.getFullYear())
+    {
     if(e.confirmada)
     {
       novoCadastro.innerHTML += `<td>${e.nome}</td>
@@ -25,7 +27,7 @@ export async function cadastrarTransacao(objeto) {
                 <td>${e.categoria}</td>
                 <td>R$ ${e.valor}</td>
                 <td>${e.parcelas}</td>
-                <td style="cursor: pointer"><i class="bi bi-x-square-fill"></i></td>
+                <td style="cursor: pointer"><i class="bi bi-x-square-fill" onclick="desfazerTransacao(${e.id_transacao})"></i></td>
                 <td style="cursor: pointer"><i class="bi bi-trash3" onclick="excluirTransacao(${e.id_transacao})"></i></td>`;
     }
     else
@@ -35,11 +37,13 @@ export async function cadastrarTransacao(objeto) {
                 <td>${e.categoria}</td>
                 <td>R$ ${e.valor}</td>
                 <td>${e.parcelas}</td>
-                <td style="cursor: pointer"><i class="bi bi-check-square-fill" onclick="atualizaValor(${e.id_transacao})"></i></td>
+                <td style="cursor: pointer"><i class="bi bi-check-square-fill" onclick="confirmarTransacao(${e.id_transacao})"></i></td>
                 <td style="cursor: pointer"><i class="bi bi-trash3" onclick="excluirTransacao(${e.id_transacao})"></i></td>`;
     }
     
     tabela.appendChild(novoCadastro);
+  }
+}
   });
 }
 

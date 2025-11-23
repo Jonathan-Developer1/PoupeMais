@@ -109,36 +109,38 @@ app.post("/api/saldo", async (req, res) => {
 app.post("/api/transacao", async (req, res) => {
   const transacao = req.body;
 
-  try {
-    const conn = await getConnection();
-    const request = new sql.Request(conn);
-
-    request.input("id_usuario", sql.Int, transacao.id_usuario);
+  const transacoes = Array.isArray(transacao) ? transacao : [transacao];
+  const conn = await getConnection();
+  const promises = transacoes.map(e =>
+  {
+    
+     const request = new sql.Request(conn); 
+    
+    request.input("id_usuario", sql.Int, e.id_usuario);
     //
-    request.input("nome", sql.VarChar(200), transacao.nome);
-    request.input("tipo", sql.VarChar(50), transacao.tipo);
-    request.input("valor", sql.Decimal(18, 2), transacao.valor);
-    request.input("parcelas", sql.Int, transacao.parcelas || 1);
-    request.input("data", sql.Date, transacao.data);
+    request.input("nome", sql.VarChar(200), e.nome);
+    request.input("tipo", sql.VarChar(50), e.tipo);
+    request.input("valor", sql.Decimal(18, 2), e.valor);
+    request.input("parcelas", sql.Int, e.parcelas || 1);
+    request.input("data", sql.Date, e.data);
 
-    request.input("id_categoria", sql.Int, transacao.categoria);
+    request.input("id_categoria", sql.Int, e.categoria);
 
-    await request.query(`
+    return request.query(`
       INSERT INTO transacoes
         (id_usuario, nome, tipo, valor, parcelas, confirmada, data, id_categoria)
       VALUES 
         (@id_usuario, @nome, @tipo, @valor, @parcelas, 0, @data, @id_categoria)
     `);
+  });
+
+  await Promise.all(promises);
 
     res.json({ sucesso: true });
 
-  } catch (error) {
-    console.error("❌ Erro ao inserir transação:");
-    console.error("Detalhes completos:", error);
-
     res.status(500).json({ erro: error.message });
-  }
-});
+  });
+
 
 //carregar transações
 app.get("/api/transacoes/:id_usuario", async (req, res) => {
@@ -175,7 +177,7 @@ SELECT
 
 //pegar valor
 
-app.post("/api/valor", async (req, res) => {
+app.post("/api/valor/confirmar", async (req, res) => {
   const {id_transacao} = req.body;
   try {
     const result = await execSQLQuery(`SELECT * FROM Transacoes WHERE id_transacao = ${id_transacao}`);
@@ -196,9 +198,30 @@ app.post("/api/valor", async (req, res) => {
   }
 });
 
-//atualizar saldo 
 
-app.post("/api/saldo/atualizar", async (req, res) => {
+app.post("/api/valor/cancelar", async (req, res) => {
+  const {id_transacao} = req.body;
+  try {
+    const result = await execSQLQuery(`SELECT * FROM Transacoes WHERE id_transacao = ${id_transacao}`);
+    
+    await execSQLQuery(`
+    UPDATE Transacoes
+    SET confirmada = 0
+    WHERE id_transacao = ${id_transacao};
+  `);
+   
+    
+    res.json({ sucesso: true, dados: result});
+    
+
+  } catch (error) {
+    console.error("Erro ao selecionar transação:");
+    res.status(500).json({ erro: error.message });
+  }
+});
+//confirmar transação
+
+app.post("/api/saldo/atualizar/confirmar", async (req, res) => {
   const result = req.body;
   
   
@@ -222,7 +245,34 @@ app.post("/api/saldo/atualizar", async (req, res) => {
   }
 });
 
-app.post("/api/excluir", async (req, res) => {
+
+//cancelar transação
+
+app.post("/api/saldo/atualizar/cancelar", async (req, res) => {
+  const result = req.body;
+  
+  
+  try {
+
+   if(result.dados.tipo == "despesa")
+   {
+    await execSQLQuery(`UPDATE Usuarios SET saldo = saldo + ${result.dados.valor} WHERE id = ${result.id_usuario}`)
+   }
+   else if(result.dados.tipo == "receita")
+   {
+    await execSQLQuery(`UPDATE Usuarios SET saldo = saldo - ${result.dados.valor} WHERE id = ${result.id_usuario}`)
+   }
+  
+    res.json({sucesso: true, dados: result});
+    
+
+  } catch (error) {
+    console.error("Erro ao selecionar transação:");
+    res.status(500).json({ erro: error.message });
+  }
+});
+
+app.post("/api/excluir/", async (req, res) => {
   const { transacao_id } = req.body;
 
 

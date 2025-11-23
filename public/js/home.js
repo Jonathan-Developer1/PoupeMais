@@ -1,11 +1,22 @@
 //const API_URL_CADASTRO = 'http://localhost:5000/api/transacoes'; //MUDAR PARA A ROTA CORRETA DO BANCO DE DASDOS
 import { cadastrarTransacao } from "./cadastro.js";
 
+const mes = [
 
-const button = document.getElementById("botao-cadastro");
-const tabelaUltimas = document.getElementById("tabela-ultimas");
-let array = [];
-let arrayUltima = [];
+    {value: 0, nome: "Janeiro"},
+    {value: 1, nome: "Fevereiro"},
+    {value: 2, nome: "Março"},
+    {value: 3, nome: "Abril"},
+    {value: 4, nome: "Maio"},
+    {value: 5, nome: "Junho"},
+    {value: 6, nome: "Julho"},
+    {value: 7, nome: "Agosto"},
+    {value: 8, nome: "Setembro"},
+    {value: 9, nome: "Outubro"},
+    {value: 10, nome: "Novembro"},
+    {value: 11, nome: "Dezembro"}    
+
+];
 
 const categorias = {
     receita: [
@@ -45,9 +56,9 @@ if(data)
 data.valueAsDate = new Date();
 
 //Atualiza o saldo
-window.atualizaValor = async function atualizaValor(transacao_id) {
+window.confirmarTransacao = async function confirmarTransacao(transacao_id) {
     try {
-        const resposta = await fetch("/api/valor", {
+        const resposta = await fetch("/api/valor/confirmar", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -59,7 +70,48 @@ window.atualizaValor = async function atualizaValor(transacao_id) {
         
         console.log(json.dados[0])
         if (json) {
-            const respostaSaldo = await fetch("/api/saldo/atualizar", {
+            const respostaSaldo = await fetch("/api/saldo/atualizar/confirmar", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ dados: json.dados[0], id_usuario: usuario.id })
+            });
+
+            const jsonSaldo = await respostaSaldo.json();
+            
+
+            if (jsonSaldo.sucesso) {
+                saldoUsuario = await pegarSaldo();
+                listarTransacoes();
+                animacaoOlho();
+               
+            } else {
+                console.log("erro");
+            }
+        }
+
+    } catch (erro) {
+        console.error('Erro de rede ou na requisição:', erro);
+    }
+}
+
+//Atualiza o saldo
+window.desfazerTransacao = async function desfazerTransacao(transacao_id) {
+    try {
+        const resposta = await fetch("/api/valor/cancelar", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id_transacao: transacao_id })
+        });
+
+        const json = await resposta.json();
+        
+        console.log(json.dados[0])
+        if (json) {
+            const respostaSaldo = await fetch("/api/saldo/atualizar/cancelar", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -179,8 +231,46 @@ async function listarTransacoes() {
     }
 }
 
+//Criar opções de filtro
+export const filtromes = document.getElementById("filter-mestransacoes");
+export const filtroano = document.getElementById("filter-anotransacoes");
+
+const mesAtual = new Date().getMonth();
+const anoAtual = new Date().getFullYear();
+  
+if(filtromes)
+{
+mes.forEach(mes => {
+    const option = document.createElement("option");
+    option.textContent = mes.nome;
+    option.value = mes.value; // AGORA ENVIA O ID CORRETO
+    filtromes.appendChild(option);
+});
+
+filtromes.value = mesAtual;
+filtroano.value = anoAtual;
+
+filtromes.addEventListener("change", (e) =>
+{
+    e.preventDefault();
+
+    listarTransacoes();
+
+});
+}
+if(filtroano)
+{
 
 
+filtroano.addEventListener("change", (e) =>
+{
+    e.preventDefault();
+
+    listarTransacoes();
+
+});
+}
+//Criar opções de categorias
 if (tipoSelect && categoriaSelect) {
     tipoSelect.addEventListener("change", () => {
         const tipoSelecionado = tipoSelect.value;
@@ -211,9 +301,41 @@ const formCadastro = document.getElementById("formCadastroTransacao");
 if (formCadastro) {
     formCadastro.addEventListener("submit", async (evento) => {
         evento.preventDefault(); // Impede o envio padrão do formulário
+        let parcelas = parseFloat(document.getElementById("parcelas").value)
+        const parcelaOriginal = parcelas;
+        let transacao = [];
+        
 
+        if(parcelas > 1)
+        {
+            
+            const dataP = document.getElementById("data-transacao").value;
+            
+            
+            
+            for(let i = 0; i < parcelas; i++)
+            {
+            const dataParcelas = new Date(dataP);
+            dataParcelas.setMonth(dataParcelas.getMonth() + i);
+
+            transacao.push({
+            id_usuario: usuario.id,
+            nome: document.getElementById("descricao-transacao").value,
+            tipo: document.getElementById("tipo").value,
+            categoria: document.getElementById("categoria").value,
+            valor: parseFloat(document.getElementById("valor-transacao").value/parcelaOriginal),
+            parcelas: parcelas,
+            data: dataParcelas
+            
+            })
+            parcelas--;
+            
+            }
+        }
         // 1. Coleta e mapeamento dos dados do formulário
-        const transacao = {
+        else
+        {
+        transacao = {
             id_usuario: usuario.id,
             // IDs do HTML modificado:
             nome: document.getElementById("descricao-transacao").value,
@@ -224,7 +346,7 @@ if (formCadastro) {
             parcelas: parseFloat(document.getElementById("parcelas").value),
             data: document.getElementById("data-transacao").value // yyyy-mm-dd
         };
-
+    }
         try {
             // 2. Envio dos dados para a API (Backend)
             const resposta = await fetch("/api/transacao", {
@@ -261,7 +383,7 @@ window.excluirTransacao = async function excluirTransacao(id_transacao) {
     
     try
     {
-        const resposta = await fetch("/api/excluir",{
+        const resposta = await fetch("/api/excluir/",{
             method: 'POST',
             headers: {
                     'Content-Type': 'application/json'
@@ -270,7 +392,7 @@ window.excluirTransacao = async function excluirTransacao(id_transacao) {
             });
 
         const json = await resposta.json();
-        console.log(json);
+       
 
         if(json.sucesso)
         {
