@@ -18,7 +18,7 @@ const data = await resposta.json();
     if (data.sucesso) {
       alert("Login bem-sucedido!");
       window.location.href = "home.html";
-      usuario = { email: email, senha: senha, saldo: data.saldo, id: data.id};
+      usuario = { email: email, id: data.id};
       localStorage.setItem('usuario', JSON.stringify(usuario));
     } else {
       alert("E-mail ou senha incorretos.");

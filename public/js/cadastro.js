@@ -1,9 +1,6 @@
 
 import { filtromes, filtroano } from "./home.js";
 
-
-
-
 //imprimir a nova transação
 export async function cadastrarTransacao(objeto) {
 
@@ -15,7 +12,15 @@ export async function cadastrarTransacao(objeto) {
   
   objeto.forEach(e => {
     const novoCadastro = document.createElement('tr');
+    
     const data = new Date(e.data);
+    
+    const valor = e.valor;
+            const valorAtualizado = valor.toLocaleString('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                          });
+                          
     if(filtromes && filtroano)
     {
     if(filtromes.value == data.getMonth() && filtroano.value == data.getFullYear())
@@ -25,7 +30,7 @@ export async function cadastrarTransacao(objeto) {
       novoCadastro.innerHTML += `<td>${e.nome}</td>
                 <td>${data.toLocaleString('pt-BR', { timezone: 'UTC', dateStyle: 'short' })}</td>
                 <td>${e.categoria}</td>
-                <td>R$ ${e.valor}</td>
+                <td>${valorAtualizado}</td>
                 <td>${e.parcelas}</td>
                 <td style="cursor: pointer"><i class="bi bi-x-square-fill" onclick="desfazerTransacao(${e.id_transacao})"></i></td>
                 <td style="cursor: pointer"><i class="bi bi-trash3" onclick="excluirTransacao(${e.id_transacao})"></i></td>`;
@@ -35,7 +40,7 @@ export async function cadastrarTransacao(objeto) {
     novoCadastro.innerHTML += `<td>${e.nome}</td>
                 <td>${data.toLocaleString('pt-BR', { timezone: 'UTC', dateStyle: 'short' })}</td>
                 <td>${e.categoria}</td>
-                <td>R$ ${e.valor}</td>
+                <td>${valorAtualizado}</td>
                 <td>${e.parcelas}</td>
                 <td style="cursor: pointer"><i class="bi bi-check-square-fill" onclick="confirmarTransacao(${e.id_transacao})"></i></td>
                 <td style="cursor: pointer"><i class="bi bi-trash3" onclick="excluirTransacao(${e.id_transacao})"></i></td>`;
@@ -47,57 +52,32 @@ export async function cadastrarTransacao(objeto) {
   });
 }
 
-    
-  /*addUltimas();  
-
-     let saldoNovo;
-     
-     const valor = array[index].valor;
-    
-    const saldoEditavel = document.getElementById("saldo");
-    
-    const saldoFloat = parseFloat(saldoEditavel.innerText);
-    console.log(saldoFloat);
-    const valorFloat = parseFloat(valor);
-    
-    
-    console.log(saldoNovo);
-
-    if(array[index].tipo == "Despesa")
-    {
-        saldoNovo = saldoFloat - valorFloat ;
-        
-    }
-    else if(array[index].tipo == "Receita")
-    {
-        saldoNovo = saldoFloat + valorFloat;
-    }
-
-    saldoEditavel.textContent = saldoNovo;
-}
-
-export async function addUltimas()
+export async function addUltimas(objeto)
 {
 
- tabelaUltimas.innerHTML =
-           "";
+  const tabelaUltimas = document.getElementById("tabela-ultimas");
     
-    
-    
-
-        arrayUltima.forEach(e => {
-            
+ 
+  
+        objeto.forEach(e => {
+             const tipo = e.tipo;
+            const tipoMaiusculo = tipo.charAt(0).toUpperCase() + tipo.slice(1);
+            const valor = e.valor;
+            const valorAtualizado = valor.toLocaleString('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                          });
             const ultimaTransacao = document.createElement('tr');
             ultimaTransacao.innerHTML =
             `<tr>
-                    <td class="primeiro"><i class="bi bi-fork-knife"></i></td>
+                    <td class="primeiro"><i class="bi bi-coin"></i></td>
                     <td>${e.nome}</td>
-                    <td>${e.tipo}</td>
-                    <td>${e.valor}</td>
+                    <td>${tipoMaiusculo}</td>
+                    <td>${valorAtualizado}</td>
                 </tr>`;
 
             tabelaUltimas.appendChild(ultimaTransacao);
         });
 
     
-}*/
+}

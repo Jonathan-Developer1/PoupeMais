@@ -1,5 +1,5 @@
 //const API_URL_CADASTRO = 'http://localhost:5000/api/transacoes'; //MUDAR PARA A ROTA CORRETA DO BANCO DE DASDOS
-import { cadastrarTransacao } from "./cadastro.js";
+import { cadastrarTransacao, addUltimas } from "./cadastro.js";
 
 const mes = [
 
@@ -47,15 +47,28 @@ const categorias = {
     ]
 };
 
-
+//Pega o usuario passado pelo locaStorage
 let usuario = JSON.parse(localStorage.getItem('usuario'));
+//Passa o saldo atual para a variavel
 let saldoUsuario = await pegarSaldo();
+
 const data = document.getElementById("data-transacao")
 
+//Atualiza para a data atual
+function atualizaData()
+{
 if(data)
 data.valueAsDate = new Date();
+}
 
-//Atualiza o saldo
+//Chamada de funções de inicializção
+listarTransacoes();
+listarUltimasTransacoes();
+animacaoOlho();
+pegarSaldo();
+atualizaData();
+
+//Confirma transação
 window.confirmarTransacao = async function confirmarTransacao(transacao_id) {
     try {
         const resposta = await fetch("/api/valor/confirmar", {
@@ -84,7 +97,9 @@ window.confirmarTransacao = async function confirmarTransacao(transacao_id) {
             if (jsonSaldo.sucesso) {
                 saldoUsuario = await pegarSaldo();
                 listarTransacoes();
+                listarUltimasTransacoes();
                 animacaoOlho();
+                atualizaData();
                
             } else {
                 console.log("erro");
@@ -96,7 +111,7 @@ window.confirmarTransacao = async function confirmarTransacao(transacao_id) {
     }
 }
 
-//Atualiza o saldo
+//Cancela transação
 window.desfazerTransacao = async function desfazerTransacao(transacao_id) {
     try {
         const resposta = await fetch("/api/valor/cancelar", {
@@ -125,7 +140,9 @@ window.desfazerTransacao = async function desfazerTransacao(transacao_id) {
             if (jsonSaldo.sucesso) {
                 saldoUsuario = await pegarSaldo();
                 listarTransacoes();
+                listarUltimasTransacoes();
                 animacaoOlho();
+                atualizaData();
                
             } else {
                 console.log("erro");
@@ -153,7 +170,11 @@ async function pegarSaldo(){
 
             if(json)
             {
-                return json[0].saldo;
+                const dinheiro = json[0].saldo.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                    });
+                return dinheiro;
                 
             }
              else {
@@ -168,9 +189,6 @@ async function pegarSaldo(){
 }
 
 
-listarTransacoes();
-animacaoOlho();
-pegarSaldo();
 
 
 
@@ -231,13 +249,17 @@ async function listarTransacoes() {
     }
 }
 
-//Criar opções de filtro
+
 export const filtromes = document.getElementById("filter-mestransacoes");
 export const filtroano = document.getElementById("filter-anotransacoes");
 
 const mesAtual = new Date().getMonth();
 const anoAtual = new Date().getFullYear();
-  
+
+filtromes.value = mesAtual;
+filtroano.value = anoAtual;
+
+//Criar opções de filtro de mes
 if(filtromes)
 {
 mes.forEach(mes => {
@@ -247,9 +269,8 @@ mes.forEach(mes => {
     filtromes.appendChild(option);
 });
 
-filtromes.value = mesAtual;
-filtroano.value = anoAtual;
 
+// Pega as mudanças no filtro de mes
 filtromes.addEventListener("change", (e) =>
 {
     e.preventDefault();
@@ -258,10 +279,11 @@ filtromes.addEventListener("change", (e) =>
 
 });
 }
+
 if(filtroano)
 {
 
-
+//Pega as mudanças no filtro de ano
 filtroano.addEventListener("change", (e) =>
 {
     e.preventDefault();
@@ -270,6 +292,10 @@ filtroano.addEventListener("change", (e) =>
 
 });
 }
+
+filtromes.value = mesAtual;
+filtroano.value = anoAtual;
+
 //Criar opções de categorias
 if (tipoSelect && categoriaSelect) {
     tipoSelect.addEventListener("change", () => {
@@ -291,9 +317,6 @@ if (tipoSelect && categoriaSelect) {
     });
 }
 
-
-
-// ENVIO DO CADASTRO PARA O BACKEND (API)
 
 //Cadastrar nova transação
 const formCadastro = document.getElementById("formCadastroTransacao");
@@ -379,6 +402,7 @@ if (formCadastro) {
     });
 }
 
+//Excluir transação
 window.excluirTransacao = async function excluirTransacao(id_transacao) {
     
     try
@@ -401,6 +425,31 @@ window.excluirTransacao = async function excluirTransacao(id_transacao) {
         
     }
     catch(error)
+{
+    console.log(error);
+}
+}
+
+async function listarUltimasTransacoes()
+{
+try
+{
+const resposta = await fetch("api/ultimas-transacoes",
+            {method: 'POST',
+            headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id_usuario: usuario.id })
+            });
+
+        const json = await resposta.json();
+        
+        if(json.sucesso)
+        {
+            addUltimas(json.dados);
+        }
+}
+catch(error)
 {
     console.log(error);
 }
