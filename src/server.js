@@ -364,10 +364,6 @@ catch(error)
 });
 
 
-app.listen(3000, () => {
-  console.log("Servidor funcionando em http://localhost:3000");
-});
-
 // Rota para buscar os dados dos últimos 12 meses para o gráfico
 app.get("/api/grafico/evolucao/:id_usuario", async (req, res) => {
   const id_usuario = req.params.id_usuario;
@@ -391,4 +387,9 @@ app.get("/api/grafico/evolucao/:id_usuario", async (req, res) => {
     console.error("Erro ao buscar dados do gráfico:", error);
     res.status(500).json({ erro: error.message });
   }
+});
+
+
+app.listen(3000, () => {
+  console.log("Servidor funcionando em http://localhost:3000");
 });
