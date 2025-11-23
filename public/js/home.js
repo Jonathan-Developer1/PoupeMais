@@ -327,18 +327,18 @@ if (formCadastro) {
         let parcelas = parseFloat(document.getElementById("parcelas").value)
         const parcelaOriginal = parcelas;
         let transacao = [];
-        
+
+        const dataP = document.getElementById("data-transacao").value;
+        const dataAtualizada = new Date(dataP);
+        dataAtualizada.setDate(dataAtualizada.getDate() + 1);
 
         if(parcelas > 1)
         {
             
-            const dataP = document.getElementById("data-transacao").value;
-            
-            
-            
             for(let i = 0; i < parcelas; i++)
             {
-            const dataParcelas = new Date(dataP);
+            const dataParcelas = new Date(dataAtualizada);
+            
             dataParcelas.setMonth(dataParcelas.getMonth() + i);
 
             transacao.push({
@@ -367,7 +367,7 @@ if (formCadastro) {
             // Certifique-se de que o input seja do tipo 'number' no HTML para garantir o valor
             valor: parseFloat(document.getElementById("valor-transacao").value),
             parcelas: parseFloat(document.getElementById("parcelas").value),
-            data: document.getElementById("data-transacao").value // yyyy-mm-dd
+            data: dataAtualizada// yyyy-mm-dd
         };
     }
         try {
@@ -384,7 +384,7 @@ if (formCadastro) {
             // 3. Verifica o status da resposta
             if (json.sucesso) {
                 listarTransacoes();
-                data.valueAsDate = new Date();
+                atualizaData();
                 alert("Transação cadastrada com sucesso!");
                 formCadastro.reset(); // Limpa o formulário
                 // Garante que o select de categoria volte ao estado inicial (disabled)
