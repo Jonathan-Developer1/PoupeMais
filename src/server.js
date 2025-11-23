@@ -86,9 +86,39 @@ app.post("/login.html", async (req, res) => {
   }
 });
 
+// cadastrar novo usuário
+app.post("/api/cadastrarUsuario", async (req, res) => {
+  const { nome, email, senha } = req.body;
+
+  try {
+
+    // verificar se já existe e-mail cadastrado
+    const existe = await execSQLQuery(`
+      SELECT * FROM Usuarios WHERE Email='${email}'
+    `);
+
+    if (existe.length > 0) {
+      return res.json({ sucesso: false, mensagem: "E-mail já cadastrado!" });
+    }
+
+    // inserir novo usuário com saldo inicial zero
+    await execSQLQuery(`
+      INSERT INTO Usuarios (Nome, Email, Senha, Saldo)
+      VALUES ('${nome}', '${email}', '${senha}', 0)
+    `);
+
+    res.json({ sucesso: true });
+
+  } catch (error) {
+    console.error("❌ Erro ao cadastrar usuário:", error);
+    res.status(500).json({ erro: "Erro ao cadastrar usuário" });
+  }
+});
+
+
 //saldo
 app.post("/api/saldo", async (req, res) => {
-  const {id_usuario} = req.body;
+  const { id_usuario } = req.body;
 
   try {
     const result = await execSQLQuery(
@@ -167,30 +197,29 @@ SELECT
   t.id_usuario = ${id_usuario}
   `);
 
-  res.json(result); 
+    res.json(result);
 
   } catch (error) {
-  console.error(error);
-  res.status(500).json({ erro: "Erro ao consultar o banco" });
+    console.error(error);
+    res.status(500).json({ erro: "Erro ao consultar o banco" });
   }
 });
 
 //pegar valor
-
 app.post("/api/valor/confirmar", async (req, res) => {
   const {id_transacao} = req.body;
   try {
     const result = await execSQLQuery(`SELECT * FROM Transacoes WHERE id_transacao = ${id_transacao}`);
-    
+
     await execSQLQuery(`
     UPDATE Transacoes
     SET confirmada = 1
     WHERE id_transacao = ${id_transacao};
   `);
-   
-    
-    res.json({ sucesso: true, dados: result});
-    
+
+
+    res.json({ sucesso: true, dados: result });
+
 
   } catch (error) {
     console.error("Erro ao selecionar transação:");
@@ -223,21 +252,19 @@ app.post("/api/valor/cancelar", async (req, res) => {
 
 app.post("/api/saldo/atualizar/confirmar", async (req, res) => {
   const result = req.body;
-  
-  
+
+
   try {
 
-   if(result.dados.tipo == "despesa")
-   {
-    await execSQLQuery(`UPDATE Usuarios SET saldo = saldo - ${result.dados.valor} WHERE id = ${result.id_usuario}`)
-   }
-   else if(result.dados.tipo == "receita")
-   {
-    await execSQLQuery(`UPDATE Usuarios SET saldo = saldo + ${result.dados.valor} WHERE id = ${result.id_usuario}`)
-   }
-  
-    res.json({sucesso: true, dados: result});
-    
+    if (result.dados.tipo == "despesa") {
+      await execSQLQuery(`UPDATE Usuarios SET saldo = saldo - ${result.dados.valor} WHERE id = ${result.id_usuario}`)
+    }
+    else if (result.dados.tipo == "receita") {
+      await execSQLQuery(`UPDATE Usuarios SET saldo = saldo + ${result.dados.valor} WHERE id = ${result.id_usuario}`)
+    }
+
+    res.json({ sucesso: true, dados: result });
+
 
   } catch (error) {
     console.error("Erro ao selecionar transação:");
@@ -276,14 +303,12 @@ app.post("/api/excluir/", async (req, res) => {
   const { transacao_id } = req.body;
 
 
-  try
-  {
+  try {
     await execSQLQuery(`DELETE FROM Transacoes WHERE id_transacao = ${transacao_id}`);
-    
-    res.json({sucesso: true});
+
+    res.json({ sucesso: true });
   }
-  catch(error)
-  {
+  catch (error) {
     console.log(error);
   }
 })

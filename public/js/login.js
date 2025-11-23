@@ -24,3 +24,8 @@ const data = await resposta.json();
       alert("E-mail ou senha incorretos.");
     }
   });
+
+//Link botão de cadastro
+document.querySelector('.btn-cadastro').addEventListener('click', function() {
+    window.location.href = 'cadastrarUsuario.html';
+});
