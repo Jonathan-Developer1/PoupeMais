@@ -343,3 +343,28 @@ app.get("/api/historico/ultimo/:id_usuario", async (req, res) => {
 app.listen(3000, () => {
   console.log("Servidor funcionando em http://localhost:3000");
 });
+
+// Rota para buscar os dados dos últimos 12 meses para o gráfico
+app.get("/api/grafico/evolucao/:id_usuario", async (req, res) => {
+  const id_usuario = req.params.id_usuario;
+
+  try {
+    // Busca os últimos 12 registros da sua View HistoricoMensal
+    // Obs: Se a ordem dos meses vier errada, precisamos adicionar um ORDER BY no SQL depois
+    const result = await execSQLQuery(`
+      SELECT TOP 12 
+        mes, 
+        total_receitas, 
+        total_despesas, 
+        economia 
+      FROM HistoricoMensal 
+      WHERE id_usuario = ${id_usuario}
+    `);
+
+    res.json(result);
+
+  } catch (error) {
+    console.error("Erro ao buscar dados do gráfico:", error);
+    res.status(500).json({ erro: error.message });
+  }
+});
