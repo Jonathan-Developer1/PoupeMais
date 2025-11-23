@@ -47,64 +47,85 @@ preencherResumo();
 
                                                 // GRÁFICOS
 // GRÁFICO DE Evolução Financeira 
-const ctx = document.getElementById('graficoEvolucao');
-new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: ['Nov', 'Dez', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out'],
-    datasets: [
-      {
-        label: 'Receitas',
-        data: [1000, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600],
-        borderColor: '#0f5132',
-        backgroundColor: '#c',
-        tension: 0.3,
-        fill: false
-      },
-      {
-        label: 'Despesas',
-        data: [800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350],
-        borderColor: '#dc3545',
-        backgroundColor: '#dc3545',
-        tension: 0.3,
-        fill: false
-      },
-      {
-        label: 'Saldo Geral',
-        data: [200, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250, 250],
-        borderColor: '#d9d700',
-        backgroundColor: '#d9d700',
-        tension: 0.3,
-        fill: false
-      }
-    ]
-  },
-  options: {
-    plugins: {
-      legend: {
-        display: true,
-        position: 'bottom',
-        labels: {
-          font: {
-            size: 12,
-            weight: 'bold'
-          },
-          padding: 20,
-          color: '#000'
-        }
-      }
-    },
-    layout: {
-      padding: 10
-    },
-    scales: {
-      y: {
-        beginAtZero: false
-      }
-    }
-  }
+// ======================================================
+// GRÁFICO DE EVOLUÇÃO FINANCEIRA (CONECTADO AO BANCO)
+// ======================================================
 
-});
+async function montarGraficoEvolucao() {
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  const ctx = document.getElementById('graficoEvolucao');
+
+  try {
+    // 1. Busca os dados no servidor que acabamos de criar
+    const resposta = await fetch(`/api/grafico/evolucao/${usuario.id}`);
+    const dados = await resposta.json();
+
+    // 2. Prepara os arrays vazios para separar os dados
+    const labelsMeses = [];
+    const dadosReceitas = [];
+    const dadosDespesas = [];
+    const dadosSaldo = [];
+
+    // 3. Separa o JSON que veio do banco em listas para o gráfico
+    dados.forEach(item => {
+      labelsMeses.push(item.mes); // Nome do mês (ex: 'Nov')
+      dadosReceitas.push(item.total_receitas);
+      dadosDespesas.push(item.total_despesas);
+      dadosSaldo.push(item.economia); // Ou 'saldo', dependendo da sua view
+    });
+
+    // 4. Cria o gráfico com os dados reais
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labelsMeses, // Meses do banco
+        datasets: [
+          {
+            label: 'Receitas',
+            data: dadosReceitas, // Receitas do banco
+            borderColor: '#0f5132',
+            backgroundColor: '#0f5132',
+            tension: 0.3,
+            fill: false
+          },
+          {
+            label: 'Despesas',
+            data: dadosDespesas, // Despesas do banco
+            borderColor: '#dc3545',
+            backgroundColor: '#dc3545',
+            tension: 0.3,
+            fill: false
+          },
+          {
+            label: 'Saldo Geral',
+            data: dadosSaldo, // Saldo do banco
+            borderColor: '#d9d700',
+            backgroundColor: '#d9d700',
+            tension: 0.3,
+            fill: false
+          }
+        ]
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: true,
+            position: 'bottom',
+            labels: { font: { size: 12, weight: 'bold' }, color: '#000' }
+          }
+        },
+        layout: { padding: 10 },
+        scales: { y: { beginAtZero: false } }
+      }
+    });
+
+  } catch (erro) {
+    console.error("Erro ao carregar gráfico:", erro);
+  }
+}
+
+// Chama a função para rodar
+montarGraficoEvolucao();
 
 //  HISTÓRICO DE PERÍODO 
 const historico = [
