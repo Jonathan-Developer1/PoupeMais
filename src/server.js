@@ -248,6 +248,7 @@ app.post("/api/valor/cancelar", async (req, res) => {
     res.status(500).json({ erro: error.message });
   }
 });
+
 //confirmar transação
 
 app.post("/api/saldo/atualizar/confirmar", async (req, res) => {
@@ -314,7 +315,6 @@ app.post("/api/excluir/", async (req, res) => {
 })
 
 //HistoricoMensal:
-
 app.get("/api/historico/ultimo/:id_usuario", async (req, res) => {
   const id_usuario = req.params.id_usuario;
 
@@ -337,6 +337,30 @@ app.get("/api/historico/ultimo/:id_usuario", async (req, res) => {
     console.error("Erro ao consultar último histórico:", error);
     res.status(500).json({ erro: error.message });
   }
+});
+
+//Pegar ultimas transações
+
+
+app.post("/api/ultimas-transacoes", async (req, res) =>
+{
+ 
+  const {id_usuario} = req.body;
+  try
+  {
+  const result = await execSQLQuery(`SELECT TOP 5 * FROM Transacoes WHERE id_usuario = ${id_usuario} AND confirmada = 1
+ORDER BY data DESC`);
+
+  if(result.length > 1)
+
+    res.json({sucesso: true, dados: result})
+
+}
+catch(error)
+{
+  console.log(error);
+}
+
 });
 
 
