@@ -28,8 +28,8 @@ const categorias = {
         { id: 6, nome: "Juros" },
         { id: 7, nome: "Dividendos" },
         { id: 8, nome: "Herança" },
-        { id: 9, nome: "Outros" },
-        { id: 10, nome: "Freelance" }
+        { id: 9, nome: "Freelance" },
+        { id: 10, nome: "Outros" }
     ],
     despesa: [
         { id: 11, nome: "Aluguel" },
@@ -42,8 +42,8 @@ const categorias = {
         { id: 18, nome: "Cartão" },
         { id: 19, nome: "Transporte" },
         { id: 20, nome: "Plano de Saude" },
-        { id: 22, nome: "Outros" },
-        { id: 21, nome: "Financiamento" }
+        { id: 22, nome: "Financiamento" },
+        { id: 21, nome: "Outros" }
     ]
 };
 
