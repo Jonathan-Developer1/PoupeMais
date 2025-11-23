@@ -390,6 +390,35 @@ app.get("/api/grafico/evolucao/:id_usuario", async (req, res) => {
 });
 
 
+// Rota para pegar dados agrupados por categoria (para os gráficos de pizza)
+// Exemplo de uso: /api/grafico/categorias/1/despesa
+app.get("/api/grafico/categorias/:id_usuario/:tipo", async (req, res) => {
+  const { id_usuario, tipo } = req.params;
+
+  try {
+    // Essa query soma o valor total de cada categoria para aquele usuário e tipo
+    const result = await execSQLQuery(`
+      SELECT 
+        c.nome_categoria, 
+        SUM(t.valor) as total
+      FROM Transacoes t
+      JOIN Categorias c ON t.id_categoria = c.id_categoria
+      WHERE t.id_usuario = ${id_usuario} 
+      AND t.tipo = '${tipo}'
+      GROUP BY c.nome_categoria
+    `);
+
+    res.json(result);
+
+  } catch (error) {
+    console.error(`Erro ao buscar categorias de ${tipo}:`, error);
+    res.status(500).json({ erro: error.message });
+  }
+});
+
+
+
+
 app.listen(3000, () => {
   console.log("Servidor funcionando em http://localhost:3000");
 });
