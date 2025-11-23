@@ -55,9 +55,9 @@ export async function cadastrarTransacao(objeto) {
 export async function addUltimas(objeto)
 {
 
-  const tabelaUltimas = document.getElementById("tabela-ultimas");
+  let tabelaUltimas = document.getElementById("tabela-ultimas");
     
- 
+  tabelaUltimas.innerHTML = "";
   
         objeto.forEach(e => {
              const tipo = e.tipo;
