@@ -3,18 +3,18 @@ import { cadastrarTransacao, addUltimas } from "./cadastro.js";
 
 const mes = [
 
-    {value: 0, nome: "Janeiro"},
-    {value: 1, nome: "Fevereiro"},
-    {value: 2, nome: "Março"},
-    {value: 3, nome: "Abril"},
-    {value: 4, nome: "Maio"},
-    {value: 5, nome: "Junho"},
-    {value: 6, nome: "Julho"},
-    {value: 7, nome: "Agosto"},
-    {value: 8, nome: "Setembro"},
-    {value: 9, nome: "Outubro"},
-    {value: 10, nome: "Novembro"},
-    {value: 11, nome: "Dezembro"}    
+    { value: 0, nome: "Janeiro" },
+    { value: 1, nome: "Fevereiro" },
+    { value: 2, nome: "Março" },
+    { value: 3, nome: "Abril" },
+    { value: 4, nome: "Maio" },
+    { value: 5, nome: "Junho" },
+    { value: 6, nome: "Julho" },
+    { value: 7, nome: "Agosto" },
+    { value: 8, nome: "Setembro" },
+    { value: 9, nome: "Outubro" },
+    { value: 10, nome: "Novembro" },
+    { value: 11, nome: "Dezembro" }
 
 ];
 
@@ -55,10 +55,9 @@ let saldoUsuario = await pegarSaldo();
 const data = document.getElementById("data-transacao")
 
 //Atualiza para a data atual
-function atualizaData()
-{
-if(data)
-data.valueAsDate = new Date();
+function atualizaData() {
+    if (data)
+        data.valueAsDate = new Date();
 }
 
 //Chamada de funções de inicializção
@@ -80,7 +79,7 @@ window.confirmarTransacao = async function confirmarTransacao(transacao_id) {
         });
 
         const json = await resposta.json();
-        
+
         console.log(json.dados[0])
         if (json) {
             const respostaSaldo = await fetch("/api/saldo/atualizar/confirmar", {
@@ -92,7 +91,7 @@ window.confirmarTransacao = async function confirmarTransacao(transacao_id) {
             });
 
             const jsonSaldo = await respostaSaldo.json();
-            
+
 
             if (jsonSaldo.sucesso) {
                 saldoUsuario = await pegarSaldo();
@@ -100,7 +99,7 @@ window.confirmarTransacao = async function confirmarTransacao(transacao_id) {
                 listarUltimasTransacoes();
                 animacaoOlho();
                 atualizaData();
-               
+
             } else {
                 console.log("erro");
             }
@@ -123,7 +122,7 @@ window.desfazerTransacao = async function desfazerTransacao(transacao_id) {
         });
 
         const json = await resposta.json();
-        
+
         console.log(json.dados[0])
         if (json) {
             const respostaSaldo = await fetch("/api/saldo/atualizar/cancelar", {
@@ -135,7 +134,7 @@ window.desfazerTransacao = async function desfazerTransacao(transacao_id) {
             });
 
             const jsonSaldo = await respostaSaldo.json();
-            
+
 
             if (jsonSaldo.sucesso) {
                 saldoUsuario = await pegarSaldo();
@@ -143,7 +142,7 @@ window.desfazerTransacao = async function desfazerTransacao(transacao_id) {
                 listarUltimasTransacoes();
                 animacaoOlho();
                 atualizaData();
-               
+
             } else {
                 console.log("erro");
             }
@@ -155,37 +154,35 @@ window.desfazerTransacao = async function desfazerTransacao(transacao_id) {
 }
 
 // Pega o saldo atual do usuário
-async function pegarSaldo(){
-    try
-    {
-        const resposta = await fetch("/api/saldo", 
+async function pegarSaldo() {
+    try {
+        const resposta = await fetch("/api/saldo",
             {
-                method: 'POST', 
+                method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json' 
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ id_usuario: usuario.id })
             })
-            const json = await resposta.json()
+        const json = await resposta.json()
 
-            if(json)
-            {
-                const dinheiro = json[0].saldo.toLocaleString('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                    });
-                return dinheiro;
-                
-            }
-             else {
-                // Tenta ler o erro do corpo da resposta JSON
-                alert(`ERRO ao cadastrar (Status ${resposta.status}): ${json.message || resposta.statusText}`);
-            }
+        if (json) {
+            const dinheiro = json[0].saldo.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+            });
+            return dinheiro;
 
-        } catch (erro) {
-            console.error('Erro de rede ou na requisição:', erro);
         }
-    
+        else {
+            // Tenta ler o erro do corpo da resposta JSON
+            alert(`ERRO ao cadastrar (Status ${resposta.status}): ${json.message || resposta.statusText}`);
+        }
+
+    } catch (erro) {
+        console.error('Erro de rede ou na requisição:', erro);
+    }
+
 }
 
 
@@ -200,27 +197,26 @@ function getNomeCategoria(tipo, id) {
 }
 
 //Animação do olho para o saldo
-function animacaoOlho()
-{
-const iconeOlho = document.getElementById("icone-olho");
-const saldo = document.getElementById('saldo');
+function animacaoOlho() {
+    const iconeOlho = document.getElementById("icone-olho");
+    const saldo = document.getElementById('saldo');
 
-let saldoVisivel = true;
-saldo.textContent = saldoUsuario;
+    let saldoVisivel = true;
+    saldo.textContent = saldoUsuario;
 
-iconeOlho.addEventListener("click", () => {
-    saldoVisivel = !saldoVisivel;
+    iconeOlho.addEventListener("click", () => {
+        saldoVisivel = !saldoVisivel;
 
-    if (saldoVisivel) {
-        saldo.textContent = saldoUsuario;
-        iconeOlho.classList.remove("bi-eye");
-        iconeOlho.classList.add("bi-eye-slash");
-    } else {
-        saldo.textContent = "•••••";
-        iconeOlho.classList.remove("bi-eye-slash");
-        iconeOlho.classList.add("bi-eye");
-    }
-});
+        if (saldoVisivel) {
+            saldo.textContent = saldoUsuario;
+            iconeOlho.classList.remove("bi-eye");
+            iconeOlho.classList.add("bi-eye-slash");
+        } else {
+            saldo.textContent = "•••••";
+            iconeOlho.classList.remove("bi-eye-slash");
+            iconeOlho.classList.add("bi-eye");
+        }
+    });
 }
 
 
@@ -256,45 +252,39 @@ export const filtroano = document.getElementById("filter-anotransacoes");
 const mesAtual = new Date().getMonth();
 const anoAtual = new Date().getFullYear();
 
-filtromes.value = mesAtual;
-filtroano.value = anoAtual;
-
-//Criar opções de filtro de mes
-if(filtromes)
-{
-mes.forEach(mes => {
-    const option = document.createElement("option");
-    option.textContent = mes.nome;
-    option.value = mes.value; // AGORA ENVIA O ID CORRETO
-    filtromes.appendChild(option);
-});
+if (filtromes) {
+    filtromes.value = mesAtual;
 
 
-// Pega as mudanças no filtro de mes
-filtromes.addEventListener("change", (e) =>
-{
-    e.preventDefault();
+    //Criar opções de filtro de mes
 
-    listarTransacoes();
+    mes.forEach(mes => {
+        const option = document.createElement("option");
+        option.textContent = mes.nome;
+        option.value = mes.value; // AGORA ENVIA O ID CORRETO
+        filtromes.appendChild(option);
+    });
 
-});
+
+    // Pega as mudanças no filtro de mes
+    filtromes.addEventListener("change", (e) => {
+        e.preventDefault();
+
+        listarTransacoes();
+
+    });
 }
 
-if(filtroano)
-{
+if (filtroano) {
+    filtroano.value = anoAtual;
+    //Pega as mudanças no filtro de ano
+    filtroano.addEventListener("change", (e) => {
+        e.preventDefault();
 
-//Pega as mudanças no filtro de ano
-filtroano.addEventListener("change", (e) =>
-{
-    e.preventDefault();
+        listarTransacoes();
 
-    listarTransacoes();
-
-});
+    });
 }
-
-filtromes.value = mesAtual;
-filtroano.value = anoAtual;
 
 //Criar opções de categorias
 if (tipoSelect && categoriaSelect) {
@@ -332,44 +322,41 @@ if (formCadastro) {
         const dataAtualizada = new Date(dataP);
         dataAtualizada.setDate(dataAtualizada.getDate() + 1);
 
-        if(parcelas > 1)
-        {
-            
-            for(let i = 0; i < parcelas; i++)
-            {
-            const dataParcelas = new Date(dataAtualizada);
-            
-            dataParcelas.setMonth(dataParcelas.getMonth() + i);
+        if (parcelas > 1) {
 
-            transacao.push({
-            id_usuario: usuario.id,
-            nome: document.getElementById("descricao-transacao").value,
-            tipo: document.getElementById("tipo").value,
-            categoria: document.getElementById("categoria").value,
-            valor: parseFloat(document.getElementById("valor-transacao").value/parcelaOriginal),
-            parcelas: parcelas,
-            data: dataParcelas
-            
-            })
-            parcelas--;
-            
+            for (let i = 0; i < parcelas; i++) {
+                const dataParcelas = new Date(dataAtualizada);
+
+                dataParcelas.setMonth(dataParcelas.getMonth() + i);
+
+                transacao.push({
+                    id_usuario: usuario.id,
+                    nome: document.getElementById("descricao-transacao").value,
+                    tipo: document.getElementById("tipo").value,
+                    categoria: document.getElementById("categoria").value,
+                    valor: parseFloat(document.getElementById("valor-transacao").value / parcelaOriginal),
+                    parcelas: parcelas,
+                    data: dataParcelas
+
+                })
+                parcelas--;
+
             }
         }
         // 1. Coleta e mapeamento dos dados do formulário
-        else
-        {
-        transacao = {
-            id_usuario: usuario.id,
-            // IDs do HTML modificado:
-            nome: document.getElementById("descricao-transacao").value,
-            tipo: document.getElementById("tipo").value,
-            categoria: document.getElementById("categoria").value,
-            // Certifique-se de que o input seja do tipo 'number' no HTML para garantir o valor
-            valor: parseFloat(document.getElementById("valor-transacao").value),
-            parcelas: parseFloat(document.getElementById("parcelas").value),
-            data: dataAtualizada// yyyy-mm-dd
-        };
-    }
+        else {
+            transacao = {
+                id_usuario: usuario.id,
+                // IDs do HTML modificado:
+                nome: document.getElementById("descricao-transacao").value,
+                tipo: document.getElementById("tipo").value,
+                categoria: document.getElementById("categoria").value,
+                // Certifique-se de que o input seja do tipo 'number' no HTML para garantir o valor
+                valor: parseFloat(document.getElementById("valor-transacao").value),
+                parcelas: parseFloat(document.getElementById("parcelas").value),
+                data: dataAtualizada// yyyy-mm-dd
+            };
+        }
         try {
             // 2. Envio dos dados para a API (Backend)
             const resposta = await fetch("/api/transacao", {
@@ -404,53 +391,47 @@ if (formCadastro) {
 
 //Excluir transação
 window.excluirTransacao = async function excluirTransacao(id_transacao) {
-    
-    try
-    {
-        const resposta = await fetch("/api/excluir/",{
+
+    try {
+        const resposta = await fetch("/api/excluir/", {
             method: 'POST',
             headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ transacao_id: id_transacao })
-            });
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ transacao_id: id_transacao })
+        });
 
         const json = await resposta.json();
-       
 
-        if(json.sucesso)
-        {
+
+        if (json.sucesso) {
             listarTransacoes();
         }
-        
+
     }
-    catch(error)
-{
-    console.log(error);
-}
+    catch (error) {
+        console.log(error);
+    }
 }
 
-async function listarUltimasTransacoes()
-{
-try
-{
-const resposta = await fetch("api/ultimas-transacoes",
-            {method: 'POST',
-            headers: {
+async function listarUltimasTransacoes() {
+    try {
+        const resposta = await fetch("api/ultimas-transacoes",
+            {
+                method: 'POST',
+                headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ id_usuario: usuario.id })
             });
 
         const json = await resposta.json();
-        
-        if(json.sucesso)
-        {
+
+        if (json.sucesso) {
             addUltimas(json.dados);
         }
-}
-catch(error)
-{
-    console.log(error);
-}
+    }
+    catch (error) {
+        console.log(error);
+    }
 }

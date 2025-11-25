@@ -133,16 +133,16 @@ hr {
 }
 .table thead th {
     background-color: #2e7d32;
-    color: white !important;
+    color: white;
 }
 .table.table-striped tbody tr:nth-of-type(odd) td {
-    background-color: #3DCE3D !important;
+    background-color: #E5F6E0;
 }
 .table.table-striped tbody tr:nth-of-type(even) td {
-    background-color: #FFFEF2 !important;
+    background-color: #f0f0f0;
 }
 .table, .table th, .table td {
-    border: 2px solid #2e7d32;
+    border: 2px solid #2a6b2d;
 }
 
 table {

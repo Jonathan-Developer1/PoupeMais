@@ -141,11 +141,10 @@ app.post("/api/transacao", async (req, res) => {
 
   const transacoes = Array.isArray(transacao) ? transacao : [transacao];
   const conn = await getConnection();
-  const promises = transacoes.map(e =>
-  {
-    
-     const request = new sql.Request(conn); 
-    
+  const promises = transacoes.map(e => {
+
+    const request = new sql.Request(conn);
+
     request.input("id_usuario", sql.Int, e.id_usuario);
     //
     request.input("nome", sql.VarChar(200), e.nome);
@@ -166,10 +165,10 @@ app.post("/api/transacao", async (req, res) => {
 
   await Promise.all(promises);
 
-    res.json({ sucesso: true });
+  res.json({ sucesso: true });
 
-    res.status(500).json({ erro: error.message });
-  });
+  res.status(500).json({ erro: error.message });
+});
 
 
 //carregar transações
@@ -207,7 +206,7 @@ SELECT
 
 //pegar valor
 app.post("/api/valor/confirmar", async (req, res) => {
-  const {id_transacao} = req.body;
+  const { id_transacao } = req.body;
   try {
     const result = await execSQLQuery(`SELECT * FROM Transacoes WHERE id_transacao = ${id_transacao}`);
 
@@ -229,19 +228,19 @@ app.post("/api/valor/confirmar", async (req, res) => {
 
 
 app.post("/api/valor/cancelar", async (req, res) => {
-  const {id_transacao} = req.body;
+  const { id_transacao } = req.body;
   try {
     const result = await execSQLQuery(`SELECT * FROM Transacoes WHERE id_transacao = ${id_transacao}`);
-    
+
     await execSQLQuery(`
     UPDATE Transacoes
     SET confirmada = 0
     WHERE id_transacao = ${id_transacao};
   `);
-   
-    
-    res.json({ sucesso: true, dados: result});
-    
+
+
+    res.json({ sucesso: true, dados: result });
+
 
   } catch (error) {
     console.error("Erro ao selecionar transação:");
@@ -278,21 +277,19 @@ app.post("/api/saldo/atualizar/confirmar", async (req, res) => {
 
 app.post("/api/saldo/atualizar/cancelar", async (req, res) => {
   const result = req.body;
-  
-  
+
+
   try {
 
-   if(result.dados.tipo == "despesa")
-   {
-    await execSQLQuery(`UPDATE Usuarios SET saldo = saldo + ${result.dados.valor} WHERE id = ${result.id_usuario}`)
-   }
-   else if(result.dados.tipo == "receita")
-   {
-    await execSQLQuery(`UPDATE Usuarios SET saldo = saldo - ${result.dados.valor} WHERE id = ${result.id_usuario}`)
-   }
-  
-    res.json({sucesso: true, dados: result});
-    
+    if (result.dados.tipo == "despesa") {
+      await execSQLQuery(`UPDATE Usuarios SET saldo = saldo + ${result.dados.valor} WHERE id = ${result.id_usuario}`)
+    }
+    else if (result.dados.tipo == "receita") {
+      await execSQLQuery(`UPDATE Usuarios SET saldo = saldo - ${result.dados.valor} WHERE id = ${result.id_usuario}`)
+    }
+
+    res.json({ sucesso: true, dados: result });
+
 
   } catch (error) {
     console.error("Erro ao selecionar transação:");
@@ -342,24 +339,21 @@ app.get("/api/historico/ultimo/:id_usuario", async (req, res) => {
 //Pegar ultimas transações
 
 
-app.post("/api/ultimas-transacoes", async (req, res) =>
-{
- 
-  const {id_usuario} = req.body;
-  try
-  {
-  const result = await execSQLQuery(`SELECT TOP 5 * FROM Transacoes WHERE id_usuario = ${id_usuario} AND confirmada = 1
+app.post("/api/ultimas-transacoes", async (req, res) => {
+
+  const { id_usuario } = req.body;
+  try {
+    const result = await execSQLQuery(`SELECT TOP 5 * FROM Transacoes WHERE id_usuario = ${id_usuario} AND confirmada = 1
 ORDER BY data DESC`);
 
-  if(result.length > 1)
+    if (result.length > 1)
 
-    res.json({sucesso: true, dados: result})
+      res.json({ sucesso: true, dados: result })
 
-}
-catch(error)
-{
-  console.log(error);
-}
+  }
+  catch (error) {
+    console.log(error);
+  }
 
 });
 
@@ -409,6 +403,144 @@ const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
 const data = await response.json();
 console.log(data.choices[0].message.content);
 */
+
+// Rota para pegar dados agrupados por categoria (para os gráficos de pizza)
+// Exemplo de uso: /api/grafico/categorias/1/despesa
+app.get("/api/grafico/categorias/:id_usuario/:tipo", async (req, res) => {
+  const { id_usuario, tipo } = req.params;
+
+  try {
+    // Essa query soma o valor total de cada categoria para aquele usuário e tipo
+    const result = await execSQLQuery(`
+      SELECT 
+        c.nome_categoria, 
+        SUM(t.valor) as total
+      FROM Transacoes t
+      JOIN Categorias c ON t.id_categoria = c.id_categoria
+      WHERE t.id_usuario = ${id_usuario} 
+      AND t.tipo = '${tipo}'
+      GROUP BY c.nome_categoria
+    `);
+
+    res.json(result);
+
+  } catch (error) {
+    console.error(`Erro ao buscar categorias de ${tipo}:`, error);
+    res.status(500).json({ erro: error.message });
+  }
+});
+
+
+//===============================
+//PAGINA SIMULAÇÃO
+//===============================
+
+app.post("/api/simulacao/salvar", async (req, res) => {
+  const {
+    nome_simulacao,
+    saldo_inicial,
+    periodo,
+    porcentagem,
+    tipo_simulacao,
+    dados_linha,
+    id_usuario
+  } = req.body;
+
+  try {
+    const result = await execSQLQuery(`
+      INSERT INTO Simulacoes (
+        nome_simulacao,
+        saldo_inicial,
+        periodo,
+        porcentagem,
+        tipo_simulacao,
+        dados_linha,
+        data_criacao,
+        id_usuario
+      )
+      VALUES (
+        '${nome_simulacao}',
+        ${saldo_inicial},
+        ${periodo},
+        ${porcentagem},
+        ${tipo_simulacao},
+        '${dados_linha}',
+        GETDATE(),
+        ${id_usuario}
+      );
+      SELECT * FROM Simulacoes WHERE id_simulacao = SCOPE_IDENTITY();
+    `);
+
+    res.json(result[0]);
+
+  } catch (error) {
+    console.error("Erro ao salvar simulação:", error);
+    res.status(500).json({ erro: error.message });
+  }
+});
+
+app.get("/api/simulacao/listar/:id_usuario", async (req, res) => {
+  const id_usuario = req.params.id_usuario;
+
+  try {
+    const result = await execSQLQuery(`
+      SELECT 
+        id_simulacao,
+        nome_simulacao,
+        saldo_inicial,
+        periodo,
+        porcentagem,
+        tipo_simulacao,
+        data_criacao
+      FROM Simulacoes
+      WHERE id_usuario = ${id_usuario}
+      ORDER BY data_criacao DESC
+    `);
+
+    res.json(result);
+
+  } catch (error) {
+    console.error("Erro ao listar simulações:", error);
+    res.status(500).json({ erro: error.message });
+  }
+});
+
+app.get("/api/simulacao/:id_simulacao", async (req, res) => {
+  const id = req.params.id_simulacao;
+
+  try {
+    const result = await execSQLQuery(`
+      SELECT *
+      FROM Simulacoes
+      WHERE id_simulacao = ${id}
+    `);
+
+    res.json(result[0] || {});
+
+  } catch (error) {
+    console.error("Erro ao buscar simulação:", error);
+    res.status(500).json({ erro: error.message });
+  }
+});
+
+app.post("/api/simulacao/excluir", async (req, res) => {
+  const { id_simulacao } = req.body;
+
+  try {
+    await execSQLQuery(`
+      DELETE FROM Simulacoes
+      WHERE id_simulacao = ${id_simulacao}
+    `);
+
+    res.json({ sucesso: true });
+
+  } catch (error) {
+    console.error("Erro ao excluir simulação:", error);
+    res.status(500).json({ erro: error.message });
+  }
+});
+
+
 
 app.listen(3000, () => {
   console.log("Servidor funcionando em http://localhost:3000");
