@@ -19,21 +19,12 @@ iconeOlho.addEventListener("click", () => {
 });
 
 // ============================
-// LOCALSTORAGE / HISTÓRICO
+// HISTÓRICO
 // ============================
 const container = document.getElementById("historicoSimulacao");
-
-function getSimulacoes() {
-    const simulacoes = localStorage.getItem("simulacoes");
-    return simulacoes ? JSON.parse(simulacoes) : [];
-}
-
-function salvarSimulacoes(lista) {
-    localStorage.setItem("simulacoes", JSON.stringify(lista));
-}
-
+const usuario = JSON.parse(localStorage.getItem('usuario'));
 function getTipoTexto(tipo) {
-    switch(tipo) {
+    switch (tipo) {
         case "1": return "Redução de despesas";
         case "2": return "Aumento de receitas";
         case "3": return "Investimento com rendimento";
@@ -41,24 +32,33 @@ function getTipoTexto(tipo) {
         default: return "Outro";
     }
 }
+async function getSimulacoes() {
+    try {
+        const res = await fetch(`/api/simulacao/listar/${usuario.id}`);
+        return await res.json();
+    } catch (err) {
+        console.error("Erro ao buscar simulações:", err);
+        return [];
+    }
+}
 
 // ============================
 // RENDERIZA HISTÓRICO
 // ============================
-function renderizarHistorico() {
+async function renderizarHistorico() {
     container.innerHTML = "";
-    const lista = getSimulacoes();
+    const lista = await getSimulacoes();
 
     lista.forEach(sim => {
         const div = document.createElement("div");
         div.classList.add("card-item");
         div.innerHTML = `
             <div class="card-text">
-                <h4>${sim.nome}</h4>
-                <p>Tipo: ${getTipoTexto(sim.tipoSimulacao)}</p>
+                <h4>${sim.nome_simulacao}</h4>
+                <p>Tipo: ${getTipoTexto(sim.tipo_simulacao)}</p>
             </div>
             <div>
-                <span class="btn-excluir" style="color:red; cursor:pointer; margin-left:10px;">🗑️</span>
+                <span class="bi bi-trash3 btn-excluir" cursor:pointer; margin-left:10px;"></span>
             </div>
         `;
 
@@ -74,7 +74,7 @@ function renderizarHistorico() {
         // Clique lixeira
         div.querySelector(".btn-excluir").addEventListener("click", (e) => {
             e.stopPropagation();
-            excluirSimulacao(sim.id);
+            excluirSimulacao(sim.id_simulacao);
         });
 
         container.appendChild(div);
@@ -92,11 +92,11 @@ function atualizarResultado(sim) {
         "4": `Ao seguir sua meta de economia de ${sim.porcentagem}% por ${sim.periodo} meses, você conseguirá economizar:`
     };
 
-    document.getElementById("resMensagem").textContent = mensagens[sim.tipoSimulacao] || "Resultado da simulação";
-    document.getElementById("nomeSimul").textContent = sim.nome;
-    document.getElementById("resValor").textContent = sim.dadosLinha[sim.dadosLinha.length - 1].toFixed(2);
+    document.getElementById("resMensagem").textContent = mensagens[sim.tipo_simulacao] || "Resultado da simulação";
+    document.getElementById("nomeSimul").textContent = sim.nome_simulacao;
+    document.getElementById("resValor").textContent = sim.dados_linha[sim.dados_linha.length - 1].toFixed(2);
 
-    const saldoFinal = sim.saldoInicial + sim.dadosLinha[sim.dadosLinha.length - 1];
+    const saldoFinal = sim.saldo_inicial + sim.dados_linha[sim.dados_linha.length - 1];
     document.getElementById("resTotal").textContent = saldoFinal.toFixed(2);
 }
 
@@ -111,10 +111,10 @@ function atualizarGraficoLinha(sim) {
     graficoLinha = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: Array.from({length: sim.dadosLinha.length}, (_, i) => i + 1),
+            labels: Array.from({ length: sim.dados_linha.length }, (_, i) => i + 1),
             datasets: [{
-                label: sim.nome,
-                data: sim.dadosLinha,
+                label: sim.nome_simulacao,
+                data: sim.dados_linha,
                 fill: false,
                 borderColor: 'rgb(75, 192, 192)',
                 tension: 0.1
@@ -133,40 +133,20 @@ function atualizarGraficoLinha(sim) {
 let graficoPizza, graficoComparativo;
 
 function atualizarGraficoPizza(sim) {
-    const ctx1 = document.getElementById("grafico1");
-    const ctx2 = document.getElementById("grafico2"); // segundo canvas
+    const ctx2 = document.getElementById("grafico2");
 
-    const saldoInicial = sim.saldoInicial;
-    const saldoExtra = sim.dadosLinha[sim.dadosLinha.length - 1];
+    const saldoInicial = sim.saldo_inicial;
+    const saldoExtra = sim.dados_linha[sim.dados_linha.length - 1];
 
     if (graficoPizza) graficoPizza.destroy();
     if (graficoComparativo) graficoComparativo.destroy();
 
-    // Gráfico pizza no primeiro canvas
-    graficoPizza = new Chart(ctx1, {
-        type: "pie",
-        data: {
-            labels: ["Saldo Inicial"],
-            datasets: [{
-                data: [saldoInicial],
-                backgroundColor: ["#4CAF50", "#FFA500"],
-                borderColor: ["#003A14", "#FF8C00"],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false
-        }
-    });
-
-    // Exemplo de uso do segundo canvas (comparativo ou outro gráfico)
     graficoComparativo = new Chart(ctx2, {
-        type: "pie", 
+        type: "pie",
         data: {
             labels: ["Saldo Inicial", "Ganho da Simulação"],
             datasets: [{
-                label: sim.nome,
+                label: sim.nome_simulacao,
                 data: [saldoInicial, saldoExtra],
                 backgroundColor: ["#4CAF50", "#FFA500"]
             }]
@@ -177,11 +157,10 @@ function atualizarGraficoPizza(sim) {
     document.getElementById("valorTotal").textContent = `+${(saldoInicial + saldoExtra).toFixed(2)}`;
 }
 
-
 // ============================
-// CRIAR SIMULAÇÃO
+// CRIAR SIMULAÇÃO 
 // ============================
-function criarSimulacao() {
+async function criarSimulacao() {
     const nome = document.getElementById("nomeSimulacao").value.trim();
     const saldoInicial = parseFloat(document.getElementById("saldoInicial").value.replace(/\D/g, "")) || 0;
     const periodo = parseInt(document.getElementById("periodoSimulacao").value.trim());
@@ -201,43 +180,63 @@ function criarSimulacao() {
     }
 
     const novaSimulacao = {
-        id: Date.now(),
-        nome,
-        saldoInicial,
+        nome_simulacao: nome,
+        saldo_inicial: saldoInicial,
         periodo,
         porcentagem,
-        tipoSimulacao: tipo.value,
-        dadosLinha
+        tipo_simulacao: tipo.value,
+        dados_linha: dadosLinha,
+        id_usuario: usuario.id
     };
 
-    const lista = getSimulacoes();
-    lista.push(novaSimulacao);
-    salvarSimulacoes(lista);
+    try {
+        const res = await fetch("/api/simulacao/salvar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(novaSimulacao)
+        });
 
-    renderizarHistorico();
-    atualizarResultado(novaSimulacao);
-    atualizarGraficoLinha(novaSimulacao);
-    atualizarGraficoPizza(novaSimulacao);
+        const simSalva = await res.json(); // Recebe simulação salva com id_simulacao real
+
+        // Atualiza histórico completo
+        await renderizarHistorico();
+
+        // Atualiza gráficos e resultado usando dados do backend
+        atualizarResultado({ ...novaSimulacao, id_simulacao: simSalva.id_simulacao });
+        atualizarGraficoLinha({ ...novaSimulacao, id_simulacao: simSalva.id_simulacao });
+        atualizarGraficoPizza({ ...novaSimulacao, id_simulacao: simSalva.id_simulacao });
+
+    } catch (err) {
+        console.error("Erro ao salvar simulação:", err);
+    }
 }
 
 // ============================
-// EXCLUIR SIMULAÇÃO
+// EXCLUIR SIMULAÇÃO 
 // ============================
-function excluirSimulacao(id) {
-    let lista = getSimulacoes();
-    lista = lista.filter(sim => sim.id !== id);
-    salvarSimulacoes(lista);
-    renderizarHistorico();
+async function excluirSimulacao(id) {
+    try {
+        await fetch("/api/simulacao/excluir", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id_simulacao: id })
+        });
 
-    const resNome = document.getElementById("nomeSimul").textContent;
-    if (!lista.find(sim => sim.nome === resNome)) {
-        document.getElementById("resMensagem").textContent = "AQUI APARECERÁ O RESULTADO DA SIMULAÇÃO";
-        document.getElementById("nomeSimul").textContent = "";
-        document.getElementById("resValor").textContent = "0,00";
-        document.getElementById("resTotal").textContent = "0,00";
-        if (graficoLinha) graficoLinha.destroy();
-        if (graficoPizza) graficoPizza.destroy();
-        document.getElementById("valorTotal").textContent = "+0,00";
+        await renderizarHistorico();
+
+        const resNome = document.getElementById("nomeSimul").textContent;
+        if (!document.querySelector(`#historicoSimulacao div:contains("${resNome}")`)) {
+            document.getElementById("resMensagem").textContent = "AQUI APARECERÁ O RESULTADO DA SIMULAÇÃO";
+            document.getElementById("nomeSimul").textContent = "";
+            document.getElementById("resValor").textContent = "0,00";
+            document.getElementById("resTotal").textContent = "0,00";
+            if (graficoLinha) graficoLinha.destroy();
+            if (graficoPizza) graficoPizza.destroy();
+            document.getElementById("valorTotal").textContent = "+0,00";
+        }
+
+    } catch (err) {
+        console.error("Erro ao excluir simulação:", err);
     }
 }
 
