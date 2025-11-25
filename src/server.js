@@ -389,6 +389,26 @@ app.get("/api/grafico/evolucao/:id_usuario", async (req, res) => {
   }
 });
 
+//pegar api
+/*
+const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+  method: "POST",
+  headers: {
+    "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    model: "alibaba/tongyi-deepresearch-30b-a3b:free", // escolha qualquer modelo do OpenRouter
+    messages: [
+      { role: "system", content: "Você é um assistente que irá analisar gráficos de gastos e oferecer sugestões para o consumidor." },
+      { role: "user", content: "Analise esses gráficos." }
+    ]
+  })
+});
+
+const data = await response.json();
+console.log(data.choices[0].message.content);
+*/
 
 app.listen(3000, () => {
   console.log("Servidor funcionando em http://localhost:3000");
