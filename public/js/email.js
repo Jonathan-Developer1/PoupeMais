@@ -7,15 +7,15 @@ dotenv.config();
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: parseInt(process.env.SMTP_PORT, 10) || 587,
-  secure: false, 
+  secure: false,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
 });
-
+//envio do código
 export async function enviarCodigo(destinatarioEmail, codigo) {
-   console.log(`Tentando enviar e-mail para: ${destinatarioEmail} com usuário SMTP: ${process.env.SMTP_USER}`);
+  console.log(`Tentando enviar e-mail para: ${destinatarioEmail} com usuário SMTP: ${process.env.SMTP_USER}`);
   const mailOptions = {
     from: process.env.FROM_EMAIL,
     to: destinatarioEmail,
@@ -36,6 +36,57 @@ export async function enviarCodigo(destinatarioEmail, codigo) {
   } catch (error) {
 
     console.error(" ERRO NO NODEMAILER/BREVO:", error.message);
+    return false;
+  }
+}
+//boas vindas para usuario após o cadastro
+export async function enviarBoasVindas(destinatarioEmail, nome) {
+  console.log(`Tentando enviar e-mail de boas-vindas para: ${destinatarioEmail}`);
+
+  const primeiroNome = nome.split(" ")[0];
+
+  const mailOptions = {
+  from: process.env.FROM_EMAIL,
+  to: destinatarioEmail,
+  subject: "🎉 Bem-vindo(a) ao PoupeMais!",
+  html: `
+    <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.5; max-width: 600px; margin: 0 auto; text-align: center;">
+      <img src="cid:PoupeMaisLogo" alt="PoupeMais" width="120" style="display:block; margin: 20px auto;" />
+      
+      <h2 style="color: #2E8B57;">Olá, ${primeiroNome}!</h2>
+      <p style="font-size: 16px; margin: 10px 0;">
+        Seu cadastro no <strong>PoupeMais</strong> foi realizado com sucesso! 🥳💚
+      </p>
+      
+      <p style="font-size: 15px; margin: 15px 0 5px;">Agora você pode:</p>
+      <ul style="text-align: left; display: inline-block; margin: 0; padding-left: 20px; font-size: 14px;">
+        <li>Registrar suas receitas e despesas</li>
+        <li>Acompanhar seu saldo e evolução financeira</li>
+        <li>Visualizar gráficos detalhados de gastos e economia</li>
+        <li>Receber dicas de economia e planejamento com nossa IA exclusiva</li>
+        <li>Planejar suas metas financeiras com facilidade</li>
+      </ul>
+      
+      <p style="font-size: 15px; margin: 15px 0;">Estamos felizes em ter você conosco!</p>
+      <p style="font-size: 15px; margin: 0;">Equipe <strong>PoupeMais</strong></p>
+    </div>
+  `,
+  attachments: [
+    {
+      filename: "PoupeMais-logo.png",
+      path: "./public/img/PoupeMais-logo.png",
+      cid: "PoupeMaisLogo"
+    }
+  ]
+};
+
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log("E-mail de boas-vindas enviado: %s", info.messageId);
+    return true;
+  } catch (error) {
+    console.error("ERRO AO ENVIAR EMAIL DE BOAS-VINDAS:", error.message);
     return false;
   }
 }
