@@ -68,6 +68,10 @@ a.navbar-brand {
     }
 }
 
+#titulo {
+    text-align: center;
+}
+
 /* Body - Parâmetros */
 h1 {
     margin: 2% 0 0 3%;
@@ -83,11 +87,14 @@ h3 {
 }
 
 #parametros {
-    margin: 3rem;
-    padding: 1rem 1.5rem;
+    margin: 3rem auto;
+    padding: 2rem;
     background-color: #E5F6E0;
     border-radius: 8px;
+    max-width: 1000px;
+    width: 100%;
 }
+
 
 #obrigatorio {
     color: red;
@@ -113,9 +120,9 @@ h3 {
 .input-estilo,
 .input-estilo-money {
     width: 100%;
-    max-width: 550px;
+    max-width: 1200px;
     padding: 10px 15px;
-    border: 1px solid #2c3e2c;
+    border: 1px solid #465d46;
     border-radius: 8px;
     background-color: #fdfdf2;
     box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
@@ -125,7 +132,7 @@ h3 {
 }
 
 .input-estilo-money {
-    max-width: 550px;
+    max-width: 1200px;
 }
 
 .input-estilo::placeholder,
@@ -134,9 +141,16 @@ h3 {
     opacity: 0.8;
 }
 
+input[disabled] {
+    background-color: #e6e6e6;
+    color: #6d6d6d;
+    border: 1px solid #bdbdbd;
+    cursor: not-allowed;
+}
+
 #botao-alterar {
     display: block;
-    margin-top: 2rem;
+    margin: 2rem auto;
     width: 20rem;
     padding: 0.6rem;
     border: 1px solid #2c3e2c;
