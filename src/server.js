@@ -218,6 +218,7 @@ SELECT
  t.confirmada,
  t.data,
  t.id_categoria,
+ t.id_parcela,
  c.nome_categoria 
  FROM 
  Transacoes t
@@ -327,6 +328,21 @@ app.post("/api/saldo/atualizar/cancelar", async (req, res) => {
     res.status(500).json({ erro: error.message });
   }
 });
+
+//excluir parcelas
+app.post("/api/excluirParcelas/", async (req, res) => {
+  const { parcelas_id } = req.body;
+
+
+  try {
+    await execSQLQuery(`DELETE FROM Transacoes WHERE id_parcela = ${parcelas_id}`);
+
+    res.json({ sucesso: true });
+  }
+  catch (error) {
+    console.log(error);
+  }
+})
 
 app.post("/api/excluir/", async (req, res) => {
   const { transacao_id } = req.body;

@@ -227,7 +227,7 @@ async function listarTransacoes() {
     try {
         const resposta = await fetch(`/api/transacoes/${usuario.id}`);
         const json = await resposta.json();
-
+        console.log(json);
         if (json) {
             // Ajusta os objetos para incluir o nome da categoria antes de enviar para cadastrarTransacao
             const jsonAjustado = json.map(e => ({
@@ -409,7 +409,7 @@ if (formCadastro) {
 }
 
 //Excluir transação
-window.excluirTransacao = async function excluirTransacao(id_transacao, id_parcela) {
+window.excluirTransacao = async function excluirTransacao(id_transacao) {
 
     try {
         const resposta = await fetch("/api/excluir/", {
@@ -417,9 +417,32 @@ window.excluirTransacao = async function excluirTransacao(id_transacao, id_parce
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ transacao_id: id_transacao,
-                id_parcela: id_parcela
-             })
+            body: JSON.stringify({ transacao_id: id_transacao})
+        });
+
+        const json = await resposta.json();
+
+
+        if (json.sucesso) {
+            listarTransacoes();
+        }
+
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+//Excluir parcelas
+window.excluirParcelas = async function excluirParcelas(id_parcela) {
+
+    try {
+        const resposta = await fetch("/api/excluirParcelas/", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ parcelas_id: id_parcela})
         });
 
         const json = await resposta.json();

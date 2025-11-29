@@ -25,7 +25,7 @@ export async function cadastrarTransacao(objeto) {
     {
     if(filtromes.value == data.getMonth() && filtroano.value == data.getFullYear())
     {
-    if(e.confirmada)
+    if(e.parcelas > 1 && e.confirmada)
     {
       novoCadastro.innerHTML += `<td>${e.nome}</td>
                 <td>${data.toLocaleString('pt-BR', { timezone: 'UTC', dateStyle: 'short' })}</td>
@@ -33,7 +33,28 @@ export async function cadastrarTransacao(objeto) {
                 <td>${valorAtualizado}</td>
                 <td>${e.parcelas}</td>
                 <td style="cursor: pointer"><i class="bi bi-x-square-fill" onclick="desfazerTransacao(${e.id_transacao})"></i></td>
-                <td style="cursor: pointer"><i class="bi bi-trash3" onclick="excluirTransacao(${e.id_transacao}, ${e.id_parcela})"></i></td>`;
+                <td style="cursor: pointer"><i class="bi bi-trash3" onclick="excluirParcelas(${e.id_parcela})"></i></td>`;
+    }
+    else if(e.parcelas > 1)
+    {
+      novoCadastro.innerHTML += `<td>${e.nome}</td>
+                <td>${data.toLocaleString('pt-BR', { timezone: 'UTC', dateStyle: 'short' })}</td>
+                <td>${e.categoria}</td>
+                <td>${valorAtualizado}</td>
+                <td>${e.parcelas}</td>
+                <td style="cursor: pointer"><i class="bi bi-check-square-fill" onclick="confirmarTransacao(${e.id_transacao})"></i></td>
+                <td style="cursor: pointer"><i class="bi bi-trash3" onclick="excluirParcelas(${e.id_parcela})"></i></td>`;
+    }
+
+    else if(e.confirmada)
+    {
+      novoCadastro.innerHTML += `<td>${e.nome}</td>
+                <td>${data.toLocaleString('pt-BR', { timezone: 'UTC', dateStyle: 'short' })}</td>
+                <td>${e.categoria}</td>
+                <td>${valorAtualizado}</td>
+                <td>${e.parcelas}</td>
+                <td style="cursor: pointer"><i class="bi bi-x-square-fill" onclick="desfazerTransacao(${e.id_transacao})"></i></td>
+                <td style="cursor: pointer"><i class="bi bi-trash3" onclick="excluirTransacao(${e.id_transacao})"></i></td>`;
     }
     else
     {
