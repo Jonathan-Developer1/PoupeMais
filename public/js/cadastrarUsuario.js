@@ -13,25 +13,29 @@ document.querySelector(".btn-cadastro").addEventListener("click", async () => {
 
     usuarioTemp = { nome, email, senha };
 
-    const resposta = await fetch("/api/cadastrarUsuario", {
+    //rota enviar codigo
+    const resposta = await fetch("/api/enviarCodigo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nome, email, senha })
+        body: JSON.stringify({ email })
     });
-
     
+console.log("Resposta servidor:", resposta);
+
     const data = await resposta.json();
 
     if (data.sucesso) {
         alert("Código enviado para seu e-mail!");
 
-        // mostra a área de verificação
         document.getElementById("verificacao").style.display = "block";
 
     } else {
         alert(data.mensagem || "Erro ao enviar código.");
     }
+    console.log("JSON recebido:", data);
+
 });
+
 
 document.getElementById("btn-confirmar").addEventListener("click", async () => {
 
@@ -42,6 +46,7 @@ document.getElementById("btn-confirmar").addEventListener("click", async () => {
         return;
     }
 
+    // verifica código
     const resposta = await fetch("/api/verificarCodigo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -51,14 +56,18 @@ document.getElementById("btn-confirmar").addEventListener("click", async () => {
         })
     });
 
+    console.log("Resposta servidor:", resposta);
+
     const data = await resposta.json();
 
     if (!data.validado) {
         alert("Código incorreto!");
         return;
     }
+    console.log("JSON recebido:", data);
 
 
+    //Cadastrar usuário
     const respostaCadastro = await fetch("/api/cadastrarUsuario", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

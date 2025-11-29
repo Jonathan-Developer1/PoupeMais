@@ -88,7 +88,21 @@ app.post("/login.html", async (req, res) => {
   }
 });
 
-// cadastrar novo usuário
+// cadastrar novo usuário e enviar código
+app.post("/api/enviarCodigo", async (req, res) => {
+  const { email } = req.body;
+  const codigo = Math.floor(100000 + Math.random() * 900000);
+  codigosAtivos[email] = codigo;
+
+  try {
+    const enviado = await enviarCodigo(email, codigo);
+    res.json({ sucesso: enviado });
+  } catch (erro) {
+    console.log(erro);
+    res.json({ sucesso: false });
+  }
+});
+
 app.post("/api/cadastrarUsuario", async (req, res) => {
   const { nome, email, senha } = req.body;
 
@@ -112,7 +126,7 @@ app.post("/api/cadastrarUsuario", async (req, res) => {
     res.json({ sucesso: true });
 
   } catch (error) {
-    console.error("❌ Erro ao cadastrar usuário:", error);
+    console.error(" Erro ao cadastrar usuário:", error);
     res.status(500).json({ erro: "Erro ao cadastrar usuário" });
   }
 });
@@ -526,7 +540,7 @@ app.post("/api/simulacao/excluir", async (req, res) => {
 app.post("/api/ia", async (req, res) => 
 {
 console.log("BODY RECEBIDO:", req.body);
-const  dadosIa  = req.body;
+ const  dadosIa  = req.body;
 
 
 try{
@@ -536,7 +550,7 @@ const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
     "Content-Type": "application/json",
   },
-  body: JSON.stringify({
+   body: JSON.stringify({
     model: "alibaba/tongyi-deepresearch-30b-a3b:free",
     messages: [
       { role: "system", content: `Você é um assistente que irá analisar gráficos de gastos e oferecer sugestões para o consumidor, usando esses dados: ${dadosIa[1]}` },
