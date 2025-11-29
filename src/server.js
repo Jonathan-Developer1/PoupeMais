@@ -86,7 +86,7 @@ app.post("/api/enviarCodigo", async (req, res) => {
  codigosAtivos[email] = codigo;
 
  try {
-  // A função enviarCodigo agora deve ser chamada com sucesso
+  
   const enviado = await enviarCodigo(email, codigo);
   res.json({ sucesso: enviado });
  } catch (erro) {
