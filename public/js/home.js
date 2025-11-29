@@ -42,8 +42,8 @@ const categorias = {
         { id: 18, nome: "Cartão" },
         { id: 19, nome: "Transporte" },
         { id: 20, nome: "Plano de Saude" },
-        { id: 22, nome: "Financiamento" },
-        { id: 21, nome: "Outros" }
+        { id: 21, nome: "Financiamento" },
+        { id: 22, nome: "Outros" }
     ]
 };
 
@@ -80,7 +80,6 @@ window.confirmarTransacao = async function confirmarTransacao(transacao_id) {
 
         const json = await resposta.json();
 
-        console.log(json.dados[0])
         if (json) {
             const respostaSaldo = await fetch("/api/saldo/atualizar/confirmar", {
                 method: 'POST',
@@ -330,10 +329,23 @@ if (formCadastro) {
 
         if (parcelas > 1) {
 
-            for (let i = 0; i < parcelas; i++) {
+            function generateNumericID() {
+            return Date.now() % 100000000;
+            }
+            const id_parcela = generateNumericID();
+
+            for (let i = 0; i < parcelaOriginal; i++) {
                 const dataParcelas = new Date(dataAtualizada);
 
+                
+                if(dataParcelas.getMonth(dataParcelas.setMonth(dataParcelas.getMonth() + i)) != dataParcelas.getMonth(+1))
+                {
+                    dataParcelas.setDate(1);
+                }
+                else
+                {
                 dataParcelas.setMonth(dataParcelas.getMonth() + i);
+                }
 
                 transacao.push({
                     id_usuario: usuario.id,
@@ -342,8 +354,8 @@ if (formCadastro) {
                     categoria: document.getElementById("categoria").value,
                     valor: parseFloat(document.getElementById("valor-transacao").value / parcelaOriginal),
                     parcelas: parcelas,
-                    data: dataParcelas
-
+                    data: dataParcelas,
+                    id_parcela: id_parcela
                 })
                 parcelas--;
 
@@ -360,7 +372,8 @@ if (formCadastro) {
                 // Certifique-se de que o input seja do tipo 'number' no HTML para garantir o valor
                 valor: parseFloat(document.getElementById("valor-transacao").value),
                 parcelas: parseFloat(document.getElementById("parcelas").value),
-                data: dataAtualizada// yyyy-mm-dd
+                data: dataAtualizada,
+                id_parcela: null
             };
         }
         try {
@@ -377,9 +390,10 @@ if (formCadastro) {
             // 3. Verifica o status da resposta
             if (json.sucesso) {
                 listarTransacoes();
-                atualizaData();
+                
                 alert("Transação cadastrada com sucesso!");
                 formCadastro.reset(); // Limpa o formulário
+                atualizaData();
                 // Garante que o select de categoria volte ao estado inicial (disabled)
                 categoriaSelect.innerHTML = '<option value="" selected disabled>Inserir categoria</option>';
 
