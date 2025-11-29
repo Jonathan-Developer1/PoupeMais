@@ -525,3 +525,54 @@ app.post("/api/simulacao/excluir", async (req, res) => {
 app.listen(3000, () => {
   console.log("Servidor funcionando em http://localhost:3000");
 });
+
+//===============================
+//PAGINA PERFIL
+//===============================
+
+//Rota para carregar dados do usuário
+app.get("/api/usuario/:id_usuario", async (req, res) => {
+    const id = req.params.id_usuario;
+
+    try {
+        const result = await execSQLQuery(`
+            SELECT Nome, Email FROM Usuarios WHERE id = ${id}
+        `);
+
+        res.json(result[0] || {});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ erro: "Erro ao carregar dados do usuário" });
+    }
+});
+
+//Rota para alterar a senha do banco
+app.post("/api/usuario/alterar-senha", async (req, res) => {
+    const { id_usuario, senha_atual, nova_senha } = req.body;
+
+    try {
+        // verificar senha atual
+        const usuario = await execSQLQuery(`
+            SELECT Senha FROM Usuarios WHERE id = ${id_usuario}
+        `);
+
+        if (usuario.length === 0)
+            return res.json({ sucesso: false, mensagem: "Usuário não encontrado." });
+
+        if (usuario[0].Senha !== senha_atual)
+            return res.json({ sucesso: false, mensagem: "Senha atual incorreta!" });
+
+        // atualizar senha
+        await execSQLQuery(`
+            UPDATE Usuarios 
+            SET Senha = '${nova_senha}'
+            WHERE id = ${id_usuario}
+        `);
+
+        res.json({ sucesso: true });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ erro: "Erro ao alterar senha" });
+    }
+});

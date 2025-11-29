@@ -36,35 +36,37 @@
         <h4 class="h4-saldo"><b>Saldo:</b><span id="saldo">0,00</span>
           <i class="bi bi-eye-slash" id="icone-olho"></i>
         </h4>
-        <img src="img/inc-user.png" alt="" id="inc-user">
+        <a href="perfil.html">
+          <img src="img/inc-user.png" alt="" id="inc-user">
+        </a>
       </div>
     </div>
   </nav>
 
 
   <!--Dados baseados em saldo, despesas, economia e receita-->
-    <div class="texto-inicial">
-        <h1 id="titulo"><b>GRÁFICOS FINANCEIROS</b></h1>
-        <h3 id="subtitulo">Acompanhe a evolução das suas receitas, despesas e saldo geral de forma visual e interativa.</h3>
+  <div class="texto-inicial">
+    <h1 id="titulo"><b>GRÁFICOS FINANCEIROS</b></h1>
+    <h3 id="subtitulo">Acompanhe a evolução das suas receitas, despesas e saldo geral de forma visual e interativa.</h3>
+  </div>
+  <div class="resumo-financeiro">
+    <div class="item">
+      <h4>Saldo Atual</h4>
+      <p>R$ <span id="saldo-atual"></span></p>
     </div>
-    <div class="resumo-financeiro">
-        <div class="item">
-            <h4>Saldo Atual</h4>
-            <p>R$ <span id="saldo-atual"></span></p>
-        </div>
-        <div class="item">
-            <h4>Receitas Totais</h4>
-            <p>R$ <span id="receitas-totais"></span></p>
-        </div>
-        <div class="item">
-            <h4>Despesas Totais</h4>
-            <p>R$ <span id="despesas-totais"></span></p>
-        </div>
-        <div class="item">
-            <h4>Economia</h4>
-            <p>R$ <span id="economia"></span></p>
-        </div>
+    <div class="item">
+      <h4>Receitas Totais</h4>
+      <p>R$ <span id="receitas-totais"></span></p>
     </div>
+    <div class="item">
+      <h4>Despesas Totais</h4>
+      <p>R$ <span id="despesas-totais"></span></p>
+    </div>
+    <div class="item">
+      <h4>Economia</h4>
+      <p>R$ <span id="economia"></span></p>
+    </div>
+  </div>
 
   <div class="container my-5">
     <div class="row g-4 justify-content-center">
@@ -102,7 +104,7 @@
       </div>
     </div>
 
-    
+
     <div class="row g-4 justify-content-center mt-5">
       <!-- Despesas -->
       <div class="col-md-4">
@@ -138,7 +140,7 @@
 
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="js/graficos.js" ></script>
+  <script src="js/graficos.js"></script>
   <script src="js/home.js" type="module"></script>
 </body>
 

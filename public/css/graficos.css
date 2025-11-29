@@ -1,11 +1,13 @@
 /*Titulo e subtitulo*/
 
-.texto-inicial{
+.texto-inicial {
     margin: 2% 0 0% 3%;
 }
-h1{
+
+h1 {
     margin: 0;
 }
+
 /*Quadro verde com dados*/
 .resumo-financeiro {
     display: grid;
@@ -26,6 +28,23 @@ h1{
     color: #1a3c1a;
 }
 
+.h4-saldo {
+    display: flex;
+    align-items: center;
+    margin-right: 3rem;
+    gap: 8px;
+}
+
+.h4-saldo span {
+    margin-left: 5px;
+}
+
+#icone-olho {
+    cursor: pointer;
+    margin-left: 8px;
+    font-size: 20px;
+}
+
 .item p {
     margin: 4px 0 0;
     font-weight: bold;
@@ -44,20 +63,22 @@ h1{
 }
 
 /*Distribuição das Despesas e Receitas*/
- .grafico-card {
-      width: 100%;
-      max-width: 500px;
-      text-align: center;
-    }
-    .grafico-card h5 {
-      font-weight: bold;
-      color: #013220; 
-    }
+.grafico-card {
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+}
+
+.grafico-card h5 {
+    font-weight: bold;
+    color: #013220;
+}
+
 /*Receitas vs Despesas e Historico de pedido*/
 .grafico-card {
-  width: 380px; 
-  min-height: 320px; 
-  border-radius: 10px;
+    width: 380px;
+    min-height: 320px;
+    border-radius: 10px;
 }
 
 #ReceitasvsDespesas {
