@@ -5,12 +5,9 @@ import { fileURLToPath } from "url";
 import sql from "mssql";
 import dotenv from "dotenv";
 import { enviarCodigo } from "../public/js/email.js";
-<<<<<<< HEAD
 import { marked, Marked } from "marked";
-=======
 import { enviarBoasVindas } from "../public/js/email.js";
 
->>>>>>> d07f8ca7790116e721e4507d299017aa3b5c9e3e
 dotenv.config(); // carrega as variáveis do .env
 
 const __filename = fileURLToPath(import.meta.url);
