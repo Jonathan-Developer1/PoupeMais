@@ -1,29 +1,40 @@
-const nodemailer = require("nodemailer");
-require("dotenv").config();
+import nodemailer from "nodemailer";
+import dotenv from "dotenv";
+
+dotenv.config();
+
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT),
+  port: parseInt(process.env.SMTP_PORT, 10),
+  secure: false, 
   auth: {
     user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS
-  }
+    pass: process.env.SMTP_PASS,
+  },
 });
 
-async function enviarCodigo(destinatario, codigo) {
+export async function enviarCodigo(destinatarioEmail, codigo) {
+  const mailOptions = {
+    from: process.env.FROM_EMAIL,
+    to: destinatarioEmail,
+    subject: "Seu código de verificação do PoupeMais",
+    html: `
+   <h1>Bem-vindo ao PoupeMais!</h1>
+   <p>Use o seguinte código para verificar seu cadastro:</p>
+   <h2>${codigo}</h2>
+   <p>Se você não solicitou este código, por favor, ignore este e-mail.</p>
+  `,
+  };
+
   try {
-    const info = await transporter.sendMail({
-      from: process.env.FROM_EMAIL,
-      to: destinatario,
-      subject: "Código de verificação PoupeMais",
-      text: `Seu código de verificação é: ${codigo}`
-    });
-    console.log("E-mail enviado:", info.messageId);
+    const info = await transporter.sendMail(mailOptions);
+
+    console.log("E-mail enviado: %s", info.messageId);
     return true;
-  } catch (err) {
-    console.error("Erro ao enviar e-mail:", err);
+  } catch (error) {
+
+    console.error(" ERRO NO NODEMAILER/BREVO:", error.message);
     return false;
   }
 }
-
-module.exports = { enviarCodigo };
