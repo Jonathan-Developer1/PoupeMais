@@ -1,0 +1,188 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Header */
+#logo {
+    width: 110px;
+}
+
+a.navbar-brand {
+    margin-right: 6rem;
+}
+
+.navbar {
+    border-bottom: 3px solid #003A14;
+    padding: 0.5rem 1rem;
+}
+
+.nav-item {
+    font-size: 1.3rem;
+    margin-right: 4.5rem;
+    font-size: 22px;
+}
+
+.h4-saldo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 3rem;
+}
+
+.h4-saldo span {
+    margin-left: 5px;
+}
+
+#icone-olho {
+    cursor: pointer;
+    margin-left: 8px;
+    font-size: 20px;
+}
+
+
+#inc-user {
+    width: 40px;
+    height: 40px;
+}
+
+
+/* Ajuste para responsividade do navbar */
+@media (max-width: 768px) {
+    .navbar-nav {
+        width: 100%;
+        text-align: center;
+    }
+
+    .h4-saldo {
+        display: block;
+        margin: 0.5rem auto;
+    }
+
+    #inc-user {
+        display: block;
+        margin: 0.5rem auto;
+    }
+}
+
+#titulo {
+    text-align: center;
+}
+
+/* Body - Parâmetros */
+h1 {
+    margin: 2% 0 0 3%;
+    color: #003A17;
+}
+
+h1+h3 {
+    margin: 0 0 1% 3%;
+}
+
+h3 {
+    font-size: 1.6rem;
+}
+
+#parametros {
+    margin: 3rem auto;
+    padding: 2rem;
+    background-color: #E5F6E0;
+    border-radius: 8px;
+    max-width: 1000px;
+    width: 100%;
+}
+
+
+#obrigatorio {
+    color: red;
+}
+
+#tipo {
+    font-size: 1.2rem;
+    font-weight: bolder;
+}
+
+.linha {
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.linha label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: bolder;
+}
+
+.input-estilo,
+.input-estilo-money {
+    width: 100%;
+    max-width: 1200px;
+    padding: 10px 15px;
+    border: 1px solid #465d46;
+    border-radius: 8px;
+    background-color: #fdfdf2;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 1rem;
+    color: #1c3b1c;
+    outline: none;
+}
+
+.input-estilo-money {
+    max-width: 1200px;
+}
+
+.input-estilo::placeholder,
+.input-estilo-money::placeholder {
+    color: #1c3b1c;
+    opacity: 0.8;
+}
+
+input[disabled] {
+    background-color: #e6e6e6;
+    color: #6d6d6d;
+    border: 1px solid #bdbdbd;
+    cursor: not-allowed;
+}
+
+#botao-alterar {
+    display: block;
+    margin: 2rem auto;
+    width: 20rem;
+    padding: 0.6rem;
+    border: 1px solid #2c3e2c;
+    border-radius: 0.3rem;
+    background-color: #2e7d32;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 1rem;
+    color: white;
+    font-weight: bold;
+}
+
+/* Ajustes finais para telas menores */
+@media (max-width: 768px) {
+
+    #parametros,
+    #resultado,
+    #comparativo,
+    #historico {
+        margin: 1rem;
+        padding: 1rem;
+    }
+
+    .linha-graficos canvas {
+        max-width: 100%;
+        height: 250px;
+    }
+
+    .linha>div {
+        flex: 1 1 100%;
+    }
+
+    .linha-graficos {
+        gap: 1rem;
+    }
+}

@@ -41,14 +41,17 @@
                     <h4 class="h4-saldo"><b>Saldo:</b><span id="saldo">0,00</span>
                         <i class="bi bi-eye-slash" id="icone-olho"></i>
                     </h4>
-                    <img src="img/inc-user.png" alt="" id="inc-user">
+                    <a href="perfil.html">
+                        <img src="img/inc-user.png" alt="" id="inc-user">
+                    </a>
                 </div>
             </div>
         </nav>
     </header>
     <h1><b>CADASTRAR NOVA TRANSAÇÃO</b></h1>
 
-    <form id="formCadastroTransacao"> <input type="text" placeholder="Inserir nome/descrição" class="input-estilo" id="descricao-transacao" required>
+    <form id="formCadastroTransacao"> <input type="text" placeholder="Inserir nome/descrição" class="input-estilo"
+            id="descricao-transacao" required>
 
         <div>
             <select class="select-simples" title="categoria" id="tipo" required>
@@ -57,23 +60,25 @@
                 <option value="receita">Receita</option>
             </select>
 
-            <input type="number" step="0.01" placeholder="Inserir valor (R$)" class="input-estilo-money" id="valor-transacao" required>
+            <input type="number" step="0.01" placeholder="Inserir valor (R$)" class="input-estilo-money"
+                id="valor-transacao" required>
         </div>
 
         <select class="select-simples" title="despesas e receitas" id="categoria" required>
             <option value="" selected disabled>Inserir categoria</option>
         </select>
-        
-        <label id="data-transacao-label" for="data-transacao" style="display: block; margin-top: 10px;">Data da Transação:</label>
+
+        <label id="data-transacao-label" for="data-transacao" style="display: block; margin-top: 10px;">Data da
+            Transação:</label>
         <input type="date" class="input-estilo-money" id="data-transacao" required>
 
         <input type="number" placeholder="Inserir parcelas (meses)" class="input-estilo-money" id="parcelas">
-        
+
         <button type="submit" id="botao-cadastro">Cadastrar</button>
     </form>
-    
+
     <hr>
-    
+
     <div class="porquinho">
         <img src="img/Porquinho_PM.png" alt="" id="img-porquinho">
         <h1><b>TRANSAÇÕES CADASTRADAS</b></h1>
@@ -88,8 +93,7 @@
             <option value="2030">2030</option>
         </select>
     </div>
-    </div>
-   
+
     <table class="table table-striped">
         <thead>
             <tr>
