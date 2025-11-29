@@ -1,10 +1,10 @@
-import nodemailer from "nodemailer";
 const codigosAtivos = {};
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import sql from "mssql";
 import dotenv from "dotenv";
+import { enviarCodigo } from "/public/js/email.js";
 
 dotenv.config(); // carrega as variáveis do .env
 

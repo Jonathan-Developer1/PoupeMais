@@ -1,5 +1,5 @@
-const nodemailer = require("nodemailer");
-require("dotenv").config();
+import nodemailer from "nodemailer";
+dotenv.config();
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -8,9 +8,8 @@ const transporter = nodemailer.createTransport({
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS
   }
-});
-
-async function enviarCodigo(destinatario, codigo) {
+})
+export async function enviarCodigo(destinatario, codigo) { // Exportação nomeada
   try {
     const info = await transporter.sendMail({
       from: process.env.FROM_EMAIL,
@@ -21,9 +20,7 @@ async function enviarCodigo(destinatario, codigo) {
     console.log("E-mail enviado:", info.messageId);
     return true;
   } catch (err) {
-    console.error("Erro ao enviar e-mail:", err);
+    console.error("❌ Erro ao enviar e-mail (Brevo/Nodemailer):", err);
     return false;
   }
 }
-
-module.exports = { enviarCodigo };
