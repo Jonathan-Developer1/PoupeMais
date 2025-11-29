@@ -457,7 +457,7 @@ window.excluirParcelas = async function excluirParcelas(id_parcela) {
         console.log(error);
     }
 }
-
+//listar ultimas transações
 async function listarUltimasTransacoes() {
     try {
         const resposta = await fetch("/api/ultimas-transacoes",
