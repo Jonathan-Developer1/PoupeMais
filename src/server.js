@@ -148,6 +148,8 @@ app.post("/api/transacao", async (req, res) => {
  const transacao = req.body;
 
  const transacoes = Array.isArray(transacao) ? transacao : [transacao];
+
+
  const conn = await getConnection();
  const promises = transacoes.map(e => {
 
@@ -160,14 +162,14 @@ app.post("/api/transacao", async (req, res) => {
   request.input("valor", sql.Decimal(18, 2), e.valor);
   request.input("parcelas", sql.Int, e.parcelas || 1);
   request.input("data", sql.Date, e.data);
-
   request.input("id_categoria", sql.Int, e.categoria);
+  request.input("id_parcela", sql.Int, e.id_parcela);
 
   return request.query(`
    INSERT INTO transacoes
-    (id_usuario, nome, tipo, valor, parcelas, confirmada, data, id_categoria)
+    (id_usuario, nome, tipo, valor, parcelas, confirmada, data, id_categoria, id_parcela)
    VALUES 
-    (@id_usuario, @nome, @tipo, @valor, @parcelas, 0, @data, @id_categoria)
+    (@id_usuario, @nome, @tipo, @valor, @parcelas, 0, @data, @id_categoria, @id_parcela)
   `);
  });
 
@@ -526,7 +528,7 @@ app.post("/api/simulacao/excluir", async (req, res) => {
 //pegar ia
 app.post("/api/ia", async (req, res) => 
 {
-console.log("BODY RECEBIDO:", req.body);
+
 const dadosIa = req.body;
 
 const dadosSerializados = JSON.stringify(dadosIa);
@@ -555,6 +557,7 @@ res.json(data.choices[0].message.content);
 catch(error)
 {
  console.log(error);
+ res.json("Sem sugestões no momento");
 }
 
 })
