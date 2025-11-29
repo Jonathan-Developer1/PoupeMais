@@ -336,9 +336,9 @@ app.get("/api/historico/ultimo/:id_usuario", async (req, res) => {
   }
 });
 
+
+
 //Pegar ultimas transações
-
-
 app.post("/api/ultimas-transacoes", async (req, res) => {
 
   const { id_usuario } = req.body;
@@ -383,26 +383,6 @@ app.get("/api/grafico/evolucao/:id_usuario", async (req, res) => {
   }
 });
 
-//pegar api
-/*
-const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-  method: "POST",
-  headers: {
-    "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    model: "alibaba/tongyi-deepresearch-30b-a3b:free", // escolha qualquer modelo do OpenRouter
-    messages: [
-      { role: "system", content: "Você é um assistente que irá analisar gráficos de gastos e oferecer sugestões para o consumidor." },
-      { role: "user", content: "Analise esses gráficos." }
-    ]
-  })
-});
-
-const data = await response.json();
-console.log(data.choices[0].message.content);
-*/
 
 // Rota para pegar dados agrupados por categoria (para os gráficos de pizza)
 // Exemplo de uso: /api/grafico/categorias/1/despesa
@@ -540,8 +520,37 @@ app.post("/api/simulacao/excluir", async (req, res) => {
   }
 });
 
+app.post("/api/ia", async (req, res) => 
+{
+const { dadosIa }= req.body;
+
+try{
+const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+  method: "POST",
+  headers: {
+    "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    model: "alibaba/tongyi-deepresearch-30b-a3b:free", // escolha qualquer modelo do OpenRouter
+    messages: [
+      { role: "system", content: `Você é um assistente que irá analisar gráficos de gastos e oferecer sugestões para o consumidor, usando esses dados: ${dadosIa}` },
+      { role: "user", content: "Use esses dados para dar sugestões de economia." }
+    ]
+  })
+
+});
 
 
+const data = await response.json();
+res.json(data.choices[0].message.content);
+}
+catch(error)
+{
+  console.log(error);
+}
+
+})
 app.listen(3000, () => {
   console.log("Servidor funcionando em http://localhost:3000");
 });

@@ -252,9 +252,10 @@ export const filtroano = document.getElementById("filter-anotransacoes");
 const mesAtual = new Date().getMonth();
 const anoAtual = new Date().getFullYear();
 
-if (filtromes) {
-    filtromes.value = mesAtual;
 
+  
+
+if (filtromes) {
 
     //Criar opções de filtro de mes
 
@@ -271,12 +272,17 @@ if (filtromes) {
         e.preventDefault();
 
         listarTransacoes();
+         
 
     });
 }
 
+if(filtromes)
+    filtromes.value = mesAtual;
+
+
 if (filtroano) {
-    filtroano.value = anoAtual;
+    filtroano.value = anoAtual; 
     //Pega as mudanças no filtro de ano
     filtroano.addEventListener("change", (e) => {
         e.preventDefault();
@@ -416,7 +422,7 @@ window.excluirTransacao = async function excluirTransacao(id_transacao) {
 
 async function listarUltimasTransacoes() {
     try {
-        const resposta = await fetch("api/ultimas-transacoes",
+        const resposta = await fetch("/api/ultimas-transacoes",
             {
                 method: 'POST',
                 headers: {
@@ -426,6 +432,7 @@ async function listarUltimasTransacoes() {
             });
 
         const json = await resposta.json();
+       
 
         if (json.sucesso) {
             addUltimas(json.dados);

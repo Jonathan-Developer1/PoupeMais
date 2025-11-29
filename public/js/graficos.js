@@ -2,6 +2,7 @@
 // 1. FUNÇÕES UTILITÁRIAS E DADOS GERAIS
 // ======================================================
 
+
 function getUsuario() {
   return JSON.parse(localStorage.getItem("usuario"));
 }
@@ -74,6 +75,8 @@ async function montarGraficoEvolucao() {
     const resposta = await fetch(`/api/grafico/evolucao/${usuario.id}`);
     const dados = await resposta.json();
 
+    
+
     const labelsMeses = [];
     const dadosReceitas = [];
     const dadosDespesas = [];
@@ -133,6 +136,7 @@ async function montarGraficoEvolucao() {
 
     // APROVEITA OS MESMOS DADOS PARA ENCHER A TABELA
     preencherTabelaHistorico(dados);
+    
 
   } catch (erro) {
     console.error("Erro ao carregar gráfico evolução:", erro);
@@ -180,6 +184,7 @@ async function carregarGraficoPizza(tipo, idCanvas) {
   try {
     const resposta = await fetch(`/api/grafico/categorias/${usuario.id}/${tipo}`);
     const dados = await resposta.json();
+    chamaIa(dados);
 
     if (dados.length === 0) {
         // Se não tiver dados, cria um gráfico vazio ou esconde
@@ -219,6 +224,7 @@ async function carregarGraficoPizza(tipo, idCanvas) {
 // Chama as funções
 carregarGraficoPizza('despesa', 'graficoDespesas');
 carregarGraficoPizza('receita', 'graficoReceitas');
+
 
 
 // ======================================================
@@ -268,3 +274,29 @@ function montarGraficoBarras(receitaTotal, despesaTotal) {
     }
   });
 }
+
+//pegar api
+async function chamaIa(dadosIa) {
+  
+  try
+  {
+    
+    const resposta = await fetch("/api/ia", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dadosIa)
+            });
+
+    const json = resposta.json();
+    console.log(json);
+  }
+  catch(error)
+  {
+    console.log(error);
+  }
+}
+
+
+

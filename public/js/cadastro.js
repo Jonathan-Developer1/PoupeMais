@@ -57,6 +57,7 @@ export async function addUltimas(objeto)
 
   let tabelaUltimas = document.getElementById("tabela-ultimas");
     
+if(tabelaUltimas)
   tabelaUltimas.innerHTML = "";
   
         objeto.forEach(e => {
