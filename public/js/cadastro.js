@@ -33,7 +33,7 @@ export async function cadastrarTransacao(objeto) {
                 <td>${valorAtualizado}</td>
                 <td>${e.parcelas}</td>
                 <td style="cursor: pointer"><i class="bi bi-x-square-fill" onclick="desfazerTransacao(${e.id_transacao})"></i></td>
-                <td style="cursor: pointer"><i class="bi bi-trash3" onclick="excluirTransacao(${e.id_transacao})"></i></td>`;
+                <td style="cursor: pointer"><i class="bi bi-trash3" onclick="excluirTransacao(${e.id_transacao}, ${e.id_parcela})"></i></td>`;
     }
     else
     {

@@ -88,3 +88,17 @@ h1 {
 #HistoricoPeriodo {
     margin-top: 35px;
 }
+
+.porcao, .sugestao {
+    margin: 2% 0 0% 3%;
+    display: flex;
+}
+
+.porcao h1 
+{
+    padding-top: 3rem;
+}
+#porcao
+{
+    width: 12rem;
+}

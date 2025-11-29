@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import sql from "mssql";
 import dotenv from "dotenv";
 import { enviarCodigo } from "../public/js/email.js";
-
+import { marked, Marked } from "marked";
 dotenv.config(); // carrega as variáveis do .env
 
 const __filename = fileURLToPath(import.meta.url);
@@ -543,7 +543,7 @@ const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
    body: JSON.stringify({
     model: "x-ai/grok-4.1-fast:free",
     messages: [
-      { role: "system", content: `Você é um assistente que irá analisar gráficos de gastos e oferecer sugestões para o consumidor, usando esses dados: ${dadosSerializados}. Responda de forma resumida` },
+      { role: "system", content: `Você é um assistente que irá analisar gráficos de gastos e oferecer sugestões para o consumidor, usando esses dados: ${dadosSerializados}. Responda de forma resumida. Não sugira outros apps` },
       { role: "user", content: `Use apenas esses ${dadosSerializados}  para dar sugestões de economia.`}
     ]
   })
@@ -552,7 +552,7 @@ const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
 
 
 const data = await response.json();
-res.json(data.choices[0].message.content);
+res.json(marked(data.choices[0].message.content));
 }
 catch(error)
 {

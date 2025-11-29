@@ -338,14 +338,13 @@ if (formCadastro) {
                 const dataParcelas = new Date(dataAtualizada);
 
                 
-                if(dataParcelas.getMonth(dataParcelas.setMonth(dataParcelas.getMonth() + i)) != dataParcelas.getMonth(+1))
+                if(dataParcelas.getMonth() == 0 && dataParcelas.getDate() > 28)
                 {
                     dataParcelas.setDate(1);
                 }
-                else
-                {
+                
                 dataParcelas.setMonth(dataParcelas.getMonth() + i);
-                }
+                
 
                 transacao.push({
                     id_usuario: usuario.id,
@@ -410,7 +409,7 @@ if (formCadastro) {
 }
 
 //Excluir transação
-window.excluirTransacao = async function excluirTransacao(id_transacao) {
+window.excluirTransacao = async function excluirTransacao(id_transacao, id_parcela) {
 
     try {
         const resposta = await fetch("/api/excluir/", {
@@ -418,7 +417,9 @@ window.excluirTransacao = async function excluirTransacao(id_transacao) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ transacao_id: id_transacao })
+            body: JSON.stringify({ transacao_id: id_transacao,
+                id_parcela: id_parcela
+             })
         });
 
         const json = await resposta.json();
