@@ -1,3 +1,5 @@
+import nodemailer from "nodemailer";
+const codigosAtivos = {};
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";

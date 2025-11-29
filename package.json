@@ -23,6 +23,7 @@
     "express": "^5.1.0",
     "msnodesqlv8": "^5.1.1",
     "mssql": "^12.1.0",
+    "nodemailer": "^7.0.11",
     "webpack": "^5.102.1"
   },
   "devDependencies": {
