@@ -2,7 +2,7 @@
 // 1. FUNÇÕES UTILITÁRIAS E DADOS GERAIS
 // ======================================================
 
-
+let dadosIa = [];
 function getUsuario() {
   return JSON.parse(localStorage.getItem("usuario"));
 }
@@ -74,7 +74,7 @@ async function montarGraficoEvolucao() {
   try {
     const resposta = await fetch(`/api/grafico/evolucao/${usuario.id}`);
     const dados = await resposta.json();
-
+    dadosIa.push(dados);
     
 
     const labelsMeses = [];
@@ -184,7 +184,8 @@ async function carregarGraficoPizza(tipo, idCanvas) {
   try {
     const resposta = await fetch(`/api/grafico/categorias/${usuario.id}/${tipo}`);
     const dados = await resposta.json();
-    chamaIa(dados);
+     dadosIa.push(dados);
+     
 
     if (dados.length === 0) {
         // Se não tiver dados, cria um gráfico vazio ou esconde
@@ -224,6 +225,7 @@ async function carregarGraficoPizza(tipo, idCanvas) {
 // Chama as funções
 carregarGraficoPizza('despesa', 'graficoDespesas');
 carregarGraficoPizza('receita', 'graficoReceitas');
+
 
 
 
@@ -289,7 +291,7 @@ async function chamaIa(dadosIa) {
                 body: JSON.stringify(dadosIa)
             });
 
-    const json = resposta.json();
+    const json = await resposta.json();
     console.log(json);
   }
   catch(error)
@@ -297,6 +299,8 @@ async function chamaIa(dadosIa) {
     console.log(error);
   }
 }
-
+console.log(dadosIa);
+console.log(dadosIa[0][0]);
+chamaIa(dadosIa[1]);
 
 

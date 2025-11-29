@@ -520,9 +520,12 @@ app.post("/api/simulacao/excluir", async (req, res) => {
   }
 });
 
+//pegar ia
 app.post("/api/ia", async (req, res) => 
 {
-const { dadosIa }= req.body;
+console.log("BODY RECEBIDO:", req.body);
+const  dadosIa  = req.body;
+
 
 try{
 const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -532,10 +535,10 @@ const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     "Content-Type": "application/json",
   },
   body: JSON.stringify({
-    model: "alibaba/tongyi-deepresearch-30b-a3b:free", // escolha qualquer modelo do OpenRouter
+    model: "alibaba/tongyi-deepresearch-30b-a3b:free",
     messages: [
-      { role: "system", content: `Você é um assistente que irá analisar gráficos de gastos e oferecer sugestões para o consumidor, usando esses dados: ${dadosIa}` },
-      { role: "user", content: "Use esses dados para dar sugestões de economia." }
+      { role: "system", content: `Você é um assistente que irá analisar gráficos de gastos e oferecer sugestões para o consumidor, usando esses dados: ${dadosIa[1]}` },
+      { role: "user", content: `Use apenas esses ${dadosIa[1]}  para dar sugestões de economia.`}
     ]
   })
 
@@ -551,9 +554,7 @@ catch(error)
 }
 
 })
-app.listen(3000, () => {
-  console.log("Servidor funcionando em http://localhost:3000");
-});
+
 
 //===============================
 //PAGINA PERFIL
@@ -604,4 +605,8 @@ app.post("/api/usuario/alterar-senha", async (req, res) => {
         console.error(error);
         res.status(500).json({ erro: "Erro ao alterar senha" });
     }
+});
+
+app.listen(3000, () => {
+  console.log("Servidor funcionando em http://localhost:3000");
 });
