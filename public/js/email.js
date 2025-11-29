@@ -6,7 +6,7 @@ dotenv.config();
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
-  port: parseInt(process.env.SMTP_PORT, 10),
+  port: parseInt(process.env.SMTP_PORT, 10) || 587,
   secure: false, 
   auth: {
     user: process.env.SMTP_USER,
@@ -15,6 +15,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export async function enviarCodigo(destinatarioEmail, codigo) {
+   console.log(`Tentando enviar e-mail para: ${destinatarioEmail} com usuário SMTP: ${process.env.SMTP_USER}`);
   const mailOptions = {
     from: process.env.FROM_EMAIL,
     to: destinatarioEmail,
