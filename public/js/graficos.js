@@ -2,7 +2,7 @@
 // 1. FUNÇÕES UTILITÁRIAS E DADOS GERAIS
 // ======================================================
 
-let dadosIa = [];
+let dadosIa = {};
 function getUsuario() {
   return JSON.parse(localStorage.getItem("usuario"));
 }
@@ -74,7 +74,7 @@ async function montarGraficoEvolucao() {
   try {
     const resposta = await fetch(`/api/grafico/evolucao/${usuario.id}`);
     const dados = await resposta.json();
-    dadosIa.push(dados);
+   
     
 
     const labelsMeses = [];
@@ -85,10 +85,15 @@ async function montarGraficoEvolucao() {
     // Organiza os dados retornados do banco
     dados.forEach(item => {
       labelsMeses.push(item.mes);
+      dadosIa.mes = item.mes;
       dadosReceitas.push(item.total_receitas);
+      dadosIa.receita = item.total_receitas;
       dadosDespesas.push(item.total_despesas);
+       dadosIa.despesa = item.total_despesas;
       dadosSaldo.push(item.economia);
+      dadosIa.saldo = item.economia;
     });
+    
 
     new Chart(ctx, {
       type: 'line',
@@ -143,7 +148,7 @@ async function montarGraficoEvolucao() {
   }
 }
 
-montarGraficoEvolucao();
+
 
 
 // ======================================================
@@ -184,13 +189,18 @@ async function carregarGraficoPizza(tipo, idCanvas) {
   try {
     const resposta = await fetch(`/api/grafico/categorias/${usuario.id}/${tipo}`);
     const dados = await resposta.json();
-     dadosIa.push(dados);
-     
-
+    
+    
+    
+    
     if (dados.length === 0) {
         // Se não tiver dados, cria um gráfico vazio ou esconde
         console.log(`Sem dados para o gráfico de ${tipo}`);
         return;
+    }
+    else
+    {
+      dadosIa.categorias = dados;
     }
 
     const labels = dados.map(item => item.nome_categoria);
@@ -223,9 +233,14 @@ async function carregarGraficoPizza(tipo, idCanvas) {
 }
 
 // Chama as funções
-carregarGraficoPizza('despesa', 'graficoDespesas');
-carregarGraficoPizza('receita', 'graficoReceitas');
+async function incializar() {
+await carregarGraficoPizza('despesa', 'graficoDespesas');
+await carregarGraficoPizza('receita', 'graficoReceitas');
+await montarGraficoEvolucao();
+await chamaIa(dadosIa);
+}
 
+incializar();
 
 
 
@@ -280,6 +295,7 @@ function montarGraficoBarras(receitaTotal, despesaTotal) {
 //pegar api
 async function chamaIa(dadosIa) {
   
+  
   try
   {
     
@@ -292,15 +308,16 @@ async function chamaIa(dadosIa) {
             });
 
     const json = await resposta.json();
-    console.log(json);
+    const sugestao = document.getElementById("sugestao-ia");
+    sugestao.innerHTML = json;
   }
   catch(error)
   {
     console.log(error);
   }
 }
-console.log(dadosIa);
-console.log(dadosIa[0][0]);
-chamaIa(dadosIa[1]);
+
+
+
 
 

@@ -542,6 +542,7 @@ app.post("/api/ia", async (req, res) =>
 console.log("BODY RECEBIDO:", req.body);
  const  dadosIa  = req.body;
 
+const dadosSerializados = JSON.stringify(dadosIa);
 
 try{
 const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -551,10 +552,10 @@ const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     "Content-Type": "application/json",
   },
    body: JSON.stringify({
-    model: "alibaba/tongyi-deepresearch-30b-a3b:free",
+    model: "x-ai/grok-4.1-fast:free",
     messages: [
-      { role: "system", content: `Você é um assistente que irá analisar gráficos de gastos e oferecer sugestões para o consumidor, usando esses dados: ${dadosIa[1]}` },
-      { role: "user", content: `Use apenas esses ${dadosIa[1]}  para dar sugestões de economia.`}
+      { role: "system", content: `Você é um assistente que irá analisar gráficos de gastos e oferecer sugestões para o consumidor, usando esses dados: ${dadosSerializados}. Responda de forma resumida` },
+      { role: "user", content: `Use apenas esses ${dadosSerializados}  para dar sugestões de economia.`}
     ]
   })
 
