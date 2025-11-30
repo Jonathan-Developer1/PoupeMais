@@ -52,7 +52,9 @@ let usuario = JSON.parse(localStorage.getItem('usuario'));
 //Passa o saldo atual para a variavel
 let saldoUsuario = await pegarSaldo();
 
-const data = document.getElementById("data-transacao")
+const data = document.getElementById("data-transacao");
+
+
 
 //Atualiza para a data atual
 function atualizaData() {
@@ -227,7 +229,7 @@ async function listarTransacoes() {
     try {
         const resposta = await fetch(`/api/transacoes/${usuario.id}`);
         const json = await resposta.json();
-        console.log(json);
+
         if (json) {
             // Ajusta os objetos para incluir o nome da categoria antes de enviar para cadastrarTransacao
             const jsonAjustado = json.map(e => ({
@@ -325,7 +327,9 @@ if (formCadastro) {
 
         const dataP = document.getElementById("data-transacao").value;
         const dataAtualizada = new Date(dataP);
+        
         dataAtualizada.setDate(dataAtualizada.getDate() + 1);
+
 
         if (parcelas > 1) {
 
@@ -336,12 +340,10 @@ if (formCadastro) {
 
             for (let i = 0; i < parcelaOriginal; i++) {
                 const dataParcelas = new Date(dataAtualizada);
-
-                
-                if(dataParcelas.getMonth() == 0 && dataParcelas.getDate() > 28)
-                {
-                    dataParcelas.setDate(1);
-                }
+              if(dataParcelas.getDate() > 28)
+              {
+                dataParcelas.setDate(28);
+              }
                 
                 dataParcelas.setMonth(dataParcelas.getMonth() + i);
                 

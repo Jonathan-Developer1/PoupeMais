@@ -1,7 +1,7 @@
 // ======================================================
 // 1. FUNÇÕES UTILITÁRIAS E DADOS GERAIS
 // ======================================================
-
+const loading = document.getElementById("loading");
 let dadosIa = {};
 function getUsuario() {
   return JSON.parse(localStorage.getItem("usuario"));
@@ -309,6 +309,7 @@ async function chamaIa(dadosIa) {
 
     const json = await resposta.json();
     const sugestao = document.getElementById("sugestao-ia");
+    loading.style.display = "none";
     sugestao.innerHTML = json;
   }
   catch(error)

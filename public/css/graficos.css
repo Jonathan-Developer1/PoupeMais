@@ -89,13 +89,14 @@ h1 {
     margin-top: 35px;
 }
 
-.porcao, .sugestao {
+.porcao, .sugestao, #loading {
     margin: 2% 0 0% 3%;
     display: flex;
 }
 
 .porcao h1 
 {
+    font-size: 2rem;
     padding-top: 3rem;
 }
 #porcao
@@ -106,4 +107,21 @@ h1 {
 .sugestao span
 {
     font-size: 1.4rem;
+}
+
+#loading
+{
+    flex-direction: column;
+}
+
+#loading span
+{
+    font-size: 1.5rem;
+    margin: auto;
+    padding-top: 0.2rem;
+}
+
+#loading svg
+{
+    margin: auto;
 }
