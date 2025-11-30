@@ -3,8 +3,17 @@
 // ======================================================
 const loading = document.getElementById("loading");
 let dadosIa = {};
+
 function getUsuario() {
   return JSON.parse(localStorage.getItem("usuario"));
+}
+
+// Função para formatar dinheiro (R$ 1.000,00)
+function formatarMoeda(valor) {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(valor);
 }
 
 async function pegarSaldo() {
@@ -40,18 +49,18 @@ async function preencherResumoEGraficoBarra() {
   const dados = await carregarResumo();
   const saldo = await pegarSaldo();
 
-  // 1. Atualiza os textos no HTML
+  // 1. Atualiza os textos no HTML com formatação R$
   if (document.getElementById("saldo-atual"))
-    document.getElementById("saldo-atual").innerText = Number(saldo).toFixed(2);
+    document.getElementById("saldo-atual").innerText = formatarMoeda(saldo);
   
   if (document.getElementById("receitas-totais"))
-    document.getElementById("receitas-totais").innerText = Number(dados.total_receitas).toFixed(2);
+    document.getElementById("receitas-totais").innerText = formatarMoeda(dados.total_receitas || 0);
   
   if (document.getElementById("despesas-totais"))
-    document.getElementById("despesas-totais").innerText = Number(dados.total_despesas).toFixed(2);
+    document.getElementById("despesas-totais").innerText = formatarMoeda(dados.total_despesas || 0);
   
   if (document.getElementById("economia"))
-    document.getElementById("economia").innerText = Number(dados.economia).toFixed(2);
+    document.getElementById("economia").innerText = formatarMoeda(dados.economia || 0);
 
   // 2. Chama o gráfico de barras passando esses valores exatos
   montarGraficoBarras(dados.total_receitas, dados.total_despesas);
@@ -74,9 +83,7 @@ async function montarGraficoEvolucao() {
   try {
     const resposta = await fetch(`/api/grafico/evolucao/${usuario.id}`);
     const dados = await resposta.json();
-   
     
-
     const labelsMeses = [];
     const dadosReceitas = [];
     const dadosDespesas = [];
@@ -132,10 +139,28 @@ async function montarGraficoEvolucao() {
             display: true,
             position: 'bottom',
             labels: { font: { size: 12, weight: 'bold' }, color: '#000' }
+          },
+          tooltip: {
+            callbacks: {
+              // Formata o tooltip (o valor que aparece ao passar o mouse)
+              label: function(context) {
+                return context.dataset.label + ': ' + formatarMoeda(context.raw);
+              }
+            }
           }
         },
         layout: { padding: 10 },
-        scales: { y: { beginAtZero: false } }
+        scales: { 
+          y: { 
+            beginAtZero: false,
+            ticks: {
+              // Formata os números no eixo Y
+              callback: function(value) {
+                return formatarMoeda(value);
+              }
+            }
+          } 
+        }
       }
     });
 
@@ -147,8 +172,6 @@ async function montarGraficoEvolucao() {
     console.error("Erro ao carregar gráfico evolução:", erro);
   }
 }
-
-
 
 
 // ======================================================
@@ -167,8 +190,8 @@ function preencherTabelaHistorico(dados) {
     const row = `
       <tr class="text-center">
         <td>${item.mes}</td>
-        <td class="text-success fw-bold">R$ ${Number(item.total_receitas).toFixed(2)}</td>
-        <td class="text-danger fw-bold">R$ ${Number(item.total_despesas).toFixed(2)}</td>
+        <td class="text-success fw-bold">${formatarMoeda(item.total_receitas)}</td>
+        <td class="text-danger fw-bold">${formatarMoeda(item.total_despesas)}</td>
       </tr>
     `;
     tbody.innerHTML += row;
@@ -189,9 +212,6 @@ async function carregarGraficoPizza(tipo, idCanvas) {
   try {
     const resposta = await fetch(`/api/grafico/categorias/${usuario.id}/${tipo}`);
     const dados = await resposta.json();
-    
-    
-    
     
     if (dados.length === 0) {
         // Se não tiver dados, cria um gráfico vazio ou esconde
@@ -222,6 +242,16 @@ async function carregarGraficoPizza(tipo, idCanvas) {
             display: true,
             position: 'bottom',
             labels: { font: { size: 14, weight: 'bold' }, color: '#000' }
+          },
+          tooltip: {
+            callbacks: {
+              // Formata o tooltip do gráfico de pizza
+              label: function(context) {
+                const label = context.label || '';
+                const value = context.raw || 0;
+                return label + ': ' + formatarMoeda(value);
+              }
+            }
           }
         }
       }
@@ -234,10 +264,10 @@ async function carregarGraficoPizza(tipo, idCanvas) {
 
 // Chama as funções
 async function incializar() {
-await carregarGraficoPizza('despesa', 'graficoDespesas');
-await carregarGraficoPizza('receita', 'graficoReceitas');
-await montarGraficoEvolucao();
-await chamaIa(dadosIa);
+  await carregarGraficoPizza('despesa', 'graficoDespesas');
+  await carregarGraficoPizza('receita', 'graficoReceitas');
+  await montarGraficoEvolucao();
+  await chamaIa(dadosIa);
 }
 
 incializar();
@@ -280,9 +310,27 @@ function montarGraficoBarras(receitaTotal, despesaTotal) {
     },
     options: {
       indexAxis: 'y', // Barra deitada
-      plugins: { legend: { display: false } },
+      plugins: { 
+        legend: { display: false },
+        tooltip: {
+            callbacks: {
+              label: function(context) {
+                return formatarMoeda(context.raw);
+              }
+            }
+        }
+      },
       scales: {
-        x: { beginAtZero: true, grid: { display: false } },
+        x: { 
+            beginAtZero: true, 
+            grid: { display: false },
+            ticks: {
+                // Formatação do eixo X (valores)
+                callback: function(value) {
+                    return formatarMoeda(value);
+                }
+            }
+        },
         y: {
           ticks: { color: '#013220', font: { size: 14, weight: 'bold' } },
           grid: { display: false }
@@ -317,8 +365,3 @@ async function chamaIa(dadosIa) {
     console.log(error);
   }
 }
-
-
-
-
-

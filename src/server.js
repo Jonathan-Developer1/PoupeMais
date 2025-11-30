@@ -363,16 +363,19 @@ app.get("/api/historico/ultimo/:id_usuario", async (req, res) => {
   const id_usuario = req.params.id_usuario;
 
   try {
+    // ALTERAÇÃO: Consulta direta na tabela Transacoes para filtrar por confirmada = 1
+    // (Substituindo a view HistoricoMensal que trazia tudo)
     const result = await execSQLQuery(`
-   SELECT TOP 1 
-    mes,
-    ano,
-    total_receitas,
-    total_despesas,
-    economia
-   FROM HistoricoMensal
-   WHERE id_usuario = ${id_usuario}
-   ORDER BY ano DESC, mes DESC;
+    SELECT TOP 1 
+      MONTH(data) as mes,
+      YEAR(data) as ano,
+      SUM(CASE WHEN tipo = 'receita' THEN valor ELSE 0 END) as total_receitas,
+      SUM(CASE WHEN tipo = 'despesa' THEN valor ELSE 0 END) as total_despesas,
+      SUM(CASE WHEN tipo = 'receita' THEN valor ELSE -valor END) as economia
+    FROM Transacoes
+    WHERE id_usuario = ${id_usuario} AND confirmada = 1
+    GROUP BY YEAR(data), MONTH(data)
+    ORDER BY ano DESC, mes DESC;
   `);
 
     res.json(result[0] || {});
@@ -410,17 +413,20 @@ app.get("/api/grafico/evolucao/:id_usuario", async (req, res) => {
   const id_usuario = req.params.id_usuario;
 
   try {
-    // Busca os últimos 12 registros da sua View HistoricoMensal
-    // Obs: Se a ordem dos meses vier errada, precisamos adicionar um ORDER BY no SQL depois
+    // ALTERAÇÃO: Substituído a View HistoricoMensal por uma query direta para poder filtrar por 'confirmada = 1'
     const result = await execSQLQuery(`
-   SELECT TOP 12 
-    mes, 
-    total_receitas, 
-    total_despesas, 
-    economia 
-   FROM HistoricoMensal 
-   WHERE id_usuario = ${id_usuario}
-  `);
+      SELECT TOP 12 
+        MONTH(data) as mes, -- Retorna o número do mês
+        YEAR(data) as ano,
+        SUM(CASE WHEN tipo = 'receita' THEN valor ELSE 0 END) as total_receitas,
+        SUM(CASE WHEN tipo = 'despesa' THEN valor ELSE 0 END) as total_despesas,
+        SUM(CASE WHEN tipo = 'receita' THEN valor ELSE -valor END) as economia
+      FROM Transacoes 
+      WHERE id_usuario = ${id_usuario}
+      AND confirmada = 1
+      GROUP BY YEAR(data), MONTH(data)
+      ORDER BY ano DESC, mes DESC
+    `);
 
     res.json(result);
 
@@ -438,6 +444,7 @@ app.get("/api/grafico/categorias/:id_usuario/:tipo", async (req, res) => {
 
   try {
     // Essa query soma o valor total de cada categoria para aquele usuário e tipo
+    // ADICIONADO: AND t.confirmada = 1
     const result = await execSQLQuery(`
    SELECT 
     c.nome_categoria, 
@@ -446,6 +453,7 @@ app.get("/api/grafico/categorias/:id_usuario/:tipo", async (req, res) => {
    JOIN Categorias c ON t.id_categoria = c.id_categoria
    WHERE t.id_usuario = ${id_usuario} 
    AND t.tipo = '${tipo}'
+   AND t.confirmada = 1
    GROUP BY c.nome_categoria
   `);
 
@@ -570,32 +578,31 @@ app.post("/api/ia", async (req, res) => {
 
   const dadosSerializados = JSON.stringify(dadosIa);
 
-try{
-const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-  method: "POST",
-  headers: {
-    "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-    "Content-Type": "application/json",
-  },
-   body: JSON.stringify({
-    model: "x-ai/grok-4.1-fast:free",
-    messages: [
-      { role: "system", content: `Você é um assistente que irá analisar gráficos de gastos e oferecer sugestões para o consumidor, usando esses dados: ${dadosSerializados}. Responda de forma resumida. Não sugira outros apps` },
-      { role: "user", content: `Use apenas esses ${dadosSerializados}  para dar sugestões de economia.`}
-    ]
-  })
+  try {
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "x-ai/grok-4.1-fast:free",
+        messages: [
+          { role: "system", content: `Você é um assistente que irá analisar gráficos de gastos e oferecer sugestões para o consumidor, usando esses dados: ${dadosSerializados}. Responda de forma resumida. Não sugira outros apps` },
+          { role: "user", content: `Use apenas esses ${dadosSerializados}  para dar sugestões de economia.` }
+        ]
+      })
 
     });
 
 
-const data = await response.json();
-res.json(marked(data.choices[0].message.content));
-}
-catch(error)
-{
- console.log(error);
- res.json("Sem sugestões no momento");
-}
+    const data = await response.json();
+    res.json(marked(data.choices[0].message.content));
+  }
+  catch (error) {
+    console.log(error);
+    res.json("Sem sugestões no momento");
+  }
 
 })
 
