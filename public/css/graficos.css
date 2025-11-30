@@ -89,19 +89,19 @@ h1 {
     margin-top: 35px;
 }
 
-.porcao, .sugestao, #loading {
+.ze-porquinho, .sugestao, #loading {
     margin: 2% 0 0% 3%;
     display: flex;
 }
 
-.porcao h1 
+.ze-porquinho h1 
 {
     font-size: 2rem;
     padding-top: 3rem;
 }
-#porcao
+#ze-porquinho
 {
-    width: 12rem;
+    width: 18rem;
 }
 
 .sugestao span
