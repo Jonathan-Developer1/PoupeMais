@@ -162,6 +162,24 @@ input[disabled] {
     font-weight: bold;
 }
 
+#sair {
+    display: block;
+    margin: 2rem auto;
+    width: 20rem;
+    padding: 0.6rem;
+    border: 1px solid #2c3e2c;
+    border-radius: 0.3rem;
+    background-color: #972c2c;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 1rem;
+    color: white;
+    font-weight: bold;
+}
+
+a{
+    text-decoration: none;
+}
+
 /* Ajustes finais para telas menores */
 @media (max-width: 768px) {
 
