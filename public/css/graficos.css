@@ -90,7 +90,7 @@ h1 {
 }
 
 .ze-porquinho, .sugestao, #loading {
-    margin: 2% 0 0% 3%;
+    margin: 40px 320px;
     display: flex;
 }
 
@@ -101,7 +101,7 @@ h1 {
 }
 #ze-porquinho
 {
-    width: 18rem;
+    width: 12rem;
 }
 
 .sugestao span
