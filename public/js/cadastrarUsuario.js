@@ -78,7 +78,7 @@ document.getElementById("btn-confirmar").addEventListener("click", async () => {
 
     if (resultado.sucesso) {
         alert("Usuário cadastrado com sucesso!");
-        window.location.href = "login.html";
+        window.location.href = "login";
     } else {
         alert(resultado.mensagem || "Erro ao cadastrar usuário.");
     }

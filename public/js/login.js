@@ -30,5 +30,5 @@ document.querySelector(".btn-login").addEventListener("click", async (e) => {
 
 // Link botão de cadastro
 document.querySelector('.btn-cadastro').addEventListener('click', function () {
-  window.location.href = 'cadastrar';
+  window.location.href = 'cadastro';
 });
