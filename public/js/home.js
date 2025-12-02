@@ -336,7 +336,9 @@ if (tipoSelect && categoriaSelect) {
 }
 
 
-//Cadastrar nova transação
+// ===============================
+// 8. CADASTRAR NOVA TRANSAÇÃO
+// ===============================
 const formCadastro = document.getElementById("formCadastroTransacao");
 
 if (formCadastro) {
@@ -346,12 +348,14 @@ if (formCadastro) {
         const parcelaOriginal = parcelas;
         let transacao = [];
 
+        //Alteração nas datas parceladas
         const dataP = document.getElementById("data-transacao").value;
         const dataAtualizada = new Date(dataP);
         
         dataAtualizada.setDate(dataAtualizada.getDate() + 1);
 
 
+        //Cadastro de transações parceladas
         if (parcelas > 1) {
 
             function generateNumericID() {
@@ -383,15 +387,13 @@ if (formCadastro) {
 
             }
         }
-        // 1. Coleta e mapeamento dos dados do formulário
+        //Cadastro de transações comuns
         else {
             transacao = {
                 id_usuario: usuario.id,
-                // IDs do HTML modificado:
                 nome: document.getElementById("descricao-transacao").value,
                 tipo: document.getElementById("tipo").value,
                 categoria: document.getElementById("categoria").value,
-                // Certifique-se de que o input seja do tipo 'number' no HTML para garantir o valor
                 valor: parseFloat(document.getElementById("valor-transacao").value),
                 parcelas: parseFloat(document.getElementById("parcelas").value),
                 data: dataAtualizada,
@@ -399,7 +401,6 @@ if (formCadastro) {
             };
         }
         try {
-            // 2. Envio dos dados para a API (Backend)
             const resposta = await fetch("/api/transacao", {
                 method: 'POST',
                 headers: {
@@ -409,7 +410,6 @@ if (formCadastro) {
             });
 
             const json = await resposta.json();
-            // 3. Verifica o status da resposta
             if (json.sucesso) {
                 listarTransacoes();
                 
@@ -421,7 +421,6 @@ if (formCadastro) {
 
 
             } else {
-                // Tenta ler o erro do corpo da resposta JSON
                 alert(`ERRO ao cadastrar (Status ${resposta.status}): ${json.message || resposta.statusText}`);
             }
 
@@ -431,7 +430,9 @@ if (formCadastro) {
     });
 }
 
-//Excluir transação
+// ===============================
+// 9. EXCLUIR TRANSAÇÃO
+// ===============================
 window.excluirTransacao = async function excluirTransacao(id_transacao) {
 
     try {
@@ -456,7 +457,9 @@ window.excluirTransacao = async function excluirTransacao(id_transacao) {
     }
 }
 
-//Excluir parcelas
+// ===============================
+// 10. EXCLUIR PARCELAS
+// ===============================
 window.excluirParcelas = async function excluirParcelas(id_parcela) {
 
     try {
@@ -480,7 +483,10 @@ window.excluirParcelas = async function excluirParcelas(id_parcela) {
         console.log(error);
     }
 }
-//listar ultimas transações
+
+// =========================================
+// 11. BUSCA ULTIMAS TRANSAÇÕES CONFIRMADAS
+// =========================================
 async function listarUltimasTransacoes() {
     try {
         const resposta = await fetch("/api/ultimas-transacoes",

@@ -173,7 +173,6 @@ app.post("/api/cadastrarUsuario", async (req, res) => {
 // ===============================
 app.get("/api/usuario/:id_usuario", async (req, res) => {
   const id  = req.params.id_usuario;
-   console.log(id);
   try {
     const result = await execSQLQuery(`
       SELECT Nome, Email FROM Usuarios WHERE id = ${id}

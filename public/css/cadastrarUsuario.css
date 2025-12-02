@@ -108,7 +108,7 @@ main hr {
 }
 
 /* Botão cadastrar (cadastro) */
-.btn-cadastro {
+.btn-cadastro, .btn-confirmar {
   width: 100%;
   background-color: #09be6d;
   border: 2px solid #51a07d;
@@ -128,10 +128,36 @@ main hr {
   text-decoration: none;
 }
 
-.btn-cadastro:hover {
+.btn-cadastro:hover, .btn-confirmar:hover {
   background-color: #068348;
 }
+.inputs
+{
+  display: flex;
+  justify-content: center;
+}
+.inputs input {
+  margin: .3rem;
+    width: 3rem;
+    height: 4rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    border: 2px solid #ccc;
+    border-radius: .8rem;
+    outline: none;
+    transition: 0.2s;
+  }
 
+  .inputs input:focus {
+    border-color: #64f082;
+    box-shadow: 0 0 5px #5ceb7b;
+  }
+
+  .confirmacao
+  {
+    margin-top: 1rem;
+  }
 /*Media Queries*/
 @media (max-width: 1840px) {
     .left::after {
@@ -171,3 +197,4 @@ main hr {
     max-width: 100%;
   }
 }
+

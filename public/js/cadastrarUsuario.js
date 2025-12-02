@@ -28,6 +28,10 @@ console.log("Resposta servidor:", resposta);
         alert("Código enviado para seu e-mail!");
 
         document.getElementById("verificacao").style.display = "block";
+        const envio = document.querySelector(".btn-cadastro");
+        envio.innerHTML = "REENVIAR";
+        envio.style = "background-color:white; color: green"
+        
 
     } else {
         alert(data.mensagem || "Erro ao enviar código.");
@@ -36,10 +40,55 @@ console.log("Resposta servidor:", resposta);
 
 });
 
+const inputs = document.querySelectorAll("#inputs input");
+
+
+
+inputs.forEach((input, i) => 
+{
+    input.addEventListener("input", () =>
+    {
+        if(input.value && i < inputs.length - 1)
+        {
+            inputs[i + 1].focus();
+        }
+    })
+
+    input.addEventListener("keydown", (e) =>
+{
+    if(e.key == "Backspace" && !input.value && i > 0)
+    {
+        inputs[i - 1].focus();
+    }
+})
+})
+
+
+
+document.getElementById("inputs").addEventListener("paste", (e) => 
+{
+    const dados = e.clipboardData.getData("text").trim();
+
+    
+        [...dados].forEach((num, i )=>
+        {
+            inputs[i].value = num;
+        }
+        )
+    
+})
+
 
 document.getElementById("btn-confirmar").addEventListener("click", async () => {
 
-    const codigo = document.getElementById("codigo").value;
+    let codigo = "";
+
+    inputs.forEach((input) =>
+    {
+        console.log(input.value);
+        codigo += input.value;
+    })
+
 
     if (!codigo) {
         alert("Digite o código recebido!");
