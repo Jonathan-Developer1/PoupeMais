@@ -15,13 +15,12 @@ document.querySelector(".btn-login").addEventListener("click", async (e) => {
   if (data.sucesso) {
     alert("Login bem-sucedido!");
 
-    // 🔥 SALVAR OS DADOS CORRETAMENTE
-    localStorage.setItem("id_usuario", data.id);
-    localStorage.setItem("email_usuario", email);
-
-    if (data.nome) {
-      localStorage.setItem("nome_usuario", data.nome);
-    }
+    //Salvando dados no localStorage
+  localStorage.setItem("usuario", JSON.stringify({
+  id: data.id,
+  nome: data.nome,
+  email: email
+}));
 
     window.location.href = "home.html";
   } else {

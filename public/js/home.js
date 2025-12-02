@@ -1,4 +1,3 @@
-//const API_URL_CADASTRO = 'http://localhost:5000/api/transacoes'; //MUDAR PARA A ROTA CORRETA DO BANCO DE DASDOS
 import { cadastrarTransacao, addUltimas } from "./cadastro.js";
 
 const mes = [
@@ -49,6 +48,13 @@ const categorias = {
 
 //Pega o usuario passado pelo locaStorage
 let usuario = JSON.parse(localStorage.getItem('usuario'));
+
+//verificando se existe um usuário
+
+if(localStorage.length == 0)
+{
+    window.location.href = "/index.html";
+}
 //Passa o saldo atual para a variavel
 let saldoUsuario = await pegarSaldo();
 

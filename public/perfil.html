@@ -39,9 +39,6 @@
                             <a class="nav-link active" aria-current="page" href="graficos.html"><b>Gráficos</b></a>
                         </li>
                     </ul>
-                    <h4 class="h4-saldo"><b>Saldo:</b><span id="saldo">0,00</span>
-                        <i class="bi bi-eye-slash" id="icone-olho"></i>
-                    </h4>
                     <a href="perfil.html">
                         <img src="img/inc-user.png" alt="" id="inc-user">
                     </a>
@@ -86,11 +83,11 @@
             </div>
 
             <button type="button" id="botao-alterar">Alterar senha</button>
-            <a href="index.html"><button id="sair">Sair da Conta</button></a>
+            <a href="index.html" onclick="sair()"><button id="sair">Sair da Conta</button></a>
 
         </div>
     </div>
 </body>
-<script src="js/perfil.js"></script>
+<script type="module" src="js/perfil.js"></script>
 
 </html>

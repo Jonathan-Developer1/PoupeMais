@@ -24,6 +24,12 @@ function animacaoOlho() {
 // pega ID salvo no login
 const usuarioID = localStorage.getItem("id_usuario");
 
+//verificando se existe um usuário
+
+if(localStorage.length == 0)
+{
+    window.location.href = "/index.html";
+}
 // ===============================
 // 1. CARREGAR DADOS DO USUÁRIO
 // ===============================
@@ -72,3 +78,10 @@ document.getElementById("botao-alterar").addEventListener("click", async () => {
         alert(resposta.mensagem);
     }
 });
+
+//função de logout
+
+window.sair = function sair()
+{
+    localStorage.clear();
+}

@@ -23,6 +23,12 @@ iconeOlho.addEventListener("click", () => {
 // ============================
 const container = document.getElementById("historicoSimulacao");
 const usuario = JSON.parse(localStorage.getItem('usuario'));
+//verificando se existe um usuário
+
+if(localStorage.length == 0)
+{
+    window.location.href = "/index.html";
+}
 function getTipoTexto(tipo) {
     switch (tipo) {
         case "1": return "Redução de despesas";
