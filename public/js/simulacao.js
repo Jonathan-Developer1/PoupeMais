@@ -27,7 +27,7 @@ const usuario = JSON.parse(localStorage.getItem('usuario'));
 
 if(localStorage.length == 0)
 {
-    window.location.href = "/index.html";
+    window.location.href = "/";
 }
 function getTipoTexto(tipo) {
     switch (tipo) {

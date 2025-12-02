@@ -53,7 +53,7 @@ let usuario = JSON.parse(localStorage.getItem('usuario'));
 
 if(localStorage.length == 0)
 {
-    window.location.href = "/index.html";
+    window.location.href = "/";
 }
 //Passa o saldo atual para a variavel
 let saldoUsuario = await pegarSaldo();

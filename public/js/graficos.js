@@ -11,7 +11,7 @@ function getUsuario() {
 
 if(localStorage.length == 0)
 {
-    window.location.href = "/index.html";
+    window.location.href = "/";
 }
 // Função para formatar dinheiro (R$ 1.000,00)
 function formatarMoeda(valor) {
