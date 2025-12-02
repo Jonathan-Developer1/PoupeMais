@@ -1,6 +1,6 @@
-//const API_URL_CADASTRO = 'http://localhost:5000/api/transacoes'; //MUDAR PARA A ROTA CORRETA DO BANCO DE DASDOS
 import { cadastrarTransacao, addUltimas } from "./cadastro.js";
 
+//Dados para os selects de meses
 const mes = [
 
     { value: 0, nome: "Janeiro" },
@@ -18,6 +18,7 @@ const mes = [
 
 ];
 
+//Dados para as categorias
 const categorias = {
     receita: [
         { id: 1, nome: "Salário" },
@@ -49,27 +50,38 @@ const categorias = {
 
 //Pega o usuario passado pelo locaStorage
 let usuario = JSON.parse(localStorage.getItem('usuario'));
+
+//verificando se existe um usuário
+if(localStorage.length == 0)
+{
+    window.location.href = "/";
+}
 //Passa o saldo atual para a variavel
 let saldoUsuario = await pegarSaldo();
-
-const data = document.getElementById("data-transacao");
 
 
 
 //Atualiza para a data atual
+const data = document.getElementById("data-transacao");
+
+
 function atualizaData() {
     if (data)
         data.valueAsDate = new Date();
 }
 
-//Chamada de funções de inicializção
+// ===============================
+// 1. iNICIALIZAÇÃO
+// ===============================
 listarTransacoes();
 listarUltimasTransacoes();
 animacaoOlho();
 pegarSaldo();
 atualizaData();
 
-//Confirma transação
+// ===============================
+// 2. CONFIRMAÇÃO DE TRANSAÇÕES
+// ===============================
 window.confirmarTransacao = async function confirmarTransacao(transacao_id) {
     try {
         const resposta = await fetch("/api/valor/confirmar", {
@@ -110,8 +122,9 @@ window.confirmarTransacao = async function confirmarTransacao(transacao_id) {
         console.error('Erro de rede ou na requisição:', erro);
     }
 }
-
-//Cancela transação
+// ===============================
+// 3. CANCELAMENTO DE TRANSAÇÕES
+// ===============================
 window.desfazerTransacao = async function desfazerTransacao(transacao_id) {
     try {
         const resposta = await fetch("/api/valor/cancelar", {
@@ -154,7 +167,9 @@ window.desfazerTransacao = async function desfazerTransacao(transacao_id) {
     }
 }
 
-// Pega o saldo atual do usuário
+// ===============================
+// 4. PEGAR SALDO DO USUÁRIO
+// ===============================
 async function pegarSaldo() {
     try {
         const resposta = await fetch("/api/saldo",
@@ -190,14 +205,18 @@ async function pegarSaldo() {
 
 
 
-// Função para pegar o nome da categoria pelo id
+// ===============================
+// 5. PEGAR O NOME DA CATEGORIA
+// ===============================
 function getNomeCategoria(tipo, id) {
     const lista = categorias[tipo];
     const categoriaEncontrada = lista.find(c => c.id == id);
     return categoriaEncontrada ? categoriaEncontrada.nome : "Desconhecido";
 }
 
-//Animação do olho para o saldo
+// ===============================
+// 6. ANIMAÇÃO DO OLHO DO SALDO
+// ===============================
 function animacaoOlho() {
     const iconeOlho = document.getElementById("icone-olho");
     const saldo = document.getElementById('saldo');
@@ -224,7 +243,9 @@ function animacaoOlho() {
 const tipoSelect = document.getElementById("tipo");
 const categoriaSelect = document.getElementById("categoria");
 
-//Busca as transações no banco
+// ===============================
+// 7. BUSCA AS TRANSAÇÕES
+// ===============================
 async function listarTransacoes() {
     try {
         const resposta = await fetch(`/api/transacoes/${usuario.id}`);
@@ -246,10 +267,11 @@ async function listarTransacoes() {
     }
 }
 
-
+//Selecionando os selects
 export const filtromes = document.getElementById("filter-mestransacoes");
 export const filtroano = document.getElementById("filter-anotransacoes");
 
+//Atualizando para as datas atuais
 const mesAtual = new Date().getMonth();
 const anoAtual = new Date().getFullYear();
 
@@ -259,7 +281,6 @@ const anoAtual = new Date().getFullYear();
 if (filtromes) {
 
     //Criar opções de filtro de mes
-
     mes.forEach(mes => {
         const option = document.createElement("option");
         option.textContent = mes.nome;

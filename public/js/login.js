@@ -10,20 +10,19 @@ document.querySelector(".btn-login").addEventListener("click", async (e) => {
     body: JSON.stringify({ email: email, senha: senha }),
   });
 
-  const data = await resposta.json();
+  const dados = await resposta.json();
 
-  if (data.sucesso) {
+  if (dados.sucesso) {
     alert("Login bem-sucedido!");
 
-    // 🔥 SALVAR OS DADOS CORRETAMENTE
-    localStorage.setItem("id_usuario", data.id);
-    localStorage.setItem("email_usuario", email);
+    //Salvando dados no localStorage
+  localStorage.setItem("usuario", JSON.stringify({
+  id: dados.id,
+  nome: dados.nome,
+  email: email
+}));
 
-    if (data.nome) {
-      localStorage.setItem("nome_usuario", data.nome);
-    }
-
-    window.location.href = "home.html";
+    window.location.href = "home";
   } else {
     alert("E-mail ou senha incorretos.");
   }
@@ -31,5 +30,5 @@ document.querySelector(".btn-login").addEventListener("click", async (e) => {
 
 // Link botão de cadastro
 document.querySelector('.btn-cadastro').addEventListener('click', function () {
-  window.location.href = 'cadastrarUsuario.html';
+  window.location.href = 'cadastro';
 });

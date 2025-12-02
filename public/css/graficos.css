@@ -90,7 +90,7 @@ h1 {
 }
 
 .ze-porquinho, .sugestao, #loading {
-    margin: 2% 0 0% 3%;
+    margin: 40px 320px;
     display: flex;
 }
 
@@ -101,7 +101,7 @@ h1 {
 }
 #ze-porquinho
 {
-    width: 18rem;
+    width: 12rem;
 }
 
 .sugestao span
@@ -125,3 +125,162 @@ h1 {
 {
     margin: auto;
 }
+
+/* ============================
+   RESPONSIVIDADE (SEM MUDAR LAYOUT NO DESKTOP)
+   ============================ */
+
+/* Telas menores que 1200px (tablets grandes) */
+@media (max-width: 1200px) {
+
+    .resumo-financeiro {
+        grid-template-columns: 1fr;
+        max-width: 90%;
+        min-height: auto;
+    }
+
+    .grafico-card {
+        max-width: 100%;
+        margin: 20px auto;
+    }
+
+    .ze-porquinho, .sugestao, #loading {
+        margin: 40px auto;
+    }
+}
+
+/* Telas menores que 768px (tablets e celulares grandes) */
+@media (max-width: 768px) {
+
+    .texto-inicial {
+        margin: 20px;
+        text-align: center;
+    }
+
+    .resumo-financeiro {
+        grid-template-columns: 1fr;
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .item h4,
+    .item p {
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .grafico-card {
+        width: 90%;
+        min-height: auto;
+    }
+
+    .ze-porquinho {
+        flex-direction: column;
+        text-align: center;
+        margin: 20px auto;
+    }
+
+    .ze-porquinho h1 {
+        padding-top: 1rem;
+        font-size: 1.6rem;
+    }
+
+    #ze-porquinho {
+        width: 9rem;
+        margin: 0 auto;
+    }
+
+    .sugestao,
+    #loading {
+        flex-direction: column;
+        margin: 20px auto;
+        text-align: center;
+    }
+
+    .sugestao span {
+        font-size: 1.2rem;
+    }
+
+    #loading span {
+        font-size: 1.2rem;
+    }
+
+}
+
+/* Telas menores que 480px (celulares pequenos) */
+@media (max-width: 480px) {
+
+    .grafico-card {
+        width: 100%;
+        min-height: auto;
+    }
+
+    .item h4,
+    .item p {
+        font-size: 16px;
+    }
+
+    .ze-porquinho h1 {
+        font-size: 1.4rem;
+    }
+
+    #ze-porquinho {
+        width: 7rem;
+    }
+
+    .sugestao span,
+    #loading span {
+        font-size: 1rem;
+    }
+}
+/* Corrige centralização do Zé-porquinho entre 769px e 1200px */
+@media (min-width: 769px) and (max-width: 1200px) {
+    .ze-porquinho {
+        margin: 40px auto !important;    /* centraliza horizontalmente */
+        justify-content: center;         /* centraliza conteúdo interno */
+        align-items: center;
+        gap: 20px;                        /* mantém espaçamento entre imagem e texto */
+        max-width: 1100px;                /* opcional: evita overflow em larguras intermediárias */
+        padding: 0 16px;                  /* pequeno padding para garantir espaçamento nas laterais */
+    }
+
+    .ze-porquinho h1 {
+        text-align: center;
+        padding-top: 1.5rem;
+        margin: 0;
+    }
+
+    #ze-porquinho {
+        margin: 0;
+        display: block;
+    }
+}
+
+/* Centraliza a seção da sugestão entre 769px e 1200px */
+@media (min-width: 769px) and (max-width: 1200px) {
+
+    .sugestao {
+        width: 100%;
+        max-width: 900px;   /* Ajuste a largura máxima caso queira */
+        margin: 0 auto !important;  /* Centraliza no meio */
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .sugestao img {
+        display: block;
+        margin: 0 auto !important; /* Garante que a imagem também fique centralizada */
+    }
+
+    .sugestao h2,
+    .sugestao p {
+        width: 100%;
+        text-align: center !important;
+    }
+}
+

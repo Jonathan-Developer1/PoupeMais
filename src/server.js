@@ -13,7 +13,12 @@ dotenv.config(); // carrega as variáveis do .env
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+
+
 const app = express();
+
+app.use(express.static(path.join(__dirname, "../public")));
+
 let connection = null;
 
 // arquivo .env p config:
@@ -23,6 +28,10 @@ DB_NAME=
 DB_USER=
 DB_PASS=
 */
+
+// ===============================
+// 1. CONFIGS DO BANCO DE DADOS
+// ===============================
 const config = {
   server: process.env.DB_SERVER,
   database: process.env.DB_NAME,
@@ -34,7 +43,9 @@ const config = {
   },
 };
 
-// função de conexão
+// ===============================
+// 2. CONEXÃO NO BANCO DE DADOS
+// ===============================
 export async function getConnection() {
   if (connection) return connection;
   try {
@@ -42,13 +53,15 @@ export async function getConnection() {
     console.log("Conectado ao SQL Server!");
     return connection;
   } catch (err) {
-    console.error("❌ Erro ao conectar:");
+    console.error("Erro ao conectar:");
     console.error(JSON.stringify(err, null, 2));
     throw err;
   }
 }
 
-// executa uma query SQL
+// ===============================
+// 3. FUNÇÃO DE EXECUÇÃO DE QUERYS
+// ===============================
 export async function execSQLQuery(sqlQuery) {
   const conn = await getConnection();
   const request = new sql.Request(conn);
@@ -57,7 +70,9 @@ export async function execSQLQuery(sqlQuery) {
 }
 app.use(express.json());
 
-// login
+// ===============================
+// 4. ROTA DE LOGIN
+// ===============================
 app.post("/login.html", async (req, res) => {
   const { email, senha } = req.body;
 
@@ -81,7 +96,9 @@ app.post("/login.html", async (req, res) => {
   }
 });
 
-// cadastrar novo usuário e enviar código
+// ===============================
+// 5. ROTA DE CADASTRO DE USUÁRIO E ENVIO DE CÓDIGO
+// ===============================
 app.post("/api/enviarCodigo", async (req, res) => {
   const { email } = req.body;
   const codigo = Math.floor(100000 + Math.random() * 900000);
@@ -97,7 +114,9 @@ app.post("/api/enviarCodigo", async (req, res) => {
   }
 });
 
-// verificar código
+// ===============================
+// 6. VERIFICAÇÃO DE CÓDIGO
+// ===============================
 app.post("/api/verificarCodigo", (req, res) => {
   const { email, codigo } = req.body;
 
@@ -115,6 +134,10 @@ app.post("/api/verificarCodigo", (req, res) => {
     return res.json({ validado: false });
   }
 });
+
+// ===============================
+// 7. CADASTRO DE USUÁRIO
+// ===============================
 app.post("/api/cadastrarUsuario", async (req, res) => {
   const { nome, email, senha } = req.body;
   try {
@@ -145,8 +168,61 @@ app.post("/api/cadastrarUsuario", async (req, res) => {
   }
 });
 
+// ===============================
+// 8. ROTA QUE BUSCA DADOS DO USUÁRIO
+// ===============================
+app.get("/api/usuario/:id_usuario", async (req, res) => {
+  const id  = req.params.id_usuario;
+   console.log(id);
+  try {
+    const result = await execSQLQuery(`
+      SELECT Nome, Email FROM Usuarios WHERE id = ${id}
+    `);
 
-//saldo
+    res.json(result[0] || {});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ erro: "Erro ao carregar dados do usuário" });
+  }
+});
+
+// ===============================
+// 9. ROTA PARA ALTERAÇÃO DE SENHA
+// ===============================
+app.post("/api/usuario/alterar-senha", async (req, res) => {
+  const { id_usuario, senha_atual, nova_senha } = req.body;
+
+  try {
+    // verificar senha atual
+    const usuario = await execSQLQuery(`
+      SELECT Senha FROM Usuarios WHERE id = ${id_usuario}
+    `);
+
+    if (usuario.length === 0)
+      return res.json({ sucesso: false, mensagem: "Usuário não encontrado." });
+
+    if (usuario[0].Senha !== senha_atual)
+      return res.json({ sucesso: false, mensagem: "Senha atual incorreta!" });
+
+    // atualizar senha
+    await execSQLQuery(`
+      UPDATE Usuarios 
+      SET Senha = '${nova_senha}'
+      WHERE id = ${id_usuario}
+    `);
+
+    res.json({ sucesso: true });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ erro: "Erro ao alterar senha" });
+  }
+});
+
+
+// ===============================
+// 10. ROTA QUE BUSCA O SALDO
+// ===============================
 app.post("/api/saldo", async (req, res) => {
   const { id_usuario } = req.body;
 
@@ -165,7 +241,9 @@ app.post("/api/saldo", async (req, res) => {
   }
 })
 
-//cadastro
+// ===============================
+// 11. ROTA PARA CADASTRO DE TRANSAÇÕES
+// ===============================
 app.post("/api/transacao", async (req, res) => {
   const transacao = req.body;
 
@@ -202,7 +280,9 @@ app.post("/api/transacao", async (req, res) => {
 });
 
 
-//carregar transações
+// ===============================
+// 12. ROTA QUE BUSCA AS TRANSAÇÕES
+// ===============================
 app.get("/api/transacoes/:id_usuario", async (req, res) => {
   const id_usuario = req.params.id_usuario;
 
@@ -236,7 +316,9 @@ SELECT
   }
 });
 
-//pegar valor
+// ===============================
+// 13. ROTAS QUE CONFIRMAM TRANSAÇÕES
+// ===============================
 app.post("/api/valor/confirmar", async (req, res) => {
   const { id_transacao } = req.body;
   try {
@@ -257,30 +339,6 @@ app.post("/api/valor/confirmar", async (req, res) => {
     res.status(500).json({ erro: error.message });
   }
 });
-
-
-app.post("/api/valor/cancelar", async (req, res) => {
-  const { id_transacao } = req.body;
-  try {
-    const result = await execSQLQuery(`SELECT * FROM Transacoes WHERE id_transacao = ${id_transacao}`);
-
-    await execSQLQuery(`
-  UPDATE Transacoes
-  SET confirmada = 0
-  WHERE id_transacao = ${id_transacao};
- `);
-
-
-    res.json({ sucesso: true, dados: result });
-
-
-  } catch (error) {
-    console.error("Erro ao selecionar transação:");
-    res.status(500).json({ erro: error.message });
-  }
-});
-
-//confirmar transação
 
 app.post("/api/saldo/atualizar/confirmar", async (req, res) => {
   const result = req.body;
@@ -305,7 +363,30 @@ app.post("/api/saldo/atualizar/confirmar", async (req, res) => {
 });
 
 
-//cancelar transação
+// ===============================
+// 14. ROTAS QUE CANCELAM TRANSAÇÕES
+// ===============================
+app.post("/api/valor/cancelar", async (req, res) => {
+  const { id_transacao } = req.body;
+  try {
+    const result = await execSQLQuery(`SELECT * FROM Transacoes WHERE id_transacao = ${id_transacao}`);
+
+    await execSQLQuery(`
+  UPDATE Transacoes
+  SET confirmada = 0
+  WHERE id_transacao = ${id_transacao};
+ `);
+
+
+    res.json({ sucesso: true, dados: result });
+
+
+  } catch (error) {
+    console.error("Erro ao selecionar transação:");
+    res.status(500).json({ erro: error.message });
+  }
+});
+
 
 app.post("/api/saldo/atualizar/cancelar", async (req, res) => {
   const result = req.body;
@@ -329,7 +410,9 @@ app.post("/api/saldo/atualizar/cancelar", async (req, res) => {
   }
 });
 
-//excluir parcelas
+// ===============================
+// 15. ROTA DE EXCLUSÃO DE PARCELAS
+// ===============================
 app.post("/api/excluirParcelas/", async (req, res) => {
   const { parcelas_id } = req.body;
 
@@ -358,13 +441,14 @@ app.post("/api/excluir/", async (req, res) => {
   }
 })
 
-//HistoricoMensal:
+// ===============================
+// 16. ROTA QUE BUSCA O HISTÓRICO MENSAL
+// ===============================
+
 app.get("/api/historico/ultimo/:id_usuario", async (req, res) => {
   const id_usuario = req.params.id_usuario;
 
   try {
-    // ALTERAÇÃO: Consulta direta na tabela Transacoes para filtrar por confirmada = 1
-    // (Substituindo a view HistoricoMensal que trazia tudo)
     const result = await execSQLQuery(`
     SELECT TOP 1 
       MONTH(data) as mes,
@@ -386,9 +470,9 @@ app.get("/api/historico/ultimo/:id_usuario", async (req, res) => {
   }
 });
 
-
-
-//Pegar ultimas transações
+// ===================================================
+// 17. ROTA QUE BUSCA AS ULTIMAS TRANSAÇÕES CONFIRMADAS
+// ===================================================
 app.post("/api/ultimas-transacoes", async (req, res) => {
 
   const { id_usuario } = req.body;
@@ -408,7 +492,9 @@ ORDER BY data DESC`);
 });
 
 
-// Rota para buscar os dados dos últimos 12 meses para o gráfico
+// ===============================================
+// 18. ROTA QUE BUSCA OS DADOS DOS ULTIMOS 12 MESES
+// ===============================================
 app.get("/api/grafico/evolucao/:id_usuario", async (req, res) => {
   const id_usuario = req.params.id_usuario;
 
@@ -437,8 +523,9 @@ app.get("/api/grafico/evolucao/:id_usuario", async (req, res) => {
 });
 
 
-// Rota para pegar dados agrupados por categoria (para os gráficos de pizza)
-// Exemplo de uso: /api/grafico/categorias/1/despesa
+// ===============================
+// 19. ROTA QUE BUSCA OS DADOS POR CATEGORIA
+// ===============================
 app.get("/api/grafico/categorias/:id_usuario/:tipo", async (req, res) => {
   const { id_usuario, tipo } = req.params;
 
@@ -465,7 +552,9 @@ app.get("/api/grafico/categorias/:id_usuario/:tipo", async (req, res) => {
   }
 });
 
-
+// ===============================
+// 20. ROTA PARA SALVAR SIMULAÇÕES
+// ===============================
 app.post("/api/simulacao/salvar", async (req, res) => {
   const {
     nome_simulacao,
@@ -510,6 +599,9 @@ app.post("/api/simulacao/salvar", async (req, res) => {
   }
 });
 
+// ===============================
+// 21. ROTAS PARA SIMULAÇÕES
+// ===============================
 app.get("/api/simulacao/listar/:id_usuario", async (req, res) => {
   const id_usuario = req.params.id_usuario;
 
@@ -571,7 +663,9 @@ app.post("/api/simulacao/excluir", async (req, res) => {
   }
 });
 
-//pegar ia
+// ===============================
+// 22. ROTA PARA A API DE IA
+// ===============================
 app.post("/api/ia", async (req, res) => {
 
   const dadosIa = req.body;
@@ -606,62 +700,40 @@ app.post("/api/ia", async (req, res) => {
 
 })
 
-//Rota para carregar dados do usuário
-app.get("/api/usuario/:id_usuario", async (req, res) => {
-  const id = req.params.id_usuario;
-
-  try {
-    const result = await execSQLQuery(`
-      SELECT Nome, Email FROM Usuarios WHERE id = ${id}
-    `);
-
-    res.json(result[0] || {});
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ erro: "Erro ao carregar dados do usuário" });
-  }
-});
-
-//Rota para alterar a senha do banco
-app.post("/api/usuario/alterar-senha", async (req, res) => {
-  const { id_usuario, senha_atual, nova_senha } = req.body;
-
-  try {
-    // verificar senha atual
-    const usuario = await execSQLQuery(`
-      SELECT Senha FROM Usuarios WHERE id = ${id_usuario}
-    `);
-
-    if (usuario.length === 0)
-      return res.json({ sucesso: false, mensagem: "Usuário não encontrado." });
-
-    if (usuario[0].Senha !== senha_atual)
-      return res.json({ sucesso: false, mensagem: "Senha atual incorreta!" });
-
-    // atualizar senha
-    await execSQLQuery(`
-      UPDATE Usuarios 
-      SET Senha = '${nova_senha}'
-      WHERE id = ${id_usuario}
-    `);
-
-    res.json({ sucesso: true });
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ erro: "Erro ao alterar senha" });
-  }
-});
-
-
-
-app.use(express.static(path.join(__dirname, "../public")));
-
-
+// ===============================
+// ROTAS DE PÁGINAS
+// ===============================
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../public", "index.html"));
 });
 
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public", "login.html"));
+});
+
+app.get("/home", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public", "home.html"));
+});
+
+app.get("/graficos", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public", "graficos.html"));
+});
+
+app.get("/simulacao", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public", "simulacao.html"));
+});
+
+app.get("/perfil", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public", "perfil.html"));
+});
+
+app.get("/cadastro", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public", "cadastrarUsuario.html"));
+});
+
+// ===============================
+// ABERTURA SERVIDOR
+// ===============================
 
 app.listen(3000, () => {
   console.log("Servidor funcionando em http://localhost:3000");

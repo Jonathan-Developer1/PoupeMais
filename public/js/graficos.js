@@ -7,7 +7,12 @@ let dadosIa = {};
 function getUsuario() {
   return JSON.parse(localStorage.getItem("usuario"));
 }
+//verificando se existe um usuário
 
+if(localStorage.length == 0)
+{
+    window.location.href = "/";
+}
 // Função para formatar dinheiro (R$ 1.000,00)
 function formatarMoeda(valor) {
   return new Intl.NumberFormat('pt-BR', {

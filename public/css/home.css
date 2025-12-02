@@ -99,11 +99,23 @@ h1 {
     font-size: 16px;
     color: #1c3b1c;
     outline: none;
+}
+
+#valor-transacao{
+    margin-left: 30px;
+}
+
+#data-transacao{
     margin-left: 60px;
 }
 
-#botao-cadastro {
+#parcelas{
     width: 217px;
+    margin-left: 20px;
+}
+
+#botao-cadastro {
+    width: 168px;
     padding: 10px 15px;
     border: 1px solid #2c3e2c;
     border-radius: 8px;
@@ -113,12 +125,16 @@ h1 {
     color: white;
     font-weight: bold;
     outline: none;
-    margin-left: 30px;
+    margin-left: 20px;
 }
 
 hr {
     width: 96%;
     margin: 2%;
+}
+
+#filter-mestransacoes, #filter-anotransacoes{
+    margin-top: 30px
 }
 
 #img-porquinho {

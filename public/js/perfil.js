@@ -1,29 +1,15 @@
-//Animação do olho para o saldo
-function animacaoOlho() {
-    const iconeOlho = document.getElementById("icone-olho");
-    const saldo = document.getElementById('saldo');
-
-    let saldoVisivel = true;
-    saldo.textContent = saldoUsuario;
-
-    iconeOlho.addEventListener("click", () => {
-        saldoVisivel = !saldoVisivel;
-
-        if (saldoVisivel) {
-            saldo.textContent = saldoUsuario;
-            iconeOlho.classList.remove("bi-eye");
-            iconeOlho.classList.add("bi-eye-slash");
-        } else {
-            saldo.textContent = "•••••";
-            iconeOlho.classList.remove("bi-eye-slash");
-            iconeOlho.classList.add("bi-eye");
-        }
-    });
-}
 
 // pega ID salvo no login
-const usuarioID = localStorage.getItem("id_usuario");
+const usuario = JSON.parse(localStorage.getItem("usuario"));
+const usuarioID = usuario.id;
 
+console.log(usuario.id);
+
+//verificando se existe um usuário
+if(localStorage.length == 0)
+{
+    window.location.href = "/";
+}
 // ===============================
 // 1. CARREGAR DADOS DO USUÁRIO
 // ===============================
@@ -32,7 +18,6 @@ async function carregarPerfil() {
 
     const res = await fetch("/api/usuario/" + usuarioID);
     const dados = await res.json();
-
     document.getElementById("nome").value = dados.Nome;
     document.getElementById("email").value = dados.Email;
 }
@@ -72,3 +57,12 @@ document.getElementById("botao-alterar").addEventListener("click", async () => {
         alert(resposta.mensagem);
     }
 });
+
+// ===============================
+// 3. LOGOUT
+// ===============================
+
+window.sair = function sair()
+{
+    localStorage.clear();
+}

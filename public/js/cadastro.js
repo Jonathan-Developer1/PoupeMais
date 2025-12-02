@@ -32,7 +32,7 @@ export async function cadastrarTransacao(objeto) {
                 <td>${e.categoria}</td>
                 <td>${valorAtualizado}</td>
                 <td>${e.parcelas}</td>
-                <td style="cursor: pointer"><i class="bi bi-x-square-fill" onclick="desfazerTransacao(${e.id_transacao})"></i></td>
+                <td style="cursor: pointer"><i class="bi bi-x-square-fill text-danger" onclick="desfazerTransacao(${e.id_transacao})"></i></td>
                 <td style="cursor: pointer"><i class="bi bi-trash3" onclick="excluirParcelas(${e.id_parcela})"></i></td>`;
     }
     else if(e.parcelas > 1)
@@ -42,7 +42,7 @@ export async function cadastrarTransacao(objeto) {
                 <td>${e.categoria}</td>
                 <td>${valorAtualizado}</td>
                 <td>${e.parcelas}</td>
-                <td style="cursor: pointer"><i class="bi bi-check-square-fill" onclick="confirmarTransacao(${e.id_transacao})"></i></td>
+                <td style="cursor: pointer"><i class="bi bi-check-square-fill text-success" onclick="confirmarTransacao(${e.id_transacao})"></i></td>
                 <td style="cursor: pointer"><i class="bi bi-trash3" onclick="excluirParcelas(${e.id_parcela})"></i></td>`;
     }
 
@@ -53,7 +53,7 @@ export async function cadastrarTransacao(objeto) {
                 <td>${e.categoria}</td>
                 <td>${valorAtualizado}</td>
                 <td>${e.parcelas}</td>
-                <td style="cursor: pointer"><i class="bi bi-x-square-fill" onclick="desfazerTransacao(${e.id_transacao})"></i></td>
+                <td style="cursor: pointer"><i class="bi bi-x-square-fill text-danger" onclick="desfazerTransacao(${e.id_transacao})"></i></td>
                 <td style="cursor: pointer"><i class="bi bi-trash3" onclick="excluirTransacao(${e.id_transacao})"></i></td>`;
     }
     else
@@ -63,7 +63,7 @@ export async function cadastrarTransacao(objeto) {
                 <td>${e.categoria}</td>
                 <td>${valorAtualizado}</td>
                 <td>${e.parcelas}</td>
-                <td style="cursor: pointer"><i class="bi bi-check-square-fill" onclick="confirmarTransacao(${e.id_transacao})"></i></td>
+                <td style="cursor: pointer"><i class="bi bi-check-square-fill text-success" onclick="confirmarTransacao(${e.id_transacao})"></i></td>
                 <td style="cursor: pointer"><i class="bi bi-trash3" onclick="excluirTransacao(${e.id_transacao})"></i></td>`;
     }
     

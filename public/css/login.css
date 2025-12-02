@@ -192,3 +192,128 @@ main hr {
     max-width: 100%;
   }
 }
+
+/* ===============================
+   TELAS ENTRE 1100px e 1400px
+================================= */
+@media (max-width: 1400px) {
+  body {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .left {
+    width: 100%;
+    height: auto;
+    padding: 40px;
+  }
+
+  .left::after {
+    display: none;
+  }
+
+  main {
+    width: 60%;
+    margin-top: 20px;
+  }
+}
+
+/* ===============================
+   TELAS ENTRE 768px e 1100px
+================================= */
+@media (max-width: 1100px) {
+  body {
+    flex-direction: column;
+  }
+
+  .left {
+    width: 100%;
+    padding: 40px 20px;
+  }
+
+  .left img {
+    width: 150px;
+  }
+
+  .left span {
+    margin-top: 80px;
+  }
+
+  main {
+    width: 70%;
+  }
+}
+
+/* ===============================
+   TELAS ENTRE 480px e 768px
+================================= */
+@media (max-width: 768px) {
+
+  body {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .left {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .left h1 {
+    margin-top: 40px;
+  }
+
+  .left p {
+    width: 90%;
+  }
+
+  .left::after {
+    display: none;
+  }
+
+  main {
+    width: 85%;
+    margin-top: 20px;
+    padding: 40px 20px;
+  }
+
+  .holders {
+    margin: 30px 0;
+  }
+}
+
+/* ===============================
+   TELAS ATÉ 480px (mobile)
+================================= */
+@media (max-width: 480px) {
+
+  body {
+    display: block;
+    height: auto;
+  }
+
+  .left {
+    display: none;
+  }
+
+  main {
+    width: 90%;
+    margin: 1.5rem auto;
+    padding: 30px 20px;
+  }
+
+  main h1 {
+    font-size: 32px;
+  }
+
+  .holders input {
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  .btn-login,
+  .btn-cadastro {
+    padding: 12px;
+    font-size: 16px;
+  }
+}
