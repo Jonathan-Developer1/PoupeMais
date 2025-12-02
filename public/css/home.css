@@ -193,3 +193,287 @@ td i {
 {
     margin-bottom: 3rem;
 }
+
+/* ============================
+   RESPONSIVIDADE - ATÉ 992px
+   ============================ */
+@media (max-width: 992px) {
+
+    /* Header */
+    a.navbar-brand {
+        margin-right: 0;
+    }
+
+    .nav-item {
+        margin-right: 1rem;
+        font-size: 18px;
+    }
+
+    .h4-saldo {
+        margin-right: 1rem;
+        font-size: 18px;
+    }
+
+    #inc-user {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+/* ============================
+   RESPONSIVIDADE - ATÉ 768px
+   ============================ */
+@media (max-width: 768px) {
+
+    h1 {
+        font-size: 22px;
+        margin-left: 20px;
+    }
+
+    /* Inputs */
+    .input-estilo,
+    .select-simples,
+    .input-estilo-money {
+        width: 90%;
+        margin-left: 5%;
+    }
+
+    #botao-cadastro {
+        width: 90%;
+        margin-left: 5%;
+        margin-top: 15px;
+    }
+
+    /* Form em coluna */
+    form div {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    /* Porquinho + Título */
+    .porquinho {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    #img-porquinho {
+        margin-left: 0;
+    }
+
+    /* Tabela */
+    .table {
+        width: 98%;
+        margin-left: 1%;
+        font-size: 14px;
+    }
+
+    .table thead {
+        font-size: 13px;
+    }
+}
+
+/* ============================
+   RESPONSIVIDADE - ATÉ 576px
+   ============================ */
+@media (max-width: 576px) {
+
+    /* Header */
+    .h4-saldo {
+        font-size: 16px;
+    }
+
+    #logo {
+        width: 80px;
+    }
+
+    /* Inputs */
+    .input-estilo,
+    .select-simples,
+    .input-estilo-money {
+        font-size: 14px;
+    }
+
+    #botao-cadastro {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    /* Tabela transforma em scroll horizontal */
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    th,
+    td {
+        font-size: 13px;
+        padding: 6px;
+    }
+
+    #ultimas-transacoes table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
+
+/* ============================
+   RESPONSIVIDADE - ATÉ 992px
+   ============================ */
+@media (max-width: 992px) {
+
+    /* Header */
+    a.navbar-brand {
+        margin-right: 0;
+    }
+
+    .nav-item {
+        margin-right: 1.5rem;
+        font-size: 18px;
+    }
+
+    .h4-saldo {
+        margin-right: 1rem;
+        font-size: 18px;
+    }
+
+    #inc-user {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+/* ============================
+   RESPONSIVIDADE - ATÉ 768px
+   ============================ */
+@media (max-width: 768px) {
+
+    h1 {
+        font-size: 22px;
+        margin-left: 20px !important;
+    }
+
+    /* FORM VIRANDO COLUNA */
+    form div {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    /* Inputs PRINCIPAIS */
+    .input-estilo,
+    .input-estilo-money,
+    .select-simples {
+        width: 90% !important;
+        margin-left: 5% !important;
+        margin-right: 5% !important;
+        display: block;
+    }
+
+    /* Label da data */
+    #data-transacao-label {
+        margin-left: 5% !important;
+    }
+
+    /* Botão */
+    #botao-cadastro {
+        width: 90% !important;
+        margin-left: 5% !important;
+        margin-top: 15px;
+    }
+
+    /* Porquinho + Título */
+    .porquinho {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    #img-porquinho {
+        margin-left: 0;
+    }
+
+    /* Tabela */
+    .table {
+        width: 98%;
+        margin-left: 1%;
+        font-size: 14px;
+    }
+}
+
+/* ============================
+   RESPONSIVIDADE - ATÉ 576px
+   ============================ */
+@media (max-width: 576px) {
+
+    #logo {
+        width: 80px;
+    }
+
+    /* Ajuste dos inputs */
+    .input-estilo,
+    .input-estilo-money,
+    .select-simples {
+        width: 92% !important;
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    #botao-cadastro {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    /* Tabelas com scroll horizontal */
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    th, td {
+        font-size: 13px;
+        padding: 6px;
+    }
+
+    #ultimas-transacoes table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
+
+/* Filtros na mesma linha sempre */
+.filtros {
+    display: flex;
+    flex-wrap: nowrap; /* Não deixa quebrar a linha */
+    gap: 10px;
+    align-items: center;
+    margin-left: 60px;
+}
+
+/* Selects dos filtros ajustados */
+.filtros select {
+    width: 180px !important; /* Mantém compacto no mobile */
+    margin: 0 !important;    /* Remove margem lateral */
+}
+
+/* Em telas menores */
+@media (max-width: 576px) {
+
+    .filtros {
+        justify-content: center;  /* Centraliza no mobile */
+        margin-left: 0 !important;
+        width: 100%;
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+
+    .filtros select {
+        width: 45% !important; /* Fica lado a lado */
+        min-width: 130px;
+    }
+}

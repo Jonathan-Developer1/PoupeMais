@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="css/index.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:wght@400;700&display=swap"rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:wght@400;700&display=swap"
+        rel="stylesheet">
     <link rel="shortcut icon" href="img/Porquinho_PM.png" type="image/x-icon">
     <title>PoupeMais</title>
     <link rel="shortcut icon" href="img/Porquinho_PM.png" type="image/x-icon">
@@ -19,15 +20,25 @@
         <div class="container-logo">
             <a href="index.html"><img src="img/PoupeMais-logo.png" alt="Logo PoupeMais"></a>
         </div>
+
         <div class="menu">
+            <span class="hamburger" id="btnMenu">&#9776;</span>
             <ul>
                 <li><a href="login.html">Início</a></li>
                 <li><a href="login.html">Simulação</a></li>
                 <li><a href="login.html">Gráficos</a></li>
             </ul>
         </div>
+
         <div class="login">
             <a href="login.html">Entrar</a>
+        </div>
+
+        <!-- BOTÃO HAMBÚRGUER -->
+        <div id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
     </nav>
 
@@ -46,7 +57,7 @@
         </div>
     </main>
 
-    
+
     <div id="vantagens">
         <div id="container">
             <h1>Vantagens De Usar o PoupeMais</h1>
@@ -95,6 +106,15 @@
 
         </div>
     </div>
+
+    <script>
+        const btnMenu = document.getElementById("btnMenu");
+        const menu = document.querySelector(".menu");
+
+        btnMenu.addEventListener("click", () => {
+            menu.classList.toggle("show");
+        });
+    </script>
 </body>
 
 </html>

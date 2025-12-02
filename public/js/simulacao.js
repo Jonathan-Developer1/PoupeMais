@@ -24,7 +24,7 @@ iconeOlho.addEventListener("click", () => {
 const container = document.getElementById("historicoSimulacao");
 const usuario = JSON.parse(localStorage.getItem('usuario'));
 function getTipoTexto(tipo) {
-    switch (tipo) {
+    switch (tipo.toString()) {
         case "1": return "Redução de despesas";
         case "2": return "Aumento de receitas";
         case "3": return "Investimento com rendimento";
@@ -65,6 +65,17 @@ async function renderizarHistorico() {
         // Clique no card inteiro (exceto lixeira) exibe simulação
         div.addEventListener("click", (e) => {
             if (!e.target.classList.contains("btn-excluir")) {
+                // Se dados_linha não existir, calcula
+                if (!sim.dados_linha) {
+                    const dadosLinha = [];
+                    let saldoAtual = sim.saldo_inicial;
+                    for (let i = 1; i <= sim.periodo; i++) {
+                        saldoAtual += saldoAtual * (sim.porcentagem / 100);
+                        dadosLinha.push(parseFloat(saldoAtual.toFixed(2)));
+                    }
+                    sim.dados_linha = dadosLinha;
+                }
+
                 atualizarResultado(sim);
                 atualizarGraficoLinha(sim);
                 atualizarGraficoPizza(sim);
