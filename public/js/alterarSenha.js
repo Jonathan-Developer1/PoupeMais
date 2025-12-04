@@ -52,10 +52,14 @@ document.getElementById("btn-alterar").addEventListener("click", async (e) => {
             text: "Sua senha foi modificada com sucesso.",
             timer: 2000,
             showConfirmButton: false,
-            
         });
 
-        
+        setTimeout(() => {
+        window.location.href = "/login";
+    }, 2000);
+    
+        return;
+       
     } else {
         Swal.fire({
             icon: "error",
@@ -63,5 +67,6 @@ document.getElementById("btn-alterar").addEventListener("click", async (e) => {
             text: resposta.mensagem,
         });
     }
-    window.location.href = "/login";
+
+    
 });
