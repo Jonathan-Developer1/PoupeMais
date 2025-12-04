@@ -84,10 +84,10 @@ h3 {
     font-size: 1.6rem;
 }
 
-#parametros {
+.parametros {
     margin: 3rem;
     padding: 1rem 1.5rem;
-    background-color: #E5F6E0;
+    background-color: var(--simulacao-color);
     border-radius: 8px;
 }
 
