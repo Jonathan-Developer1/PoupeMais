@@ -77,10 +77,9 @@ export async function addUltimas(objeto)
 {
 
   let tabelaUltimas = document.getElementById("tabela-ultimas");
-    
 if(tabelaUltimas)
   tabelaUltimas.innerHTML = "";
-  
+    
         objeto.forEach(e => {
              const tipo = e.tipo;
             const tipoMaiusculo = tipo.charAt(0).toUpperCase() + tipo.slice(1);
@@ -91,12 +90,12 @@ if(tabelaUltimas)
                           });
             const ultimaTransacao = document.createElement('tr');
             ultimaTransacao.innerHTML =
-            `<tr>
+            `
                     <td class="primeiro"><i class="bi bi-coin"></i></td>
                     <td>${e.nome}</td>
                     <td>${tipoMaiusculo}</td>
                     <td>${valorAtualizado}</td>
-                </tr>`;
+                `;
 
             tabelaUltimas.appendChild(ultimaTransacao);
         });

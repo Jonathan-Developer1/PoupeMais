@@ -23,6 +23,9 @@ const container = document.getElementById("historicoSimulacao");
 const usuario = JSON.parse(localStorage.getItem('usuario'));
 if (!usuario) window.location.href = "/";
 
+if (localStorage.length == 0) {
+    window.location.href = "/";
+}
 function getTipoTexto(tipo) {
     switch (tipo.toString()) {
         case "1": return "Juros Compostos";
@@ -272,6 +275,12 @@ async function criarSimulacao() {
 
     if (!nome || (!saldoInicial && tipo !== "3") || !periodo || !porcentagem) {
         alert("Preencha todos os campos obrigatórios!");
+    if (!nome || !saldoInicial || !periodo || !porcentagem || !tipo) {
+        Swal.fire({
+            icon: "warning",
+            title: "Campos obrigatórios",
+            text: "Preencha todos os campos!",
+        });
         return;
     }
 
@@ -306,6 +315,17 @@ async function criarSimulacao() {
         });
         const novaSimulacaoSalva = await res.json();
 
+        const simSalva = await res.json(); // Recebe simulação salva com id_simulacao real
+
+         Swal.fire({
+            icon: "success",
+            title: "Simulação criada!",
+            text: "A simulação foi registrada com sucesso.",
+            timer: 2000,
+            showConfirmButton: false
+        });
+
+        // Atualiza histórico completo
         await renderizarHistorico();
         atualizarResultado(novaSimulacaoSalva);
         atualizarGraficoLinha(novaSimulacaoSalva);
@@ -361,4 +381,4 @@ document.getElementById("botao-simulacao").addEventListener("click", executarSim
 window.onload = () => {
     atualizarCampos();
     renderizarHistorico();
-};
+}}

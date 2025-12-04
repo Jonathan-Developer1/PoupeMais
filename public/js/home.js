@@ -136,7 +136,6 @@ window.desfazerTransacao = async function desfazerTransacao(transacao_id) {
 
         const json = await resposta.json();
 
-        console.log(json.dados[0])
         if (json) {
             const respostaSaldo = await fetch("/api/saldo/atualizar/cancelar", {
                 method: 'POST',
@@ -502,9 +501,13 @@ async function listarUltimasTransacoes() {
 
         const json = await resposta.json();
 
-
         if (json.sucesso) {
             addUltimas(json.dados);
+        }
+        else
+        {
+            addUltimas(json.dados);
+            return;
         }
     }
     catch (error) {

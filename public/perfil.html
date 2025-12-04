@@ -8,21 +8,21 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/modoNoturno.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="css/perfil.css">
+    <link rel="stylesheet" href="css/modoNoturno.css">
     <link rel="shortcut icon" href="img/Porquinho_PM.png" type="image/x-icon">
 
 </head>
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg" style="background-color: #FFFEF2;">
-            <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid header-noturno">
                 <a class="navbar-brand" href="home"><img src="img/PoupeMais-logo.png" alt="Logo PoupeMais"
                         id="logo"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -59,11 +59,10 @@
 
 
     <div class="container">
-        <div id="parametros">
-            <div>
+        <div id="parametros" class="perfil-card">
+            <div class="dados-botao">
                 <h3 class="sub-titulos">MEUS DADOS</h3>
-                <button id="toggle-theme">🌙</button>
-
+                <button id="toggle-theme" class="botao-noturno">🌙</button>
             </div>
             <div class="linha">
                 <div>

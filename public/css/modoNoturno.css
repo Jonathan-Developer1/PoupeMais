@@ -1,16 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
 /* Tema Claro (padrão) */
 :root {
     --bg-color: #ffffff;
     --text-color: #000000;
     --card-color: #f4f4f4;
+    --simulacao-color: #E5F6E0;
 }
 
 /* Tema Escuro */
 .dark-mode {
-    --bg-color: #121212;
+    --bg-color: #161515;
     --text-color: #ffffff;
+    --titulo-color: #2e7d32;
     --card-color: #1e1e1e;
+    --header-color: #141615;
+    --footer-color: #000000;
+    --simulacao-color: #1e1e1e;
+    --tabela-transacoes-color: whitesmoke;
 }
 
 /* Aplicando as variáveis */
@@ -19,8 +26,224 @@ body {
     color: var(--text-color);
 }
 
+label, input, select, textarea {
+    color: var(--text-color);
+}
+
 .card {
     background-color: var(--card-color);
     padding: 20px;
     border-radius: 8px;
+}
+
+.parametros {
+    background-color: var(--simulacao-color);
+}
+
+#historico, #comparativo, #resultado {
+    background-color: var(--card-color);
+}
+
+h1, h2, h3, h4, h5, h6, p, b {
+    color: var(--titulo-color);
+}
+
+header, nav {
+    background-color: var(--header-color);
+}
+
+.header-noturno, .navbar {
+    background-color: var(--header-color);
+}
+
+footer {
+    background-color: var(--footer-color);
+    color: var(--text-color);
+}
+
+.footer-noturno {
+    background-color: var(--footer-color);
+    color: var(--text-color);
+}
+
+body.dark-mode label,
+body.dark-mode .label-noturno {
+    color: var(--titulo-color) !important;
+}
+
+.card h1,
+.card h2,
+.card h3,
+.card h4,
+.card h5,
+.card h6,
+.card p,
+.card span {
+    color: var(--titulo-color);
+}
+
+body.dark-mode .card h1,
+body.dark-mode .card h2,
+body.dark-mode .card h3,
+body.dark-mode .card h4,
+body.dark-mode .card h5,
+body.dark-mode .card h6,
+body.dark-mode .card p,
+body.dark-mode .card span {
+    color: var(--titulo-color) !important;
+}
+
+body.dark-mode .resumo-financeiro {
+  background-color: var(--card-color) !important;
+}
+
+body.dark-mode .resumo-financeiro .item h4,
+body.dark-mode .resumo-financeiro .item h4 * {
+  color: var(--titulo-color) !important;
+}
+
+body.dark-mode .resumo-financeiro .item p,
+body.dark-mode .resumo-financeiro .item p * {
+  color: var(--titulo-color) !important;
+}
+
+body.dark-mode #saldo-atual,
+body.dark-mode #receitas-totais,
+body.dark-mode #despesas-totais,
+body.dark-mode #economia {
+  color: var(--titulo-color) !important;
+}
+
+body.dark-mode .resumo-financeiro .text-dark {
+  color: var(--titulo-color) !important;
+}
+
+body.dark-mode .resumo-financeiro .card,
+body.dark-mode .resumo-financeiro .card .card-body {
+  background-color: var(--card-color) !important;
+  color: var(--titulo-color) !important;
+}
+
+body.dark-mode .resumo-financeiro strong,
+body.dark-mode .resumo-financeiro i,
+body.dark-mode .resumo-financeiro b {
+  color: var(--titulo-color) !important;
+}
+
+/* Estilos específicos para a página de perfil em modo noturno */
+body.dark-mode .perfil-card {
+    background-color: var(--card-color) !important;
+    color: var(--text-color) !important;
+    border-radius: 12px;
+    padding: 25px;
+}
+
+/* Títulos */
+body.dark-mode .perfil-card h3,
+body.dark-mode .perfil-card h1,
+body.dark-mode .perfil-card h2 {
+    color: var(--text-color) !important;
+}
+
+/* Labels */
+body.dark-mode .perfil-card label {
+    color: var(--text-color) !important;
+}
+
+/* Inputs */
+body.dark-mode .perfil-card input {
+    background-color: #2a2a2a !important;
+    border: 1px solid #555 !important;
+    color: var(--text-color) !important;
+}
+
+/* Placeholder */
+body.dark-mode .perfil-card input::placeholder {
+    color: #bbbbbb !important;
+}
+
+/* Botão “Sair da Conta” */
+body.dark-mode #sair {
+    background-color: #8b0000 !important;
+    color: #fff !important;
+}
+
+/* Ícones, spans etc */
+body.dark-mode .perfil-card span {
+    color: var(--text-color) !important;
+}
+
+/* Inputs do modo escuro */
+body.dark-mode input.input-estilo,
+body.dark-mode input.input-estilo-money {
+    background-color: #2a2a2a !important;
+    border: 1px solid #555 !important;
+    color: var(--text-color) !important;
+}
+
+/* Placeholder */
+body.dark-mode input.input-estilo::placeholder,
+body.dark-mode input.input-estilo-money::placeholder {
+    color: #bbbbbb !important;
+}
+
+/* Estilo do select */
+body.dark-mode select,
+body.dark-mode .select-simples {
+    background-color: #2a2a2a !important;
+    border: 1px solid #555 !important;
+    color: var(--text-color) !important;
+}
+
+/* Placeholder do select (opção desabilitada) */
+body.dark-mode select option[disabled] {
+    color: #bbbbbb !important;
+}
+
+/* Opções do dropdown */
+body.dark-mode option {
+    background-color: #2a2a2a !important;
+    color: #ffffff !important;
+}
+
+/* Hover das opções no dropdown */
+body.dark-mode option:hover {
+    background-color: #3a3a3a !important;
+}
+
+/* Ícone do usuário no modo claro */
+#inc-user {
+    width: 45px;
+    transition: 0.3s;
+}
+
+/* Ícone no modo escuro (fica branco) */
+.dark-mode #inc-user {
+    filter: brightness(0) invert(1);  
+}
+
+/* Texto dentro dos cards de histórico */
+.card-item .card-text h4,
+.card-item .card-text p,
+.card-item .card-text span,
+.card-item .card-text b {
+    color: var(--titulo-color) !important;
+}
+
+/* Modo escuro */
+body.dark-mode .card-item .card-text h4,
+body.dark-mode .card-item .card-text p,
+body.dark-mode .card-item .card-text span,
+body.dark-mode .card-item .card-text b {
+    color: var(--titulo-color) !important;
+}
+
+/* Tabela ultimas transações no modo escuro */
+body.dark-mode .tabela-noturno {
+    color: var(--simulacao-color) !important;
+    background-color: var(--tabela-transacoes-color) !important;
+}
+
+header{
+    background-color: #FFFEF2;
 }

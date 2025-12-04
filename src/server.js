@@ -7,6 +7,11 @@ import dotenv from "dotenv";
 import { enviarCodigo } from "../public/js/email.js";
 import { marked, Marked } from "marked";
 import { enviarBoasVindas } from "../public/js/email.js";
+import { enviarLinkRedefinicao, enviarSenhaRedefinida} from "../public/js/email.js"; 
+
+import crypto from 'crypto';
+import bcrypt from 'bcrypt';
+
 
 dotenv.config(); // carrega as variáveis do .env
 
@@ -71,33 +76,53 @@ export async function execSQLQuery(sqlQuery) {
 app.use(express.json());
 
 // ===============================
-// 4. ROTA DE LOGIN
+// 4. ROTA DE LOGIN COM BYCRPTO E CRYPTO
 // ===============================
 app.post("/login.html", async (req, res) => {
-  const { email, senha } = req.body;
+    const { email, senha } = req.body; 
 
-  try {
-    const result = await execSQLQuery(
-      `SELECT * FROM Usuarios WHERE Email='${email}' AND Senha='${senha}'`
-    );
+    try {
+        // Busca o usuário apenas pelo Email para pegar o hash da senha salva
+        const result = await execSQLQuery(
+            `SELECT id, Senha, saldo FROM Usuarios WHERE Email='${email}'`
+        );
 
-    if (result.length > 0) {
-      res.json({
-        sucesso: true,
-        saldo: result[0].saldo,
-        id: result[0].id
-      });
-    } else {
-      res.json({ sucesso: false });
+        if (result.length === 0) {
+            return res.json({ sucesso: false, mensagem: "Email ou senha incorretos." });
+        }
+
+        const usuario = result[0];
+        const hashSalvoNoDB = usuario.Senha; // Hash longo (ou '1234' para usuários antigos)
+        let senhaCorreta = false;
+        
+        if (hashSalvoNoDB && hashSalvoNoDB.startsWith('$2b$')) {
+            senhaCorreta = await bcrypt.compare(senha, hashSalvoNoDB);
+        } else if (hashSalvoNoDB === senha) {
+            // Se NÃO for um hash (sendo texto puro), faz a comparação simples.
+            // "porta de trás" para logar usuários antigos.
+            senhaCorreta = true;
+        }
+
+
+        if (senhaCorreta) {
+            res.json({
+                sucesso: true,
+                saldo: usuario.saldo,
+                id: usuario.id
+            });
+        } else {
+            // Senha incorreta
+            res.json({ sucesso: false, mensagem: "Email ou senha incorretos." });
+        }
+        
+    } catch (error) {
+        console.error("Erro na Rota de Login:", error);
+        res.status(500).json({ erro: "Erro ao consultar o banco" });
     }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ erro: "Erro ao consultar o banco" });
-  }
 });
 
 // ===============================
-// 5. ROTA DE CADASTRO DE USUÁRIO E ENVIO DE CÓDIGO
+// 5. ROTA DE CADASTRO DE USUÁRIO E ENVIO DE CÓDIGO 
 // ===============================
 app.post("/api/enviarCodigo", async (req, res) => {
   const { email } = req.body;
@@ -136,7 +161,7 @@ app.post("/api/verificarCodigo", (req, res) => {
 });
 
 // ===============================
-// 7. CADASTRO DE USUÁRIO
+// 7. CADASTRO DE USUÁRIO SEM BYCRPTO E CRYPTO
 // ===============================
 app.post("/api/cadastrarUsuario", async (req, res) => {
   const { nome, email, senha } = req.body;
@@ -218,7 +243,106 @@ app.post("/api/usuario/alterar-senha", async (req, res) => {
   }
 });
 
+// ===============================================
+// 9.1 ROTA PARA SOLICITAR LINK DE REDEFINIÇÃO COM BYCRPTO E CRYPTO
+// ===============================================
+app.post("/api/usuario/solicitar-redefinicao", async (req, res) => {
+    const { email } = req.body;
 
+    if (!email) return res.status(400).json({ sucesso: false, mensagem: "Email é obrigatório" });
+
+    try {
+        // Busca usuário pelo email
+        const usuario = await execSQLQuery(`
+            SELECT id FROM Usuarios WHERE email = '${email}'
+        `);
+
+        if (usuario.length === 0) {
+            // Retorna sucesso de maneira segura
+            return res.json({ sucesso: true, mensagem: "Se o e-mail estiver cadastrado, o link será enviado." });
+        }
+          
+        const userId = usuario[0].id;
+        const token = crypto.randomBytes(32).toString("hex");
+        const expiresAt = new Date(Date.now() + 3600000).toISOString().slice(0, 19).replace('T', ' '); 
+
+        // Insere token na tabela EsqueciSenha do SQL SERVER
+        await execSQLQuery(`
+            INSERT INTO EsqueciSenha (user_id, token, expires_at)
+            VALUES (${userId}, '${token}', '${expiresAt}')
+        `);
+
+        // Envia email com link de redefinição
+        const emailEnviado = await enviarLinkRedefinicao(email, token);
+
+        if (emailEnviado) {
+            return res.json({ sucesso: true, mensagem: "Link de redefinição enviado com sucesso." });
+        }
+        
+        console.error("Falha ao enviar e-mail de redefinição.");
+        res.status(500).json({ sucesso: false, mensagem: "Erro ao enviar e-mail. Tente novamente mais tarde." });
+
+    } catch (error) {
+        console.error("Erro ao solicitar redefinição:", error);
+        res.status(500).json({ sucesso: false, mensagem: "Erro interno do servidor." });
+    }
+});
+
+// ================================================
+// 9.2 ROTA PARA REDEFINIÇÃO DE SENHA USANDO TOKEN DO CRYPTO 
+// ================================================
+app.post("/api/usuario/redefinir-senha", async (req, res) => {
+    const { token, nova_senha } = req.body;
+
+    if (!token || !nova_senha) return res.status(400).json({ sucesso: false, mensagem: "Token e nova senha são obrigatórios." });
+
+    try {
+        // Busca registro do token
+        const resetRecord = await execSQLQuery(`
+            SELECT user_id, expires_at FROM EsqueciSenha WHERE token = '${token}'
+        `);
+
+        if (resetRecord.length === 0) {
+            return res.status(400).json({ sucesso: false, mensagem: "Link inválido ou já utilizado." });
+        }
+
+        const { user_id, expires_at } = resetRecord[0]; 
+        const expirationDate = new Date(expires_at);
+
+        // Verifica se o link expirou
+        if (expirationDate < new Date()) {
+            // Se expirou, deleta o token
+            await execSQLQuery(`DELETE FROM EsqueciSenha WHERE token = '${token}'`);
+            return res.status(400).json({ sucesso: false, mensagem: "O link de redefinição expirou. Solicite um novo." });
+        }
+
+        // Cria hash da nova senha usando BCRYPT
+        const salt = await bcrypt.genSalt(10);
+        const senhaHash = await bcrypt.hash(nova_senha, salt);
+
+        // Atualiza senha do usuário e Deleta token
+        await execSQLQuery(`
+            UPDATE Usuarios SET Senha = '${senhaHash}' WHERE id = ${user_id};
+            DELETE FROM EsqueciSenha WHERE token = '${token}';
+        `);
+        
+        // email de notificação da alteração de senha
+        const usuarioInfo = await execSQLQuery(`SELECT email, nome FROM Usuarios WHERE id = ${user_id}`);
+        if (usuarioInfo.length > 0) {
+            const primeiroNome = usuarioInfo[0].nome.split(' ')[0];
+            const emailUsuario = usuarioInfo[0].email;
+            await enviarSenhaRedefinida(emailUsuario, primeiroNome);
+        }
+
+        res.json({ sucesso: true, mensagem: "Senha redefinida com sucesso! Você pode fazer login." });
+
+    } catch (error) {
+        console.error("Erro ao redefinir senha:", error);
+        res.status(500).json({ sucesso: false, mensagem: "Erro ao redefinir senha." });
+    }
+    
+   
+});
 // ===============================
 // 10. ROTA QUE BUSCA O SALDO
 // ===============================
@@ -478,12 +602,14 @@ app.post("/api/ultimas-transacoes", async (req, res) => {
   try {
     const result = await execSQLQuery(`SELECT TOP 5 * FROM Transacoes WHERE id_usuario = ${id_usuario} AND confirmada = 1
 ORDER BY data DESC`);
-
+      
     if (result.length >= 1)
-
       res.json({ sucesso: true, dados: result })
-
+    else
+      res.json({})
+  
   }
+  
   catch (error) {
     console.log(error);
   }
@@ -668,7 +794,7 @@ app.post("/api/ia", async (req, res) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "x-ai/grok-4.1-fast:free",
+        model: "tngtech/deepseek-r1t2-chimera:free",
         messages: [
           { role: "system", content: `Você é um assistente que irá analisar gráficos de gastos e oferecer sugestões para o consumidor, usando esses dados: ${dadosSerializados}. Responda de forma resumida. Não sugira outros apps` },
           { role: "user", content: `Use apenas esses ${dadosSerializados}  para dar sugestões de economia.` }
