@@ -805,7 +805,7 @@ app.post("/api/ia", async (req, res) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "x-ai/grok-4.1-fast:free",
+        model: "tngtech/deepseek-r1t2-chimera:free",
         messages: [
           { role: "system", content: `Você é um assistente que irá analisar gráficos de gastos e oferecer sugestões para o consumidor, usando esses dados: ${dadosSerializados}. Responda de forma resumida. Não sugira outros apps` },
           { role: "user", content: `Use apenas esses ${dadosSerializados}  para dar sugestões de economia.` }
