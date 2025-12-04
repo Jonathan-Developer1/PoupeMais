@@ -52,8 +52,7 @@ const categorias = {
 let usuario = JSON.parse(localStorage.getItem('usuario'));
 
 //verificando se existe um usuário
-if(localStorage.length == 0)
-{
+if (localStorage.length == 0) {
     window.location.href = "/";
 }
 //Passa o saldo atual para a variavel
@@ -276,7 +275,7 @@ const mesAtual = new Date().getMonth();
 const anoAtual = new Date().getFullYear();
 
 
-  
+
 
 if (filtromes) {
 
@@ -294,17 +293,17 @@ if (filtromes) {
         e.preventDefault();
 
         listarTransacoes();
-         
+
 
     });
 }
 
-if(filtromes)
+if (filtromes)
     filtromes.value = mesAtual;
 
 
 if (filtroano) {
-    filtroano.value = anoAtual; 
+    filtroano.value = anoAtual;
     //Pega as mudanças no filtro de ano
     filtroano.addEventListener("change", (e) => {
         e.preventDefault();
@@ -351,7 +350,7 @@ if (formCadastro) {
         //Alteração nas datas parceladas
         const dataP = document.getElementById("data-transacao").value;
         const dataAtualizada = new Date(dataP);
-        
+
         dataAtualizada.setDate(dataAtualizada.getDate() + 1);
 
 
@@ -359,19 +358,18 @@ if (formCadastro) {
         if (parcelas > 1) {
 
             function generateNumericID() {
-            return Date.now() % 100000000;
+                return Date.now() % 100000000;
             }
             const id_parcela = generateNumericID();
 
             for (let i = 0; i < parcelaOriginal; i++) {
                 const dataParcelas = new Date(dataAtualizada);
-              if(dataParcelas.getDate() > 28)
-              {
-                dataParcelas.setDate(28);
-              }
-                
+                if (dataParcelas.getDate() > 28) {
+                    dataParcelas.setDate(28);
+                }
+
                 dataParcelas.setMonth(dataParcelas.getMonth() + i);
-                
+
 
                 transacao.push({
                     id_usuario: usuario.id,
@@ -412,8 +410,12 @@ if (formCadastro) {
             const json = await resposta.json();
             if (json.sucesso) {
                 listarTransacoes();
-                
-                alert("Transação cadastrada com sucesso!");
+
+                Swal.fire({
+                    title: "Tudo certo!",
+                    text: "Transação cadastrada com sucesso!",
+                    icon: "success"
+                });
                 formCadastro.reset(); // Limpa o formulário
                 atualizaData();
                 // Garante que o select de categoria volte ao estado inicial (disabled)
@@ -441,7 +443,7 @@ window.excluirTransacao = async function excluirTransacao(id_transacao) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ transacao_id: id_transacao})
+            body: JSON.stringify({ transacao_id: id_transacao })
         });
 
         const json = await resposta.json();
@@ -468,7 +470,7 @@ window.excluirParcelas = async function excluirParcelas(id_parcela) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ parcelas_id: id_parcela})
+            body: JSON.stringify({ parcelas_id: id_parcela })
         });
 
         const json = await resposta.json();
@@ -499,7 +501,7 @@ async function listarUltimasTransacoes() {
             });
 
         const json = await resposta.json();
-       
+
 
         if (json.sucesso) {
             addUltimas(json.dados);

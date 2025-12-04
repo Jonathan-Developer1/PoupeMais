@@ -13,20 +13,35 @@ document.querySelector(".btn-login").addEventListener("click", async (e) => {
   const dados = await resposta.json();
 
   if (dados.sucesso) {
-    alert("Login bem-sucedido!");
 
-    //Salvando dados no localStorage
-  localStorage.setItem("usuario", JSON.stringify({
-  id: dados.id,
-  nome: dados.nome,
-  email: email
-}));
+    Swal.fire({
+      title: "Login realizado!",
+      text: "Bem-vindo ao PoupeMais!",
+      icon: "success",
+      timer: 2000,
+      showConfirmButton: false
+    }).then(() => {
+      localStorage.setItem("usuario", JSON.stringify({
+        id: dados.id,
+        nome: dados.nome,
+        email: email
+      }));
 
-    window.location.href = "home";
+      window.location.href = "home";
+    });
+
   } else {
-    alert("E-mail ou senha incorretos.");
+
+    Swal.fire({
+      title: "Erro",
+      text: "E-mail ou senha incorretos.",
+      icon: "error",
+      confirmButtonText: "OK"
+    });
+
   }
 });
+
 
 // Link botão de cadastro
 document.querySelector('.btn-cadastro').addEventListener('click', function () {
