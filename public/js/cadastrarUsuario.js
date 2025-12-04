@@ -7,7 +7,11 @@ document.querySelector(".btn-cadastro").addEventListener("click", async () => {
     const senha = document.getElementById("senha").value;
 
     if (!nome || !email || !senha) {
-        alert("Preencha todos os campos!");
+         Swal.fire({
+            icon: "warning",
+            title: "Campos obrigatórios",
+            text: "Preencha todos os campos!",
+        });
         return;
     }
 
@@ -25,7 +29,11 @@ console.log("Resposta servidor:", resposta);
     const data = await resposta.json();
 
     if (data.sucesso) {
-        alert("Código enviado para seu e-mail!");
+        Swal.fire({
+            icon: "success",
+            title: "Código enviado!",
+            text: "Verifique seu e-mail.",
+        });
 
         document.getElementById("verificacao").style.display = "block";
         const envio = document.querySelector(".btn-cadastro");
@@ -34,7 +42,11 @@ console.log("Resposta servidor:", resposta);
         
 
     } else {
-        alert(data.mensagem || "Erro ao enviar código.");
+        Swal.fire({
+            icon: "error",
+            title: "Erro",
+            text: data.mensagem || "Erro ao enviar código.",
+        });
     }
     console.log("JSON recebido:", data);
 
@@ -91,7 +103,11 @@ document.getElementById("btn-confirmar").addEventListener("click", async () => {
 
 
     if (!codigo) {
-        alert("Digite o código recebido!");
+        Swal.fire({
+            icon: "warning",
+            title: "Código obrigatório",
+            text: "Digite o código recebido!",
+        });
         return;
     }
 
@@ -110,7 +126,11 @@ document.getElementById("btn-confirmar").addEventListener("click", async () => {
     const data = await resposta.json();
 
     if (!data.validado) {
-        alert("Código incorreto!");
+       Swal.fire({
+            icon: "error",
+            title: "Código incorreto!",
+            text: "Tente novamente.",
+        });
         return;
     }
     console.log("JSON recebido:", data);
@@ -126,9 +146,18 @@ document.getElementById("btn-confirmar").addEventListener("click", async () => {
     const resultado = await respostaCadastro.json();
 
     if (resultado.sucesso) {
-        alert("Usuário cadastrado com sucesso!");
-        window.location.href = "login";
+        Swal.fire({
+            icon: "success",
+            title: "Cadastro realizado!",
+            text: "Usuário cadastrado com sucesso!",
+        }).then(() => {
+            window.location.href = "login";
+        });
     } else {
-        alert(resultado.mensagem || "Erro ao cadastrar usuário.");
+        Swal.fire({
+            icon: "error",
+            title: "Erro ao cadastrar",
+            text: resultado.mensagem || "Erro ao cadastrar usuário.",
+        });
     }
 });

@@ -25,8 +25,7 @@ const container = document.getElementById("historicoSimulacao");
 const usuario = JSON.parse(localStorage.getItem('usuario'));
 //verificando se existe um usuário
 
-if(localStorage.length == 0)
-{
+if (localStorage.length == 0) {
     window.location.href = "/";
 }
 function getTipoTexto(tipo) {
@@ -185,7 +184,11 @@ async function criarSimulacao() {
     const tipo = document.querySelector("input[name='simulacaoTipo']:checked");
 
     if (!nome || !saldoInicial || !periodo || !porcentagem || !tipo) {
-        alert("Preencha todos os campos obrigatórios!");
+        Swal.fire({
+            icon: "warning",
+            title: "Campos obrigatórios",
+            text: "Preencha todos os campos!",
+        });
         return;
     }
 
@@ -214,6 +217,14 @@ async function criarSimulacao() {
         });
 
         const simSalva = await res.json(); // Recebe simulação salva com id_simulacao real
+
+         Swal.fire({
+            icon: "success",
+            title: "Simulação criada!",
+            text: "A simulação foi registrada com sucesso.",
+            timer: 2000,
+            showConfirmButton: false
+        });
 
         // Atualiza histórico completo
         await renderizarHistorico();
