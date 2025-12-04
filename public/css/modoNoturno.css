@@ -243,3 +243,7 @@ body.dark-mode .tabela-noturno {
     color: var(--simulacao-color) !important;
     background-color: var(--tabela-transacoes-color) !important;
 }
+
+header{
+    background-color: #FFFEF2;
+}
