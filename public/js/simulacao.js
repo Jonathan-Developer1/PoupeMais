@@ -275,13 +275,6 @@ async function criarSimulacao() {
 
     if (!nome || (!saldoInicial && tipo !== "3") || !periodo || !porcentagem) {
         alert("Preencha todos os campos obrigatórios!");
-    if (!nome || !saldoInicial || !periodo || !porcentagem || !tipo) {
-        Swal.fire({
-            icon: "warning",
-            title: "Campos obrigatórios",
-            text: "Preencha todos os campos!",
-        });
-        return;
     }
 
     let aporte_necessario = tipo === "3" ? window.aporteMetaAtual || calcularAporteNecessario() : 0;
@@ -314,8 +307,7 @@ async function criarSimulacao() {
             body: JSON.stringify(novaSimulacaoDB)
         });
         const novaSimulacaoSalva = await res.json();
-
-        const simSalva = await res.json(); // Recebe simulação salva com id_simulacao real
+     // Recebe simulação salva com id_simulacao real
 
          Swal.fire({
             icon: "success",
@@ -381,4 +373,4 @@ document.getElementById("botao-simulacao").addEventListener("click", executarSim
 window.onload = () => {
     atualizarCampos();
     renderizarHistorico();
-}}
+}

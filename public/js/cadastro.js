@@ -6,6 +6,7 @@ export async function cadastrarTransacao(objeto) {
 
   const tabela = document.getElementById("tabela-cadastro");
 
+  
   if(tabela)
   tabela.innerHTML = ""; // limpa antes
 
