@@ -729,6 +729,9 @@ app.get("/perfil", (req, res) => {
 app.get("/cadastro", (req, res) => {
   res.sendFile(path.join(__dirname, "../public", "cadastrarUsuario.html"));
 });
+app.get("/alterarsenha", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public", "alterarSenha.html"));
+});
 
 // ===============================
 // ABERTURA SERVIDOR
