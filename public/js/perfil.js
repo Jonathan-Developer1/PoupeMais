@@ -6,8 +6,7 @@ const usuarioID = usuario.id;
 console.log(usuario.id);
 
 //verificando se existe um usuário
-if(localStorage.length == 0)
-{
+if (localStorage.length == 0) {
     window.location.href = "/";
 }
 // ===============================
@@ -62,7 +61,8 @@ document.getElementById("botao-alterar").addEventListener("click", async () => {
 // 3. LOGOUT
 // ===============================
 
-window.sair = function sair()
-{
+window.sair = function sair() {
     localStorage.clear();
 }
+
+
