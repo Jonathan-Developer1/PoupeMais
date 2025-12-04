@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PoupeMais - Simulação</title>
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="css/modoNoturno.css">
@@ -17,7 +17,6 @@
     <link rel="stylesheet" href="css/simulacao.css">
     <link rel="stylesheet" href="css/footer.css">
     <link rel="shortcut icon" href="img/Porquinho_PM.png" type="image/x-icon">
-
 </head>
 
 <body>
@@ -54,7 +53,6 @@
         </nav>
     </header>
 
-    <!--SIMULAÇÃO FINANCEIRA-->
     <h1><b id="nova-simulacao">SIMULAÇÃO FINANCEIRA</b></h1>
     <h3>Planeje seus gastos e descubra como alcançar seus objetivos.</h3>
 
@@ -69,60 +67,63 @@
                 </div>
                 <div id="saldon">
                     <label>Saldo inicial <span id="obrigatorio">*</span></label>
-                    <input type="text" placeholder="R$" class="input-estilo-money" id="saldoInicial">
+                    <input type="number" placeholder="R$" class="input-estilo-money" id="saldoInicial">
                 </div>
             </div>
 
             <div class="linha">
                 <div>
-                    <label>Periodo da simulação <span id="obrigatorio">*</span></label>
-                    <input type="number" placeholder="(Meses)" class="input-estilo-money" id="periodoSimulacao">
+                    <label>Período da simulação (meses) <span id="obrigatorio">*</span></label>
+                    <input type="number" placeholder="Meses" class="input-estilo-money" id="periodoSimulacao">
                 </div>
                 <div id="porcentagem">
                     <label>Porcentagem da simulação <span id="obrigatorio">*</span></label>
-                    <input type="text" placeholder="%" class="input-estilo-money" id="porcentagemSimulacao">
+                    <input type="number" placeholder="%" class="input-estilo-money" id="porcentagemSimulacao">
+                </div>
+
+            </div>
+
+            <div class="linha">
+                <div id="campoAporte" style="display:none;">
+                    <label>Aporte Mensal: <span id="obrigatorio">*</span></label>
+                    <input type="number" id="aporte" class="input-estilo-money" placeholder="Ex: 100">
+                </div>
+
+                <div id="campoMeta" style="display:none;">
+                    <label>Meta desejada: <span id="obrigatorio">*</span></label>
+                    <input type="number" id="meta" class="input-estilo-money" placeholder="Ex: 10000">
                 </div>
             </div>
 
             <div>
                 <label id="tipo">Tipo da simulação <span id="obrigatorio">*</span></label>
                 <div class="check">
-                    <div id="RedDesp">
-                        <input type="radio" name="simulacaoTipo" value="1">
-                        <label>Redução de despesas</label>
+                    <div>
+                        <input type="radio" name="simulacaoTipo" value="1" checked>
+                        <label>Juros Compostos</label>
                     </div>
-                    <div id="AumReceita">
+                    <div>
                         <input type="radio" name="simulacaoTipo" value="2">
-                        <label>Aumento de receitas</label>
+                        <label>Juros Compostos + Aportes</label>
                     </div>
-                </div>
-
-                <div class="check">
-                    <div id="InvRendim">
+                    <div>
                         <input type="radio" name="simulacaoTipo" value="3">
-                        <label>Investimento com rendimento</label>
-                    </div>
-                    <div id="MetEco">
-                        <input type="radio" name="simulacaoTipo" value="4">
-                        <label>Meta de economia</label>
+                        <label>Cálculo de Meta</label>
                     </div>
                 </div>
             </div>
 
             <button type="button" id="botao-simulacao">Criar simulação</button>
-
-
         </div>
     </div>
 
-    <!--RESULTADO DA SIMULAÇÃO-->
+    <!-- RESULTADO DA SIMULAÇÃO -->
     <div class="container-fluid">
         <div id="resultado">
             <h3 class="sub-titulos">RESULTADO DA SIMULAÇÃO</h3>
             <div class="conteudo-resultado">
                 <div class="dados-simulacao">
-                    <h5 id="resMensagem">AQUI APARECERÁ O RESULTADO DA SIMULÇÃO</h5>
-                    <!-- Valores detalhados -->
+                    <h5 id="resMensagem">AQUI APARECERÁ O RESULTADO DA SIMULAÇÃO</h5>
                     <h5><span id="nomeSimul"></span></h5>
                     <h2>R$ <span id="resValor">0,00</span></h2>
                     <h5>Saldo Final: <span id="resTotal">0,00</span></h5>
@@ -134,29 +135,25 @@
         </div>
     </div>
 
-    <!--COMPARATIVO VISUAL-->
+    <!-- COMPARATIVO VISUAL -->
     <div class="comparativos-wrapper">
         <div id="comparativo">
             <h3 class="sub-titulos">COMPARATIVO VISUAL</h3>
-
             <div class="linha-graficos">
                 <div class="grafico-pizza">
                     <canvas id="grafico2"></canvas>
                     <h5>Com Simulação</h5>
                 </div>
             </div>
-
             <div class="centro-h5">
                 <h5><span class="valor" id="valorTotal">+0,00</span></h5>
             </div>
         </div>
 
-        <!--HISTÓRICO DE SIMULAÇÕES-->
+        <!-- HISTÓRICO DE SIMULAÇÕES -->
         <div id="historico">
             <h3 class="sub-titulos">HISTÓRICO DE SIMULAÇÕES</h3>
-            <div class="div-com-scroll" id="historicoSimulacao">
-                <!-- JS insere os cards aqui -->
-            </div>
+            <div class="div-com-scroll" id="historicoSimulacao"></div>
             <hr id="hr-historico">
             <a href="#nova-simulacao" id="botao-n-simulacao">
                 <button type="submit" id="botao-nova-simulacao">Nova simulação</button>
@@ -165,59 +162,38 @@
     </div>
     <hr>
 
-     <footer class="conteudo-final">
-            <div id="footer_content">
-                <div id="footer_contacts">
-                    <img src="img/PoupeMais-logo.png" alt="logo">
-
-                </div>
-
-                <ul class="footer-list">
-                    <li>
-                        <h3>Menu</h3>
-                    </li>
-                    <li>
-                        <a href="home" class="footer-link">Inicio</a>
-                    </li>
-                    <li>
-                        <a href="simulacao" class="footer-link">Simulações</a>
-                    </li>
-                    <li>
-                        <a href="graficos" class="footer-link">Gráficos</a>
-                    </li>
-                </ul>
-
-                <ul class="footer-list">
-                    <li>
-                        <h3>Graficos</h3>
-                    </li>
-                    <li>
-                        <a href="graficos" class="footer-link">Evolução financeira</a>
-                    </li>
-                    <li>
-                        <a href="graficos" class="footer-link">Historico de período</a>
-                    </li>
-                    <li>
-                        <a href="graficos" class="footer-link">Resumo total</a>
-                    </li>
-                </ul>
-
-                <div id="footer_subscribe">
-                    <h3>Fale conosco</h3>
-                    <p>
-                       <strong>E-mail:</strong> poupemais@poupemais.com.br
-                    </p>
-                </div>
+    <footer class="conteudo-final">
+        <div id="footer_content">
+            <div id="footer_contacts">
+                <img src="img/PoupeMais-logo.png" alt="logo">
             </div>
-            <div id="footer_copyright">
-                &#169
-                PoupeMais | Todos os direitos reservados.
+            <ul class="footer-list">
+                <li>
+                    <h3>Menu</h3>
+                </li>
+                <li><a href="home" class="footer-link">Início</a></li>
+                <li><a href="simulacao" class="footer-link">Simulações</a></li>
+                <li><a href="graficos" class="footer-link">Gráficos</a></li>
+            </ul>
+            <ul class="footer-list">
+                <li>
+                    <h3>Gráficos</h3>
+                </li>
+                <li><a href="graficos" class="footer-link">Evolução financeira</a></li>
+                <li><a href="graficos" class="footer-link">Histórico de período</a></li>
+                <li><a href="graficos" class="footer-link">Resumo total</a></li>
+            </ul>
+            <div id="footer_subscribe">
+                <h3>Fale conosco</h3>
+                <p><strong>E-mail:</strong> poupemais@poupemais.com.br</p>
             </div>
-        </footer>
+        </div>
+        <div id="footer_copyright">&#169; PoupeMais | Todos os direitos reservados.</div>
+    </footer>
 
+    <script src="js/simulacao.js"></script>
+    <script src="js/home.js" type="module"></script>
+    <script src="js/modoNoturno.js"></script>
 </body>
-<script src="js/simulacao.js"></script>
-<script src="js/home.js" type="module"></script>
-<script src="js/modoNoturno.js"></script>
 
 </html>

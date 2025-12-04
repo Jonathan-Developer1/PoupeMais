@@ -172,7 +172,7 @@ app.post("/api/cadastrarUsuario", async (req, res) => {
 // 8. ROTA QUE BUSCA DADOS DO USUÁRIO
 // ===============================
 app.get("/api/usuario/:id_usuario", async (req, res) => {
-  const id  = req.params.id_usuario;
+  const id = req.params.id_usuario;
   try {
     const result = await execSQLQuery(`
       SELECT Nome, Email FROM Usuarios WHERE id = ${id}
@@ -551,116 +551,105 @@ app.get("/api/grafico/categorias/:id_usuario/:tipo", async (req, res) => {
   }
 });
 
-// ===============================
-// 20. ROTA PARA SALVAR SIMULAÇÕES
-// ===============================
-app.post("/api/simulacao/salvar", async (req, res) => {
-  const {
-    nome_simulacao,
-    saldo_inicial,
-    periodo,
-    porcentagem,
-    tipo_simulacao,
-    dados_linha,
-    id_usuario
-  } = req.body;
-
-  try {
-    const result = await execSQLQuery(`
-   INSERT INTO Simulacoes (
-    nome_simulacao,
-    saldo_inicial,
-    periodo,
-    porcentagem,
-    tipo_simulacao,
-    dados_linha,
-    data_criacao,
-    id_usuario
-   )
-   VALUES (
-    '${nome_simulacao}',
-    ${saldo_inicial},
-    ${periodo},
-    ${porcentagem},
-    ${tipo_simulacao},
-    '${dados_linha}',
-    GETDATE(),
-    ${id_usuario}
-   );
-   SELECT * FROM Simulacoes WHERE id_simulacao = SCOPE_IDENTITY();
-  `);
-
-    res.json(result[0]);
-
-  } catch (error) {
-    console.error("Erro ao salvar simulação:", error);
-    res.status(500).json({ erro: error.message });
-  }
-});
 
 // ===============================
 // 21. ROTAS PARA SIMULAÇÕES
 // ===============================
+// ===============================
+// ROTAS PARA SIMULAÇÕES
+// ===============================
+
+// SALVAR SIMULAÇÃO
+app.post("/api/simulacao/salvar", async (req, res) => {
+    const {
+        nome_simulacao,
+        saldo_inicial,
+        periodo,
+        porcentagem,
+        tipo_simulacao,
+        aporte,
+        meta,
+        aporte_necessario,
+        dados_linha,
+        id_usuario
+    } = req.body;
+
+    try {
+        const result = await execSQLQuery(`
+            INSERT INTO Simulacoes (
+                nome_simulacao,
+                saldo_inicial,
+                periodo,
+                porcentagem,
+                tipo_simulacao,
+                aporte,
+                meta,
+                aporte_necessario,
+                dados_linha,
+                id_usuario,
+                data_criacao
+            )
+            VALUES (
+                '${nome_simulacao}',
+                ${saldo_inicial},
+                ${periodo},
+                ${porcentagem},
+                ${tipo_simulacao},
+                ${aporte},
+                ${meta},
+                ${aporte_necessario},
+                '${dados_linha}',
+                ${id_usuario},
+                GETDATE()
+            );
+            SELECT * FROM Simulacoes WHERE id_simulacao = SCOPE_IDENTITY();
+        `);
+
+        res.json(result[0]);
+    } catch (error) {
+        console.error("Erro ao salvar simulação:", error);
+        res.status(500).json({ erro: error.message });
+    }
+});
+
+// LISTAR SIMULAÇÕES DE UM USUÁRIO
 app.get("/api/simulacao/listar/:id_usuario", async (req, res) => {
-  const id_usuario = req.params.id_usuario;
+    const id_usuario = req.params.id_usuario;
 
-  try {
-    const result = await execSQLQuery(`
-   SELECT 
-    id_simulacao,
-    nome_simulacao,
-    saldo_inicial,
-    periodo,
-    porcentagem,
-    tipo_simulacao,
-    data_criacao
-   FROM Simulacoes
-   WHERE id_usuario = ${id_usuario}
-   ORDER BY data_criacao DESC
-  `);
-
-    res.json(result);
-
-  } catch (error) {
-    console.error("Erro ao listar simulações:", error);
-    res.status(500).json({ erro: error.message });
-  }
+    try {
+        const result = await execSQLQuery(`
+            SELECT * 
+            FROM Simulacoes
+            WHERE id_usuario = ${id_usuario}
+            ORDER BY data_criacao DESC
+        `);
+        res.json(result);
+    } catch (error) {
+        console.error("Erro ao buscar simulações:", error);
+        res.status(500).json({ erro: error.message });
+    }
 });
 
-app.get("/api/simulacao/:id_simulacao", async (req, res) => {
-  const id = req.params.id_simulacao;
-
-  try {
-    const result = await execSQLQuery(`
-   SELECT *
-   FROM Simulacoes
-   WHERE id_simulacao = ${id}
-  `);
-
-    res.json(result[0] || {});
-
-  } catch (error) {
-    console.error("Erro ao buscar simulação:", error);
-    res.status(500).json({ erro: error.message });
-  }
-});
-
+// EXCLUIR SIMULAÇÃO
 app.post("/api/simulacao/excluir", async (req, res) => {
-  const { id_simulacao } = req.body;
+    const { id_simulacao } = req.body;
 
-  try {
-    await execSQLQuery(`
-   DELETE FROM Simulacoes
-   WHERE id_simulacao = ${id_simulacao}
-  `);
+    if (!id_simulacao) {
+        return res.status(400).json({ sucesso: false, erro: "ID da simulação é obrigatório" });
+    }
 
-    res.json({ sucesso: true });
-
-  } catch (error) {
-    console.error("Erro ao excluir simulação:", error);
-    res.status(500).json({ erro: error.message });
-  }
+    try {
+        await execSQLQuery(`
+            DELETE FROM Simulacoes
+            WHERE id_simulacao = ${id_simulacao}
+        `);
+        res.json({ sucesso: true });
+    } catch (error) {
+        console.error("Erro ao excluir simulação:", error);
+        res.status(500).json({ sucesso: false, erro: error.message });
+    }
 });
+
 
 // ===============================
 // 22. ROTA PARA A API DE IA
