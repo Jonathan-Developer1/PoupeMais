@@ -67,7 +67,7 @@ footer {
 
 body.dark-mode label,
 body.dark-mode .label-noturno {
-    color: var(--text-color) !important;
+    color: var(--titulo-color) !important;
 }
 
 .card h1,
@@ -219,4 +219,20 @@ body.dark-mode option:hover {
 /* Ícone no modo escuro (fica branco) */
 .dark-mode #inc-user {
     filter: brightness(0) invert(1);  
+}
+
+/* Texto dentro dos cards de histórico */
+.card-item .card-text h4,
+.card-item .card-text p,
+.card-item .card-text span,
+.card-item .card-text b {
+    color: var(--titulo-color) !important;
+}
+
+/* Modo escuro */
+body.dark-mode .card-item .card-text h4,
+body.dark-mode .card-item .card-text p,
+body.dark-mode .card-item .card-text span,
+body.dark-mode .card-item .card-text b {
+    color: var(--titulo-color) !important;
 }
