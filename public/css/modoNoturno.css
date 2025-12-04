@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+/* Tema Claro (padrão) */
+:root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --card-color: #f4f4f4;
+}
+
+/* Tema Escuro */
+.dark-mode {
+    --bg-color: #121212;
+    --text-color: #ffffff;
+    --card-color: #1e1e1e;
+}
+
+/* Aplicando as variáveis */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: Arial, sans-serif;
+}
+
+.card {
+    background-color: var(--card-color);
+    padding: 20px;
+    border-radius: 8px;
+}

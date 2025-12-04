@@ -6,8 +6,7 @@ const usuarioID = usuario.id;
 console.log(usuario.id);
 
 //verificando se existe um usuário
-if(localStorage.length == 0)
-{
+if (localStorage.length == 0) {
     window.location.href = "/";
 }
 // ===============================
@@ -33,10 +32,35 @@ document.getElementById("botao-alterar").addEventListener("click", async () => {
     const novaSenha = document.getElementById("nova-senha").value;
 
     if (senhaAtual === "" || novaSenha === "") {
-        alert("Preencha todos os campos!");
+        Swal.fire({
+            icon: "warning",
+            title: "Campos obrigatórios",
+            text: "Preencha todos os campos!",
+        });
         return;
     }
 
+    // Pergunta se deseja realmente alterar a senha 
+    const confirmacao = await Swal.fire({
+        title: "Confirmar alteração?",
+        text: "Deseja realmente alterar sua senha?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Sim, alterar",
+        cancelButtonText: "Cancelar"
+    });
+
+    if (!confirmacao.isConfirmed) {
+        Swal.fire({
+            title: "Operação cancelada",
+            icon: "info",
+            timer: 1500,
+            showConfirmButton: false
+        });
+        return;
+    }
+
+    // Se confirmar, envia pro backend
     const res = await fetch("/api/usuario/alterar-senha", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -50,11 +74,22 @@ document.getElementById("botao-alterar").addEventListener("click", async () => {
     const resposta = await res.json();
 
     if (resposta.sucesso) {
-        alert("Senha alterada com sucesso!");
+        Swal.fire({
+            icon: "success",
+            title: "Senha alterada!",
+            text: "Sua senha foi modificada com sucesso.",
+            timer: 2000,
+            showConfirmButton: false
+        });
+
         document.getElementById("senha-atual").value = "";
         document.getElementById("nova-senha").value = "";
     } else {
-        alert(resposta.mensagem);
+        Swal.fire({
+            icon: "error",
+            title: "Erro",
+            text: resposta.mensagem,
+        });
     }
 });
 
@@ -62,7 +97,8 @@ document.getElementById("botao-alterar").addEventListener("click", async () => {
 // 3. LOGOUT
 // ===============================
 
-window.sair = function sair()
-{
+window.sair = function sair() {
     localStorage.clear();
 }
+
+
