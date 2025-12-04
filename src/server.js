@@ -218,6 +218,37 @@ app.post("/api/usuario/alterar-senha", async (req, res) => {
   }
 });
 
+// ===========================================
+// 9. ROTA PARA ALTERAÇÃO DE ESQUECIMENTO SENHA
+// ===========================================
+app.post("/api/usuario/alterar-esquecimento-senha", async (req, res) => {
+  const { email, nova_senha } = req.body;
+
+ 
+
+  try {
+    // verificar senha atual
+    const usuario = await execSQLQuery(`
+      SELECT id FROM Usuarios WHERE email = '${email}'
+    `);
+
+    if (usuario.length === 0)
+      return res.json({ sucesso: false, mensagem: "Usuário não encontrado." });
+
+    // atualizar senha
+    await execSQLQuery(`
+      UPDATE Usuarios 
+      SET Senha = '${nova_senha}'
+      WHERE id = ${usuario[0].id}
+    `);
+
+    res.json({ sucesso: true });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ erro: "Erro ao alterar senha" });
+  }
+});
 
 // ===============================
 // 10. ROTA QUE BUSCA O SALDO

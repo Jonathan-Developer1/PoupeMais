@@ -152,7 +152,11 @@ main hr {
 .btn-cadastro:hover {
   background-color: #93c4ae;
 }
-
+#input-esqueceu a
+{
+  font-size: .9rem;
+  color: #09be6d;
+}
 /*Media Queries*/
 @media (max-width: 1840px) {
     .left::after {

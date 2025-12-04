@@ -108,7 +108,7 @@ main hr {
 }
 
 /* Botão acessar (login) */
-.btn-login {
+.btn-alterar {
   width: 100%;
   background-color: #09be6d;
   border: 2px solid #51a07d;
@@ -123,12 +123,12 @@ main hr {
   transition: 0.5s;
 }
 
-.btn-login a{
+.btn-alterar a{
   color: white;
   text-decoration: none;
 }
 
-.btn-login:hover {
+.btn-alterar:hover {
   background-color: #068348;
 }
 
@@ -311,7 +311,7 @@ main hr {
     font-size: 16px;
   }
 
-  .btn-login,
+  .btn-alterar,
   .btn-cadastro {
     padding: 12px;
     font-size: 16px;

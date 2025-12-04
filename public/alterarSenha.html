@@ -25,17 +25,15 @@
 
   <main>
     <div class="sair">
-      <a href="index.html">
+      <a href="/login">
         <img src="img/sair.png" alt="Sair">
       </a>
     </div>
 
-    <h1>ALTERAR SENHA</h1>
+    <h1>Alterar Senha</h1>
     <hr>
 
     <form id="loginForm" class="form">
-
-
       <div class="holders">
         <label for="cpf">Digite seu e-mail:</label>
         <input type="text" id="email-alterar" placeholder="Insira seu e-mail" required>
@@ -44,10 +42,11 @@
       </div>
 
       <div class="alterar">
-        <button class="btn-login"><a href="home">ALTERAR</a></button>
+        <button class="btn-alterar" id="btn-alterar"><a>ALTERAR</a></button>
       </div>
     </form>
   </main>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 </body>
 <script src="js/alterarSenha.js"></script>
 
