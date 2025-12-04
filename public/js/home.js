@@ -502,7 +502,6 @@ async function listarUltimasTransacoes() {
         const json = await resposta.json();
 
         if (json.sucesso) {
-            console.log(json.sucesso);
             addUltimas(json.dados);
         }
         else

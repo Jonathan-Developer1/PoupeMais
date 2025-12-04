@@ -77,8 +77,6 @@ export async function addUltimas(objeto)
 {
 
   let tabelaUltimas = document.getElementById("tabela-ultimas");
-    console.log("recebido");
-    console.log(objeto);
 if(tabelaUltimas)
   tabelaUltimas.innerHTML = "";
     
