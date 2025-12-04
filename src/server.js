@@ -509,12 +509,14 @@ app.post("/api/ultimas-transacoes", async (req, res) => {
   try {
     const result = await execSQLQuery(`SELECT TOP 5 * FROM Transacoes WHERE id_usuario = ${id_usuario} AND confirmada = 1
 ORDER BY data DESC`);
-
+      
     if (result.length >= 1)
-
       res.json({ sucesso: true, dados: result })
-
+    else
+      res.json({})
+  
   }
+  
   catch (error) {
     console.log(error);
   }
