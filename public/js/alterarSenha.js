@@ -1,72 +1,42 @@
-document.getElementById("btn-alterar").addEventListener("click", async (e) => {
+
+document.getElementById("btn-solicitar").addEventListener("click", async (e) => {
 
     e.preventDefault();
-    const email = document.getElementById("email-alterar").value;
-    const novaSenha = document.getElementById("senha-alterar").value;
+    
+    const email = document.getElementById("email-redefinir").value; 
 
-    if (novaSenha === "" || email === "") {
+    if (email === "") {
         Swal.fire({
             icon: "warning",
-            title: "Campos obrigatórios",
-            text: "Preencha todos os campos!",
+            title: "Campo obrigatório",
+            text: "Por favor, preencha seu e-mail!",
         });
         return;
     }
 
-    // Pergunta se deseja realmente alterar a senha 
-    const confirmacao = await Swal.fire({
-        title: "Confirmar alteração?",
-        text: "Deseja realmente alterar sua senha?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonText: "Sim, alterar",
-        cancelButtonText: "Cancelar"
+    // loading enquanto espera o envio do e-mail
+    Swal.fire({
+        title: 'Enviando link...',
+        text: 'Aguarde um momento',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading()
+        }
     });
 
-    if (!confirmacao.isConfirmed) {
-        Swal.fire({
-            title: "Operação cancelada",
-            icon: "info",
-            timer: 1500,
-            showConfirmButton: false
-        });
-        return;
-    }
-
-    // Se confirmar, envia pro backend
-    const res = await fetch("/api/usuario/alterar-esquecimento-senha", {
+    // Envia o email para a nova rota do backend
+    const res = await fetch("/api/usuario/solicitar-redefinicao", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            email: email,
-            nova_senha: novaSenha
-        })
+        body: JSON.stringify({ email: email })
     });
 
-    const resposta = await res.json();
 
-    if (resposta.sucesso) {
-        Swal.fire({
-            icon: "success",
-            title: "Senha alterada!",
-            text: "Sua senha foi modificada com sucesso.",
-            timer: 2000,
-            showConfirmButton: false,
-        });
-
-        setTimeout(() => {
-        window.location.href = "/login";
-    }, 2000);
-    
-        return;
-       
-    } else {
-        Swal.fire({
-            icon: "error",
-            title: "Erro",
-            text: resposta.mensagem,
-        });
-    }
-
-    
+    Swal.fire({
+        icon: "success",
+        title: "Link enviado!",
+        text: "Verifique sua caixa de entrada. O link de redefinição foi enviado para o seu e-mail.",
+        timer: 3500,
+        showConfirmButton: false,
+    });
 });

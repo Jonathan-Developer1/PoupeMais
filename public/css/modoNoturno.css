@@ -17,6 +17,7 @@
     --header-color: #141615;
     --footer-color: #000000;
     --simulacao-color: #1e1e1e;
+    --tabela-transacoes-color: whitesmoke;
 }
 
 /* Aplicando as variáveis */
@@ -235,4 +236,14 @@ body.dark-mode .card-item .card-text p,
 body.dark-mode .card-item .card-text span,
 body.dark-mode .card-item .card-text b {
     color: var(--titulo-color) !important;
+}
+
+/* Tabela ultimas transações no modo escuro */
+body.dark-mode .tabela-noturno {
+    color: var(--simulacao-color) !important;
+    background-color: var(--tabela-transacoes-color) !important;
+}
+
+header{
+    background-color: #FFFEF2;
 }
