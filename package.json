@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/Jonathan-Developer1/PoupeMais#readme",
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "crypto": "^1.0.1",
     "debug": "^4.4.3",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",

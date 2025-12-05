@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PoupeMais - Redefinir Senha</title>
+    <title>PoupeMais - Nova Senha</title>
     <link rel="stylesheet" href="css/alterarSenha.css">
     <link rel="shortcut icon" href="img/Porquinho_PM.png" type="image/x-icon">
 </head>
@@ -30,23 +30,26 @@
             </a>
         </div>
 
-        <h1>Redefinir Senha</h1>
+        <h1>Definir Nova Senha</h1>
         <hr>
 
-        <form id="redefinirForm" class="form">
-            <p style="color: #444; margin-bottom: 25px;">Informe seu e-mail de cadastro. Enviaremos um link para redefinição.</p>
+        <form id="novaSenhaForm" class="form">
+            <p style="color: #444; margin-bottom: 25px;">Digite e confirme sua nova senha para finalizar a redefinição.</p>
             <div class="holders">
-                <label for="email-redefinir">E-mail:</label>
-                <input type="email" id="email-redefinir" placeholder="Insira seu e-mail" required>
+                <label for="nova-senha">Nova Senha:</label>
+                <input type="password" id="nova-senha" placeholder="Digite sua nova senha" required>
+                
+                <label for="confirma-senha">Confirme a Nova Senha:</label>
+                <input type="password" id="confirma-senha" placeholder="Repita a senha" required>
             </div>
 
             <div class="alterar">
-                <button class="btn-alterar" id="btn-solicitar"><a>ENVIAR LINK</a></button>
+                <button class="btn-alterar" id="btn-finalizar"><a>DEFINIR SENHA</a></button>
             </div>
         </form>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 </body>
-<script src="js/alterarSenha.js"></script>
+<script src="js/alterarSenha2.js"></script>
 
 </html>

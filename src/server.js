@@ -7,6 +7,11 @@ import dotenv from "dotenv";
 import { enviarCodigo } from "../public/js/email.js";
 import { marked, Marked } from "marked";
 import { enviarBoasVindas } from "../public/js/email.js";
+import { enviarLinkRedefinicao, enviarSenhaRedefinida} from "../public/js/email.js"; 
+
+import crypto from 'crypto';
+import bcrypt from 'bcrypt';
+
 
 dotenv.config(); // carrega as variáveis do .env
 
@@ -71,33 +76,53 @@ export async function execSQLQuery(sqlQuery) {
 app.use(express.json());
 
 // ===============================
-// 4. ROTA DE LOGIN
+// 4. ROTA DE LOGIN COM BYCRPTO E CRYPTO
 // ===============================
 app.post("/login.html", async (req, res) => {
-  const { email, senha } = req.body;
+    const { email, senha } = req.body; 
 
-  try {
-    const result = await execSQLQuery(
-      `SELECT * FROM Usuarios WHERE Email='${email}' AND Senha='${senha}'`
-    );
+    try {
+        // Busca o usuário apenas pelo Email para pegar o hash da senha salva
+        const result = await execSQLQuery(
+            `SELECT id, Senha, saldo FROM Usuarios WHERE Email='${email}'`
+        );
 
-    if (result.length > 0) {
-      res.json({
-        sucesso: true,
-        saldo: result[0].saldo,
-        id: result[0].id
-      });
-    } else {
-      res.json({ sucesso: false });
+        if (result.length === 0) {
+            return res.json({ sucesso: false, mensagem: "Email ou senha incorretos." });
+        }
+
+        const usuario = result[0];
+        const hashSalvoNoDB = usuario.Senha; // Hash longo (ou '1234' para usuários antigos)
+        let senhaCorreta = false;
+        
+        if (hashSalvoNoDB && hashSalvoNoDB.startsWith('$2b$')) {
+            senhaCorreta = await bcrypt.compare(senha, hashSalvoNoDB);
+        } else if (hashSalvoNoDB === senha) {
+            // Se NÃO for um hash (sendo texto puro), faz a comparação simples.
+            // "porta de trás" para logar usuários antigos.
+            senhaCorreta = true;
+        }
+
+
+        if (senhaCorreta) {
+            res.json({
+                sucesso: true,
+                saldo: usuario.saldo,
+                id: usuario.id
+            });
+        } else {
+            // Senha incorreta
+            res.json({ sucesso: false, mensagem: "Email ou senha incorretos." });
+        }
+        
+    } catch (error) {
+        console.error("Erro na Rota de Login:", error);
+        res.status(500).json({ erro: "Erro ao consultar o banco" });
     }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ erro: "Erro ao consultar o banco" });
-  }
 });
 
 // ===============================
-// 5. ROTA DE CADASTRO DE USUÁRIO E ENVIO DE CÓDIGO
+// 5. ROTA DE CADASTRO DE USUÁRIO E ENVIO DE CÓDIGO 
 // ===============================
 app.post("/api/enviarCodigo", async (req, res) => {
   const { email } = req.body;
@@ -136,7 +161,7 @@ app.post("/api/verificarCodigo", (req, res) => {
 });
 
 // ===============================
-// 7. CADASTRO DE USUÁRIO
+// 7. CADASTRO DE USUÁRIO SEM BYCRPTO E CRYPTO
 // ===============================
 app.post("/api/cadastrarUsuario", async (req, res) => {
   const { nome, email, senha } = req.body;
@@ -172,7 +197,7 @@ app.post("/api/cadastrarUsuario", async (req, res) => {
 // 8. ROTA QUE BUSCA DADOS DO USUÁRIO
 // ===============================
 app.get("/api/usuario/:id_usuario", async (req, res) => {
-  const id  = req.params.id_usuario;
+  const id = req.params.id_usuario;
   try {
     const result = await execSQLQuery(`
       SELECT Nome, Email FROM Usuarios WHERE id = ${id}
@@ -218,38 +243,106 @@ app.post("/api/usuario/alterar-senha", async (req, res) => {
   }
 });
 
-// ===========================================
-// 9. ROTA PARA ALTERAÇÃO DE ESQUECIMENTO SENHA
-// ===========================================
-app.post("/api/usuario/alterar-esquecimento-senha", async (req, res) => {
-  const { email, nova_senha } = req.body;
+// ===============================================
+// 9.1 ROTA PARA SOLICITAR LINK DE REDEFINIÇÃO COM BYCRPTO E CRYPTO
+// ===============================================
+app.post("/api/usuario/solicitar-redefinicao", async (req, res) => {
+    const { email } = req.body;
 
- 
+    if (!email) return res.status(400).json({ sucesso: false, mensagem: "Email é obrigatório" });
 
-  try {
-    // verificar senha atual
-    const usuario = await execSQLQuery(`
-      SELECT id FROM Usuarios WHERE email = '${email}'
-    `);
+    try {
+        // Busca usuário pelo email
+        const usuario = await execSQLQuery(`
+            SELECT id FROM Usuarios WHERE email = '${email}'
+        `);
 
-    if (usuario.length === 0)
-      return res.json({ sucesso: false, mensagem: "Usuário não encontrado." });
+        if (usuario.length === 0) {
+            // Retorna sucesso de maneira segura
+            return res.json({ sucesso: true, mensagem: "Se o e-mail estiver cadastrado, o link será enviado." });
+        }
+          
+        const userId = usuario[0].id;
+        const token = crypto.randomBytes(32).toString("hex");
+        const expiresAt = new Date(Date.now() + 3600000).toISOString().slice(0, 19).replace('T', ' '); 
 
-    // atualizar senha
-    await execSQLQuery(`
-      UPDATE Usuarios 
-      SET Senha = '${nova_senha}'
-      WHERE id = ${usuario[0].id}
-    `);
+        // Insere token na tabela EsqueciSenha do SQL SERVER
+        await execSQLQuery(`
+            INSERT INTO EsqueciSenha (user_id, token, expires_at)
+            VALUES (${userId}, '${token}', '${expiresAt}')
+        `);
 
-    res.json({ sucesso: true });
+        // Envia email com link de redefinição
+        const emailEnviado = await enviarLinkRedefinicao(email, token);
 
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ erro: "Erro ao alterar senha" });
-  }
+        if (emailEnviado) {
+            return res.json({ sucesso: true, mensagem: "Link de redefinição enviado com sucesso." });
+        }
+        
+        console.error("Falha ao enviar e-mail de redefinição.");
+        res.status(500).json({ sucesso: false, mensagem: "Erro ao enviar e-mail. Tente novamente mais tarde." });
+
+    } catch (error) {
+        console.error("Erro ao solicitar redefinição:", error);
+        res.status(500).json({ sucesso: false, mensagem: "Erro interno do servidor." });
+    }
 });
 
+// ================================================
+// 9.2 ROTA PARA REDEFINIÇÃO DE SENHA USANDO TOKEN DO CRYPTO 
+// ================================================
+app.post("/api/usuario/redefinir-senha", async (req, res) => {
+    const { token, nova_senha } = req.body;
+
+    if (!token || !nova_senha) return res.status(400).json({ sucesso: false, mensagem: "Token e nova senha são obrigatórios." });
+
+    try {
+        // Busca registro do token
+        const resetRecord = await execSQLQuery(`
+            SELECT user_id, expires_at FROM EsqueciSenha WHERE token = '${token}'
+        `);
+
+        if (resetRecord.length === 0) {
+            return res.status(400).json({ sucesso: false, mensagem: "Link inválido ou já utilizado." });
+        }
+
+        const { user_id, expires_at } = resetRecord[0]; 
+        const expirationDate = new Date(expires_at);
+
+        // Verifica se o link expirou
+        if (expirationDate < new Date()) {
+            // Se expirou, deleta o token
+            await execSQLQuery(`DELETE FROM EsqueciSenha WHERE token = '${token}'`);
+            return res.status(400).json({ sucesso: false, mensagem: "O link de redefinição expirou. Solicite um novo." });
+        }
+
+        // Cria hash da nova senha usando BCRYPT
+        const salt = await bcrypt.genSalt(10);
+        const senhaHash = await bcrypt.hash(nova_senha, salt);
+
+        // Atualiza senha do usuário e Deleta token
+        await execSQLQuery(`
+            UPDATE Usuarios SET Senha = '${senhaHash}' WHERE id = ${user_id};
+            DELETE FROM EsqueciSenha WHERE token = '${token}';
+        `);
+        
+        // email de notificação da alteração de senha
+        const usuarioInfo = await execSQLQuery(`SELECT email, nome FROM Usuarios WHERE id = ${user_id}`);
+        if (usuarioInfo.length > 0) {
+            const primeiroNome = usuarioInfo[0].nome.split(' ')[0];
+            const emailUsuario = usuarioInfo[0].email;
+            await enviarSenhaRedefinida(emailUsuario, primeiroNome);
+        }
+
+        res.json({ sucesso: true, mensagem: "Senha redefinida com sucesso! Você pode fazer login." });
+
+    } catch (error) {
+        console.error("Erro ao redefinir senha:", error);
+        res.status(500).json({ sucesso: false, mensagem: "Erro ao redefinir senha." });
+    }
+    
+   
+});
 // ===============================
 // 10. ROTA QUE BUSCA O SALDO
 // ===============================
@@ -286,7 +379,6 @@ app.post("/api/transacao", async (req, res) => {
     const request = new sql.Request(conn);
 
     request.input("id_usuario", sql.Int, e.id_usuario);
-    //
     request.input("nome", sql.VarChar(200), e.nome);
     request.input("tipo", sql.VarChar(50), e.tipo);
     request.input("valor", sql.Decimal(18, 2), e.valor);
@@ -379,10 +471,34 @@ app.post("/api/saldo/atualizar/confirmar", async (req, res) => {
     if (result.dados.tipo == "despesa") {
       await execSQLQuery(`UPDATE Usuarios SET saldo = saldo - ${result.dados.valor} WHERE id = ${result.id_usuario}`)
     }
+    if (result.dados.tipo == "despesa fixa") {
+      await execSQLQuery(`UPDATE Usuarios SET saldo = saldo - ${result.dados.valor} WHERE id = ${result.id_usuario}`)
+    }
     else if (result.dados.tipo == "receita") {
       await execSQLQuery(`UPDATE Usuarios SET saldo = saldo + ${result.dados.valor} WHERE id = ${result.id_usuario}`)
     }
 
+    const dataModificada = new Date(result.dados.data);
+
+    dataModificada.setMonth(dataModificada.getMonth() + 1);
+    const request = new sql.Request(conn);
+
+     request.input("id_usuario", sql.Int, result.dados.id_usuario);
+    request.input("nome", sql.VarChar(200), result.dados.nome);
+    request.input("tipo", sql.VarChar(50), result.dados.tipo);
+    request.input("valor", sql.Decimal(18, 2), result.dados.valor);
+    request.input("parcelas", sql.Int, result.dados.parcelas || 1);
+    request.input("data", sql.Date, dataModificada);
+    request.input("id_categoria", sql.Int, result.dados.categoria);
+    request.input("id_parcela", sql.Int, result.dados.id_parcela);
+
+    request.query(`
+   INSERT INTO transacoes
+    (id_usuario, nome, tipo, valor, parcelas, confirmada, data, id_categoria, id_parcela)
+   VALUES 
+    (@id_usuario, @nome, @tipo, @valor, @parcelas, 0, @data, @id_categoria, @id_parcela)
+  `);
+  
     res.json({ sucesso: true, dados: result });
 
 
@@ -425,6 +541,9 @@ app.post("/api/saldo/atualizar/cancelar", async (req, res) => {
   try {
 
     if (result.dados.tipo == "despesa") {
+      await execSQLQuery(`UPDATE Usuarios SET saldo = saldo + ${result.dados.valor} WHERE id = ${result.id_usuario}`)
+    }
+    if (result.dados.tipo == "despesa fixa") {
       await execSQLQuery(`UPDATE Usuarios SET saldo = saldo + ${result.dados.valor} WHERE id = ${result.id_usuario}`)
     }
     else if (result.dados.tipo == "receita") {
@@ -584,116 +703,105 @@ app.get("/api/grafico/categorias/:id_usuario/:tipo", async (req, res) => {
   }
 });
 
-// ===============================
-// 20. ROTA PARA SALVAR SIMULAÇÕES
-// ===============================
-app.post("/api/simulacao/salvar", async (req, res) => {
-  const {
-    nome_simulacao,
-    saldo_inicial,
-    periodo,
-    porcentagem,
-    tipo_simulacao,
-    dados_linha,
-    id_usuario
-  } = req.body;
-
-  try {
-    const result = await execSQLQuery(`
-   INSERT INTO Simulacoes (
-    nome_simulacao,
-    saldo_inicial,
-    periodo,
-    porcentagem,
-    tipo_simulacao,
-    dados_linha,
-    data_criacao,
-    id_usuario
-   )
-   VALUES (
-    '${nome_simulacao}',
-    ${saldo_inicial},
-    ${periodo},
-    ${porcentagem},
-    ${tipo_simulacao},
-    '${dados_linha}',
-    GETDATE(),
-    ${id_usuario}
-   );
-   SELECT * FROM Simulacoes WHERE id_simulacao = SCOPE_IDENTITY();
-  `);
-
-    res.json(result[0]);
-
-  } catch (error) {
-    console.error("Erro ao salvar simulação:", error);
-    res.status(500).json({ erro: error.message });
-  }
-});
 
 // ===============================
 // 21. ROTAS PARA SIMULAÇÕES
 // ===============================
+// ===============================
+// ROTAS PARA SIMULAÇÕES
+// ===============================
+
+// SALVAR SIMULAÇÃO
+app.post("/api/simulacao/salvar", async (req, res) => {
+    const {
+        nome_simulacao,
+        saldo_inicial,
+        periodo,
+        porcentagem,
+        tipo_simulacao,
+        aporte,
+        meta,
+        aporte_necessario,
+        dados_linha,
+        id_usuario
+    } = req.body;
+
+    try {
+        const result = await execSQLQuery(`
+            INSERT INTO Simulacoes (
+                nome_simulacao,
+                saldo_inicial,
+                periodo,
+                porcentagem,
+                tipo_simulacao,
+                aporte,
+                meta,
+                aporte_necessario,
+                dados_linha,
+                id_usuario,
+                data_criacao
+            )
+            VALUES (
+                '${nome_simulacao}',
+                ${saldo_inicial},
+                ${periodo},
+                ${porcentagem},
+                ${tipo_simulacao},
+                ${aporte},
+                ${meta},
+                ${aporte_necessario},
+                '${dados_linha}',
+                ${id_usuario},
+                GETDATE()
+            );
+            SELECT * FROM Simulacoes WHERE id_simulacao = SCOPE_IDENTITY();
+        `);
+
+        res.json(result[0]);
+    } catch (error) {
+        console.error("Erro ao salvar simulação:", error);
+        res.status(500).json({ erro: error.message });
+    }
+});
+
+// LISTAR SIMULAÇÕES DE UM USUÁRIO
 app.get("/api/simulacao/listar/:id_usuario", async (req, res) => {
-  const id_usuario = req.params.id_usuario;
+    const id_usuario = req.params.id_usuario;
 
-  try {
-    const result = await execSQLQuery(`
-   SELECT 
-    id_simulacao,
-    nome_simulacao,
-    saldo_inicial,
-    periodo,
-    porcentagem,
-    tipo_simulacao,
-    data_criacao
-   FROM Simulacoes
-   WHERE id_usuario = ${id_usuario}
-   ORDER BY data_criacao DESC
-  `);
-
-    res.json(result);
-
-  } catch (error) {
-    console.error("Erro ao listar simulações:", error);
-    res.status(500).json({ erro: error.message });
-  }
+    try {
+        const result = await execSQLQuery(`
+            SELECT * 
+            FROM Simulacoes
+            WHERE id_usuario = ${id_usuario}
+            ORDER BY data_criacao DESC
+        `);
+        res.json(result);
+    } catch (error) {
+        console.error("Erro ao buscar simulações:", error);
+        res.status(500).json({ erro: error.message });
+    }
 });
 
-app.get("/api/simulacao/:id_simulacao", async (req, res) => {
-  const id = req.params.id_simulacao;
-
-  try {
-    const result = await execSQLQuery(`
-   SELECT *
-   FROM Simulacoes
-   WHERE id_simulacao = ${id}
-  `);
-
-    res.json(result[0] || {});
-
-  } catch (error) {
-    console.error("Erro ao buscar simulação:", error);
-    res.status(500).json({ erro: error.message });
-  }
-});
-
+// EXCLUIR SIMULAÇÃO
 app.post("/api/simulacao/excluir", async (req, res) => {
-  const { id_simulacao } = req.body;
+    const { id_simulacao } = req.body;
 
-  try {
-    await execSQLQuery(`
-   DELETE FROM Simulacoes
-   WHERE id_simulacao = ${id_simulacao}
-  `);
+    if (!id_simulacao) {
+        return res.status(400).json({ sucesso: false, erro: "ID da simulação é obrigatório" });
+    }
 
-    res.json({ sucesso: true });
-
-  } catch (error) {
-    console.error("Erro ao excluir simulação:", error);
-    res.status(500).json({ erro: error.message });
-  }
+    try {
+        await execSQLQuery(`
+            DELETE FROM Simulacoes
+            WHERE id_simulacao = ${id_simulacao}
+        `);
+        res.json({ sucesso: true });
+    } catch (error) {
+        console.error("Erro ao excluir simulação:", error);
+        res.status(500).json({ sucesso: false, erro: error.message });
+    }
 });
+
 
 // ===============================
 // 22. ROTA PARA A API DE IA
@@ -712,7 +820,7 @@ app.post("/api/ia", async (req, res) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "x-ai/grok-4.1-fast:free",
+        model: "tngtech/deepseek-r1t2-chimera:free",
         messages: [
           { role: "system", content: `Você é um assistente que irá analisar gráficos de gastos e oferecer sugestões para o consumidor, usando esses dados: ${dadosSerializados}. Responda de forma resumida. Não sugira outros apps` },
           { role: "user", content: `Use apenas esses ${dadosSerializados}  para dar sugestões de economia.` }
