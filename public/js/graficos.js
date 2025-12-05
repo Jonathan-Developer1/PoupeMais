@@ -9,9 +9,8 @@ function getUsuario() {
 }
 //verificando se existe um usuário
 
-if(localStorage.length == 0)
-{
-    window.location.href = "/";
+if (localStorage.length == 0) {
+  window.location.href = "/";
 }
 // Função para formatar dinheiro (R$ 1.000,00)
 function formatarMoeda(valor) {
@@ -57,13 +56,13 @@ async function preencherResumoEGraficoBarra() {
   // 1. Atualiza os textos no HTML com formatação R$
   if (document.getElementById("saldo-atual"))
     document.getElementById("saldo-atual").innerText = formatarMoeda(saldo);
-  
+
   if (document.getElementById("receitas-totais"))
     document.getElementById("receitas-totais").innerText = formatarMoeda(dados.total_receitas || 0);
-  
+
   if (document.getElementById("despesas-totais"))
     document.getElementById("despesas-totais").innerText = formatarMoeda(dados.total_despesas || 0);
-  
+
   if (document.getElementById("economia"))
     document.getElementById("economia").innerText = formatarMoeda(dados.economia || 0);
 
@@ -88,11 +87,14 @@ async function montarGraficoEvolucao() {
   try {
     const resposta = await fetch(`/api/grafico/evolucao/${usuario.id}`);
     const dados = await resposta.json();
-    
+
     const labelsMeses = [];
     const dadosReceitas = [];
     const dadosDespesas = [];
     const dadosSaldo = [];
+    const legendaColor = getComputedStyle(document.body)
+      .getPropertyValue("--grafico-legenda-color")
+      .trim();
 
     // Organiza os dados retornados do banco
     dados.forEach(item => {
@@ -101,11 +103,11 @@ async function montarGraficoEvolucao() {
       dadosReceitas.push(item.total_receitas);
       dadosIa.receita = item.total_receitas;
       dadosDespesas.push(item.total_despesas);
-       dadosIa.despesa = item.total_despesas;
+      dadosIa.despesa = item.total_despesas;
       dadosSaldo.push(item.economia);
       dadosIa.saldo = item.economia;
     });
-    
+
 
     new Chart(ctx, {
       type: 'line',
@@ -143,35 +145,35 @@ async function montarGraficoEvolucao() {
           legend: {
             display: true,
             position: 'bottom',
-            labels: { font: { size: 12, weight: 'bold' }, color: '#000' }
+            labels: { font: { size: 12, weight: 'bold' }, color: legendaColor }
           },
           tooltip: {
             callbacks: {
               // Formata o tooltip (o valor que aparece ao passar o mouse)
-              label: function(context) {
+              label: function (context) {
                 return context.dataset.label + ': ' + formatarMoeda(context.raw);
               }
             }
           }
         },
         layout: { padding: 10 },
-        scales: { 
-          y: { 
+        scales: {
+          y: {
             beginAtZero: false,
             ticks: {
               // Formata os números no eixo Y
-              callback: function(value) {
+              callback: function (value) {
                 return formatarMoeda(value);
               }
             }
-          } 
+          }
         }
       }
     });
 
     // APROVEITA OS MESMOS DADOS PARA ENCHER A TABELA
     preencherTabelaHistorico(dados);
-    
+
 
   } catch (erro) {
     console.error("Erro ao carregar gráfico evolução:", erro);
@@ -190,7 +192,7 @@ function preencherTabelaHistorico(dados) {
   tbody.innerHTML = ''; // Limpa antes de preencher
 
   // Dica: Se quiser inverter a ordem (mais recente em cima), use dados.reverse() aqui
-  
+
   dados.forEach(item => {
     const row = `
       <tr class="text-center">
@@ -211,26 +213,28 @@ function preencherTabelaHistorico(dados) {
 async function carregarGraficoPizza(tipo, idCanvas) {
   const usuario = getUsuario();
   const ctx = document.getElementById(idCanvas);
-  
+
   if (!ctx) return;
 
   try {
     const resposta = await fetch(`/api/grafico/categorias/${usuario.id}/${tipo}`);
     const dados = await resposta.json();
-    
+
     if (dados.length === 0) {
-        // Se não tiver dados, cria um gráfico vazio ou esconde
-        console.log(`Sem dados para o gráfico de ${tipo}`);
-        return;
+      // Se não tiver dados, cria um gráfico vazio ou esconde
+      console.log(`Sem dados para o gráfico de ${tipo}`);
+      return;
     }
-    else
-    {
+    else {
       dadosIa.categorias = dados;
     }
 
     const labels = dados.map(item => item.nome_categoria);
     const valores = dados.map(item => item.total);
     const cores = ['#000dffff', '#228B22', '#f5dc00ff', '#dc3545', '#6f42c1', '#fd7e14', '#20c997', '#6610f2'];
+    const legendaColor = getComputedStyle(document.body)
+      .getPropertyValue("--grafico-legenda-color")
+      .trim();
 
     new Chart(ctx, {
       type: 'pie',
@@ -246,12 +250,12 @@ async function carregarGraficoPizza(tipo, idCanvas) {
           legend: {
             display: true,
             position: 'bottom',
-            labels: { font: { size: 14, weight: 'bold' }, color: '#000' }
+            labels: { font: { size: 14, weight: 'bold' }, color: legendaColor }
           },
           tooltip: {
             callbacks: {
               // Formata o tooltip do gráfico de pizza
-              label: function(context) {
+              label: function (context) {
                 const label = context.label || '';
                 const value = context.raw || 0;
                 return label + ': ' + formatarMoeda(value);
@@ -303,41 +307,41 @@ function montarGraficoBarras(receitaTotal, despesaTotal) {
   }
 
   // 4. Criação do novo gráfico
-  chartInstanceReceitasDespesas = new Chart(ctx, { 
+  chartInstanceReceitasDespesas = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: ['Receitas', 'Despesas'],
       datasets: [{
-        data: [valorReceita, valorDespesa], 
+        data: [valorReceita, valorDespesa],
         backgroundColor: ['#2e8b57', '#dc3545'],
         barThickness: 30
       }]
     },
     options: {
       indexAxis: 'y', // Barra deitada
-      plugins: { 
+      plugins: {
         legend: { display: false },
         tooltip: {
-            callbacks: {
-              label: function(context) {
-                return formatarMoeda(context.raw);
-              }
+          callbacks: {
+            label: function (context) {
+              return formatarMoeda(context.raw);
             }
+          }
         }
       },
       scales: {
-        x: { 
-            beginAtZero: true, 
-            grid: { display: false },
-            ticks: {
-                // Formatação do eixo X (valores)
-                callback: function(value) {
-                    return formatarMoeda(value);
-                }
+        x: {
+          beginAtZero: true,
+          grid: { display: false },
+          ticks: {
+            // Formatação do eixo X (valores)
+            callback: function (value) {
+              return formatarMoeda(value);
             }
+          }
         },
         y: {
-          ticks: { color: '#013220', font: { size: 14, weight: 'bold' } },
+          ticks: { color: '#2e7d32', font: { size: 14, weight: 'bold' } },
           grid: { display: false }
         }
       }
@@ -347,26 +351,24 @@ function montarGraficoBarras(receitaTotal, despesaTotal) {
 
 //pegar api
 async function chamaIa(dadosIa) {
-  
-  
-  try
-  {
-    
+
+
+  try {
+
     const resposta = await fetch("/api/ia", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(dadosIa)
-            });
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(dadosIa)
+    });
 
     const json = await resposta.json();
     const sugestao = document.getElementById("sugestao-ia");
     loading.style.display = "none";
     sugestao.innerHTML = json;
   }
-  catch(error)
-  {
+  catch (error) {
     console.log(error);
   }
 }
