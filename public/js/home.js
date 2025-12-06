@@ -1,3 +1,4 @@
+
 import { cadastrarTransacao, addUltimas } from "./cadastro.js";
 
 //Dados para os selects de meses
@@ -45,6 +46,20 @@ const categorias = {
         { id: 20, nome: "Plano de Saude" },
         { id: 21, nome: "Financiamento" },
         { id: 22, nome: "Outros" }
+    ],
+    "despesa fixa": [
+        { id: 23, nome: "Aluguel" },
+        { id: 24, nome: "Condomínio" },
+        { id: 25, nome: "Água" },
+        { id: 26, nome: "Luz" },
+        { id: 27, nome: "Alimentação" },
+        { id: 28, nome: "Lazer" },
+        { id: 29, nome: "Gás" },
+        { id: 30, nome: "Cartão" },
+        { id: 31, nome: "Transporte" },
+        { id: 32, nome: "Plano de Saude" },
+        { id: 33, nome: "Financiamento" },
+        { id: 34, nome: "Outros" }
     ]
 };
 
@@ -65,9 +80,10 @@ const data = document.getElementById("data-transacao");
 
 
 function atualizaData() {
-    if (data)
+    
         data.valueAsDate = new Date();
 }
+
 
 // ===============================
 // 1. iNICIALIZAÇÃO
@@ -506,7 +522,6 @@ async function listarUltimasTransacoes() {
         }
         else
         {
-            addUltimas(json.dados);
             return;
         }
     }
@@ -514,3 +529,76 @@ async function listarUltimasTransacoes() {
         console.log(error);
     }
 }
+
+// =========================================
+// 11. EDITAR VALOR TRANSAÇÃO
+// =========================================
+
+
+
+window.editarValor = async function editarValor(id, td)
+{
+
+        const tdEdit = td.closest("td");
+        
+        tdEdit.setAttribute("contenteditable", "true");
+        tdEdit.focus();
+    tdEdit.addEventListener("keydown", async (e)  =>
+    {
+        if(e.key =="Enter")
+        {
+
+            let valorNovo = tdEdit.textContent
+  .replace("R$", "")  
+  .replace(/\s/g, "")    
+  .replace(/\./g, "")    
+  .replace(",", "."); 
+             try {
+        
+        const resposta = await fetch("/api/alterar-valor",
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id_transacao: id, valor: valorNovo })
+            });
+
+        const json = await resposta.json();
+
+        if (json.sucesso) {
+            listarTransacoes();
+            atualizaData(data);
+        }
+    }
+    catch (error) {
+        console.log(error);
+    }
+
+        }
+    })
+
+
+}
+
+const up = document.getElementById("up");
+const down = document.getElementById("down");
+const dataAtualizada = new Date(data.value);
+
+up.addEventListener("click", () =>
+{
+    
+    dataAtualizada.setMonth(dataAtualizada.getMonth() + 1);
+      console.log(dataAtualizada.getMonth());
+    filtromes.value = dataAtualizada.getMonth();
+    filtroano.value = dataAtualizada.getFullYear();
+    listarTransacoes();
+})
+down.addEventListener("click", () =>
+{
+    
+    dataAtualizada.setMonth(dataAtualizada.getMonth() -1);
+    filtromes.value = dataAtualizada.getMonth();
+    filtroano.value = dataAtualizada.getFullYear();
+    listarTransacoes();
+})

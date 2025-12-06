@@ -477,36 +477,53 @@ app.post("/api/saldo/atualizar/confirmar", async (req, res) => {
     else if (result.dados.tipo == "receita") {
       await execSQLQuery(`UPDATE Usuarios SET saldo = saldo + ${result.dados.valor} WHERE id = ${result.id_usuario}`)
     }
-
-    const dataModificada = new Date(result.dados.data);
-
-    dataModificada.setMonth(dataModificada.getMonth() + 1);
-    const request = new sql.Request(conn);
-
-     request.input("id_usuario", sql.Int, result.dados.id_usuario);
-    request.input("nome", sql.VarChar(200), result.dados.nome);
-    request.input("tipo", sql.VarChar(50), result.dados.tipo);
-    request.input("valor", sql.Decimal(18, 2), result.dados.valor);
-    request.input("parcelas", sql.Int, result.dados.parcelas || 1);
-    request.input("data", sql.Date, dataModificada);
-    request.input("id_categoria", sql.Int, result.dados.categoria);
-    request.input("id_parcela", sql.Int, result.dados.id_parcela);
-
-    request.query(`
-   INSERT INTO transacoes
-    (id_usuario, nome, tipo, valor, parcelas, confirmada, data, id_categoria, id_parcela)
-   VALUES 
-    (@id_usuario, @nome, @tipo, @valor, @parcelas, 0, @data, @id_categoria, @id_parcela)
-  `);
   
-    res.json({ sucesso: true, dados: result });
+   
 
 
   } catch (error) {
     console.error("Erro ao selecionar transação:");
     res.status(500).json({ erro: error.message });
   }
+  if(result.dados.tipo == "despesa fixa")
+  {
+  try
+  {
+    
+    
+    const dataModificada = new Date(result.dados.data);
+
+    dataModificada.setMonth(dataModificada.getMonth() + 1);
+     const conn = await getConnection();
+    const request = new sql.Request(conn);
+
+      
+     request.input("id_usuario", sql.Int, result.dados.id_usuario);
+    request.input("nome", sql.VarChar(200), result.dados.nome);
+    request.input("tipo", sql.VarChar(50), result.dados.tipo);
+    request.input("valor", sql.Decimal(18, 2), result.dados.valor);
+    request.input("parcelas", sql.Int, result.dados.parcelas || 1);
+    request.input("data", sql.Date, dataModificada);
+    request.input("id_categoria", sql.Int, result.dados.id_categoria);
+    request.input("id_parcela", sql.Int, result.dados.id_parcela);
+
+    const insercao = await request.query(`
+   INSERT INTO transacoes
+    (id_usuario, nome, tipo, valor, parcelas, confirmada, data, id_categoria, id_parcela)
+   VALUES 
+    (@id_usuario, @nome, @tipo, @valor, @parcelas, 0, @data, @id_categoria, @id_parcela)
+  `);
+
+  console.log(insercao);
+   res.json({ sucesso: true, dados: result });
+  }
+  catch(error)
+  {
+    console.log(error)
+  }
+  }
 });
+
 
 
 // ===============================
@@ -839,6 +856,29 @@ app.post("/api/ia", async (req, res) => {
   }
 
 })
+// ===============================
+// 23. ATUALIZA VALOR
+// ===============================
+app.post("/api/alterar-valor", async (req, res) => {
+  const { id_transacao, valor} = req.body;
+  try {
+    const result = await execSQLQuery(`SELECT * FROM Transacoes WHERE id_transacao = ${id_transacao}`);
+
+    await execSQLQuery(`
+  UPDATE Transacoes
+  SET valor = ${valor}
+  WHERE id_transacao = ${id_transacao};
+ `);
+
+
+    res.json({ sucesso: true, dados: result });
+
+
+  } catch (error) {
+    console.error("Erro ao selecionar transação:");
+    res.status(500).json({ erro: error.message });
+  }
+});
 
 // ===============================
 // ROTAS DE PÁGINAS

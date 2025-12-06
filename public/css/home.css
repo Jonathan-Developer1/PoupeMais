@@ -128,6 +128,17 @@ h1 {
     margin-left: 20px;
 }
 
+.altera-data
+{
+    width: 50px;
+    padding: 10px;
+    border: 1px solid #2c3e2c;
+    border-radius: 8px;
+    background-color: #fdfdf2;
+    color: #1c3b1c;
+    font-size: 16px;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
+}
 hr {
     width: 96%;
     margin: 2%;
