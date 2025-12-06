@@ -142,9 +142,6 @@ h3 {
     opacity: 0.8;
 }
 
-#campoAporte{
-    
-}
 
 .check {
     display: flex;
@@ -187,6 +184,24 @@ input[type="radio"]:checked {
     font-size: 1rem;
     color: white;
     font-weight: bold;
+    transition: 0.5s;
+}
+
+#botao-simulacao:hover {
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
+    width: 12rem;
+    padding: 0.6rem;
+    border: 1px solid #2c3e2c;
+    border-radius: 0.3rem;
+    background-color: #0f3811;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 1rem;
+    color: white;
+    font-weight: bold;
+    transition: 0.3s;
+    
 }
 
 /* Resultado */
@@ -301,6 +316,21 @@ input[type="radio"]:checked {
     font-size: 1rem;
     color: white;
     font-weight: bold;
+    transition: 0.5s;
+}
+#botao-nova-simulacao:hover {
+    display: block;
+    margin: 1rem auto;
+    width: 12rem;
+    padding: 0.6rem;
+    border: 1px solid #2c3e2c;
+    border-radius: 0.3rem;
+    background-color: #0f3811;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 1rem;
+    color: white;
+    font-weight: bold;
+    transition: 0.4s;
 }
 
 #hr-historico {

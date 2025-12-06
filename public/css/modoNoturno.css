@@ -4,21 +4,37 @@
 :root {
     --bg-color: #ffffff;
     --text-color: #000000;
+
+    --titulo-color: #000000;
     --card-color: #f4f4f4;
+    --header-color: #fdfdf2;
+
     --simulacao-color: #E5F6E0;
+    --grafico-linha-receita: #0f5132;
+    --grafico-linha-despesa: #dc3545;
+    --grafico-linha-saldo: #d9d700;
+    --grafico-legenda-color: #000000;
 }
+
 
 /* Tema Escuro */
 .dark-mode {
     --bg-color: #161515;
     --text-color: #ffffff;
+
     --titulo-color: #2e7d32;
     --card-color: #1e1e1e;
     --header-color: #141615;
     --footer-color: #000000;
+
     --simulacao-color: #1e1e1e;
-    --tabela-transacoes-color: whitesmoke;
+
+    --grafico-linha-receita: #00ff88;
+    --grafico-linha-despesa: #ff5c5c;
+    --grafico-linha-saldo: #fff200;
+    --grafico-legenda-color: #ffffff;
 }
+
 
 /* Aplicando as variáveis */
 body {
@@ -244,6 +260,8 @@ body.dark-mode .tabela-noturno {
     background-color: var(--tabela-transacoes-color) !important;
 }
 
-header{
-    background-color: #FFFEF2;
+/* Últimas transações confirmadas */
+body.dark-mode #ultimas-transacoes,
+body.dark-mode #ultimas-transacoes * {
+    color: #000000 !important;
 }
