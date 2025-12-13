@@ -34,7 +34,17 @@ export async function cadastrarTransacao(objeto) {
                 <td>${valorAtualizado}<span style="margin-left: .2rem; cursor: pointer "><i class="bi bi-pencil-square text-warning" onclick="editarValor(${e.id_transacao}, this)"></span></td>
                 <td>${e.parcelas}</td>
                 <td style="cursor: pointer"><i class="bi bi-check-square-fill text-success" onclick="confirmarTransacao(${e.id_transacao})"></i></td>
-                <td style="cursor: pointer"><i class="bi bi-trash3" onclick="excluirParcelas(${e.id_parcela})"></i></td>`;
+                <td style="cursor: pointer"><i class="bi bi-trash3" onclick="excluirTransacao(${e.id_transacao})"></i></td>`;
+      }
+      else if(e.tipo == "despesa fixa" && e.confirmada)
+      {
+        novoCadastro.innerHTML += `<td>${e.nome}</td>
+                <td>${data.toLocaleString('pt-BR', { timezone: 'UTC', dateStyle: 'short' })}</td>
+                <td>${e.categoria}</td>
+                <td>${valorAtualizado}<span style="margin-left: .2rem; cursor: pointer "><i class="bi bi-pencil-square text-warning" onclick="editarValor(${e.id_transacao}, this)"></span></td>
+                <td>${e.parcelas}</td>
+                <td style="cursor: pointer"><i class="bi bi-x-square-fill text-danger" onclick="desfazerTransacao(${e.id_transacao})"></i></td>
+                <td style="cursor: pointer"><i class="bi bi-trash3" onclick="excluirTransacao(${e.id_transacao})"></i></td>`;
       }
     else if(e.parcelas > 1 && e.confirmada)
     {

@@ -507,14 +507,13 @@ app.post("/api/saldo/atualizar/confirmar", async (req, res) => {
     request.input("id_categoria", sql.Int, result.dados.id_categoria);
     request.input("id_parcela", sql.Int, result.dados.id_parcela);
 
-    const insercao = await request.query(`
+   await request.query(`
    INSERT INTO transacoes
     (id_usuario, nome, tipo, valor, parcelas, confirmada, data, id_categoria, id_parcela)
    VALUES 
     (@id_usuario, @nome, @tipo, @valor, @parcelas, 0, @data, @id_categoria, @id_parcela)
   `);
 
-  console.log(insercao);
    res.json({ sucesso: true, dados: result });
   }
   catch(error)
@@ -522,6 +521,10 @@ app.post("/api/saldo/atualizar/confirmar", async (req, res) => {
     console.log(error)
   }
   }
+  else
+      {
+        res.json({ sucesso: true, dados: result });
+      }
 });
 
 

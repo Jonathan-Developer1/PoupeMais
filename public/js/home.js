@@ -466,6 +466,9 @@ window.excluirTransacao = async function excluirTransacao(id_transacao) {
 
         if (json.sucesso) {
             listarTransacoes();
+            listarUltimasTransacoes();
+            animacaoOlho();
+            atualizaData();
         }
 
     }
@@ -493,6 +496,9 @@ window.excluirParcelas = async function excluirParcelas(id_parcela) {
 
         if (json.sucesso) {
             listarTransacoes();
+            listarUltimasTransacoes();
+            animacaoOlho();
+            atualizaData();
         }
 
     }
@@ -522,6 +528,7 @@ async function listarUltimasTransacoes() {
         }
         else
         {
+            addUltimas();
             return;
         }
     }
@@ -533,8 +540,6 @@ async function listarUltimasTransacoes() {
 // =========================================
 // 11. EDITAR VALOR TRANSAÇÃO
 // =========================================
-
-
 
 window.editarValor = async function editarValor(id, td)
 {
@@ -581,6 +586,10 @@ window.editarValor = async function editarValor(id, td)
 
 }
 
+// =========================================
+// 11. BOTÕES DE ALTERAÇÕES DE DATA 
+// =========================================
+
 const up = document.getElementById("up");
 const down = document.getElementById("down");
 const dataAtualizada = new Date(data.value);
@@ -589,7 +598,6 @@ up.addEventListener("click", () =>
 {
     
     dataAtualizada.setMonth(dataAtualizada.getMonth() + 1);
-      console.log(dataAtualizada.getMonth());
     filtromes.value = dataAtualizada.getMonth();
     filtroano.value = dataAtualizada.getFullYear();
     listarTransacoes();
